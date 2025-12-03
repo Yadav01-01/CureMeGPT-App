@@ -1,12 +1,10 @@
 package com.bussiness.curemegptapp.ui.component
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,8 +19,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -36,13 +35,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
@@ -50,7 +51,7 @@ import com.bussiness.curemegptapp.ui.theme.AppGradientColors
 import com.bussiness.curemegptapp.ui.theme.Grey
 
 @Composable
-fun GradientHeader(heading: String, description: String){
+fun GradientHeader(heading: String, description: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -98,7 +99,8 @@ fun GradientIconInputField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
 
     var passwordVisible by remember { mutableStateOf(false) }
@@ -163,6 +165,10 @@ fun GradientIconInputField(
                 unfocusedIndicatorColor = Color.Transparent
             ),
 
+            keyboardOptions = KeyboardOptions(
+                keyboardType = if (isPassword) KeyboardType.Password else keyboardType
+            ),
+
             // 👁 Visual Transformation
             visualTransformation = if (isPassword && !passwordVisible)
                 PasswordVisualTransformation()
@@ -193,7 +199,9 @@ fun GradientIconInputField(
                             ),
                             contentDescription = if (passwordVisible) "Hide Password" else "Show Password",
                             tint = Color.Unspecified,
-                            modifier = Modifier.wrapContentSize().padding(end = 15.dp)
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(end = 15.dp)
                         )
                     }
                 }
@@ -236,4 +244,140 @@ fun GradientButton(
     }
 }
 
+@Composable
+fun GradientButton1(
+    text: String,
+    fontSize: TextUnit = 16.sp,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    fontFamily : FontFamily = FontFamily(Font(R.font.urbanist_semibold)),
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .height(48.dp)
+            .clip(RoundedCornerShape(40.dp))
+            .background(
+                brush = Brush.linearGradient(AppGradientColors)
+            )
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = fontSize,
+            fontFamily = fontFamily
+        )
+    }
+}
+
+@Composable
+fun GradientButton2(
+    text: String,
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit = 12.sp,
+    enabled: Boolean = true,
+    paddingHorizontal : Dp = 18.dp,
+    onClick: () -> Unit
+) {
+
+    Box(
+        modifier = modifier
+            .height(33.dp)
+            .fillMaxWidth()
+            .padding(horizontal = paddingHorizontal)
+            .clip(RoundedCornerShape(45.dp))
+            .background(
+                brush = Brush.linearGradient(AppGradientColors)
+            )
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = fontSize,
+            fontWeight = FontWeight.Medium,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium))
+        )
+    }
+}
+
+@Composable
+fun RoundedCustomCheckbox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    val cornerRadius = 10.dp  // iOS style rounded square
+    val darkBlue = Color(0xFF1E3A8A) // Dark blue (you can change)
+
+    Box(
+        modifier = Modifier
+            .size(28.dp)
+            .clip(RoundedCornerShape(cornerRadius))
+            .background(
+                if (checked) darkBlue else Color.White
+            )
+            .border(
+                width = 1.dp,
+                color = if (checked) darkBlue else Color.Black,
+                shape = RoundedCornerShape(cornerRadius)
+            )
+            .clickable { onCheckedChange(!checked) },
+        contentAlignment = Alignment.Center
+    ) {
+        if (checked) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_check_white), // white tick icon
+                contentDescription = "Checked",
+                tint = Color.White,
+                modifier = Modifier.size(18.dp)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun DisclaimerBox(
+    title: String,
+    description: String,
+    titleColor: Color = Color.Black,
+    backColor: Color = Color(0x084338CA)
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = backColor,
+                shape = RoundedCornerShape(30.dp)
+            )
+            .padding(16.dp)
+    ) {
+        Text(
+            text = title,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            color = titleColor
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = description,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium,
+            fontSize = 13.sp,
+            color = Color(0xFF697383),
+            lineHeight = 18.sp
+        )
+    }
+
+}
 

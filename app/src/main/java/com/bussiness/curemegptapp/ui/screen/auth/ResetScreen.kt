@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.ui.screen
+package com.bussiness.curemegptapp.ui.screen.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,56 +23,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun ResetScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         // Top Gradient Header
-        GradientHeader(heading = "Welcome Back!", description = "Sign in to continue your dental health journey.")
+        GradientHeader(heading = "Reset Your Password", description = "Enter your registered email or phone number to reset your password.")
 
         Spacer(modifier = Modifier.height(32.dp))
 
         // FORM
         var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
 
         // Email Field
-        GradientIconInputField(icon = R.drawable.mail_ic,placeholder = "Email / Phone Number", value = email, onValueChange = { email = it })
+        GradientIconInputField(icon = R.drawable.mail_ic,placeholder = "Email / Phone Number", value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
 
         Spacer(Modifier.height(18.dp))
 
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Password", value = password, onValueChange = { password = it }, isPassword = true)
-
-        Spacer(Modifier.height(15.dp))
-
-        // Forgot Password
-        Text(
-            text = "Forgot Password?",
-            modifier = Modifier
-                .padding(horizontal = 18.dp)
-                .align(Alignment.End)
-                .clickable{ },
-            fontSize = 18.sp,
-            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-            color = Color.Black,
-            fontWeight = FontWeight.Medium
-        )
-
-        Spacer(Modifier.height(28.dp))
-
         // Gradient Login Button
-        GradientButton(text = "Login", onClick = { /*TODO*/ })
+        GradientButton(text = "Send Code", onClick = { navController.navigate("verifyOtp?from=reset&email=$email")
+        })
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -84,20 +69,27 @@ fun LoginScreen(navController: NavHostController) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "New here?" ,
+                text = "Back to" ,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp
             )
             Spacer(Modifier.width(4.dp))
             Text(
-                text = "Create an account",
+                text = " Login",
                 color = Color(0xFF4338CA),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
-                modifier = Modifier.clickable { /*onSignup()*/ }
+                modifier = Modifier.clickable { navController.navigate(AppDestination.Login)}
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ResetScreenPreview() {
+    val navController = rememberNavController()
+    ResetScreen(navController = navController)
 }

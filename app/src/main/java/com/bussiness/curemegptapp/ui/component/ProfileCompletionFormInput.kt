@@ -1,0 +1,948 @@
+package com.bussiness.curemegptapp.ui.component
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.data.model.StepItem
+
+
+@Composable
+fun ProfileInputField(
+    label: String,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+
+    val shape = RoundedCornerShape(30.dp)
+
+    Column(modifier = modifier.fillMaxWidth()) {
+
+        // 🔹 Label Text (top of field)
+
+        Row {
+            Text(
+                text = label,
+                fontSize = 15.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                color = Color.Black,
+                modifier = Modifier.padding(start = 12.dp, bottom = 6.dp)
+            )
+            if (isImportant) {
+                Text(
+                    text = "*",
+                    fontSize = 15.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding( bottom = 6.dp)
+                )
+            }
+
+        }
+
+        // 🔹 TextField
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    color = Color(0xFFB8B9BD),
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                )
+            },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(horizontal = 8.dp)
+                .clip(shape)
+                .border(1.dp, Color(0xFF697383), shape),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+    }
+}
+
+@Composable
+fun ProfileInputMultipleLineField(
+    label: String,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+
+    val shape = RoundedCornerShape(30.dp)
+
+    Column(modifier = modifier.fillMaxWidth()) {
+
+        // 🔹 Label Text (top of field)
+
+        Row {
+            Text(
+                text = label,
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(start = 12.dp, bottom = 6.dp)
+            )
+            if (isImportant) {
+                Text(
+                    text = "*",
+                    fontSize = 15.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding( bottom = 6.dp)
+                )
+            }
+
+        }
+
+        // 🔹 TextField
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    color = Color(0xFFB8B9BD),
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .padding(horizontal = 8.dp)
+                .clip(shape)
+                .border(1.dp, Color(0xFFC3C6CB), shape),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+    }
+}
+
+@Composable
+fun ProfileInputWithoutLabelField(
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+
+    val shape = RoundedCornerShape(30.dp)
+
+    Column(modifier = modifier.fillMaxWidth()) {
+
+
+        // 🔹 TextField
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFFB8B9BD),
+                    fontSize = 16.sp
+                )
+            },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(horizontal = 8.dp)
+                .clip(shape)
+                .border(1.dp, Color(0xFFC3C6CB), shape),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+    }
+}
+
+
+//@Composable
+//fun GenderDropdown() {
+//    var expanded by remember { mutableStateOf(false) }
+//    var selectedGender by remember { mutableStateOf("") }
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//    ) {
+//
+//        Text(
+//            text = "Gender *",
+//            color = Color.Black,
+//            modifier = Modifier.padding(bottom = 6.dp)
+//        )
+//
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .border(
+//                    width = 1.dp,
+//                    color = Color(0xFFBFC5D2),
+//                    shape = RoundedCornerShape(50.dp)
+//                )
+//                .clickable { expanded = true }
+//                .padding(horizontal = 20.dp, vertical = 16.dp)
+//        ) {
+//
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//
+//                Text(
+//                    text = if (selectedGender.isEmpty()) "Select" else selectedGender,
+//                    color = if (selectedGender.isEmpty()) Color.Gray else Color.Black,
+//
+//                    )
+//
+//                Image(
+//                    painter = painterResource(id = R.drawable.ic_dropdown_icon),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(15.dp)
+//                )
+//            }
+//        }
+//
+//        DropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//        ) {
+//
+//            DropdownMenuItem(
+//                text = { Text("Male") },
+//                onClick = {
+//                    selectedGender = "Male"
+//                    expanded = false
+//                }
+//            )
+//
+//            DropdownMenuItem(
+//                text = { Text("Female") },
+//                onClick = {
+//                    selectedGender = "Female"
+//                    expanded = false
+//                }
+//            )
+//
+//            DropdownMenuItem(
+//                text = { Text("Other") },
+//                onClick = {
+//                    selectedGender = "Other"
+//                    expanded = false
+//                }
+//            )
+//        }
+//    }
+//}
+
+@Composable
+fun GenderDropdown(
+    selected: String,
+    onSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Row {
+
+
+        Text(
+            text = "Gender",
+            color = Color.Black,
+            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(bottom = 6.dp)
+        )
+            Text(
+                text = " *",
+                color = Color.Red,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFFBFC5D2),
+                    shape = RoundedCornerShape(50.dp)
+                )
+                .clickable { expanded = true }
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    text = if (selected.isEmpty()) "Select" else selected,
+                    color = if (selected.isEmpty()) Color.Gray else Color.Black,
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.ic_dropdown_icon),
+                    contentDescription = null,
+                    modifier = Modifier.size(8.dp)
+                )
+            }
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            DropdownMenuItem(
+                text = { Text("Male") },
+                onClick = {
+                    onSelected("Male")
+                    expanded = false
+                }
+            )
+
+            DropdownMenuItem(
+                text = { Text("Female") },
+                onClick = {
+                    onSelected("Female")
+                    expanded = false
+                }
+            )
+
+            DropdownMenuItem(
+                text = { Text("Other") },
+                onClick = {
+                    onSelected("Other")
+                    expanded = false
+                }
+            )
+        }
+    }
+}
+
+
+
+@Composable
+fun Dropdown1(
+    label: String,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    dropdownItems: List<String>,
+    selectedUnit: String,
+    onUnitSelected: (String) -> Unit,
+    keyboardType: KeyboardType = KeyboardType.Number
+) {
+
+    var expanded by remember { mutableStateOf(false) }
+    val shape = RoundedCornerShape(30.dp)
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        // 🔹 Label Row
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = label,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+
+            if (isImportant) {
+                Text(
+                    text = "*",
+                    fontSize = 15.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding( bottom = 6.dp)
+                )
+            }
+        }
+
+        // 🔹 INPUT + DROPDOWN ROW
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // LEFT TEXTFIELD
+            TextField(
+                value = value,
+                onValueChange = onValueChange,
+                placeholder = {
+                    Text(
+                        text = placeholder,
+                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                        fontWeight = FontWeight.Normal,
+                        color = Color(0xFFB8B9BD),
+                        fontSize = 15.sp
+                    )
+                },
+                singleLine = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(56.dp)
+                    .clip(shape)
+                    .border(1.dp, Color(0xFFC3C6CB), shape),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+            )
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+            // RIGHT SMALL DROPDOWN
+            Box(
+                modifier = Modifier
+                    .width(90.dp)
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(30.dp))
+                    .border(
+                        1.dp,
+                        Color(0xFFBFC5D2),
+                        RoundedCornerShape(30.dp)
+                    )
+                    .clickable { expanded = true }
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = selectedUnit,
+                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                        fontWeight = FontWeight.Normal,
+                        color = Color.Black,
+                        fontSize = 15.sp
+                    )
+
+                    Image(
+                        painter =painterResource(id = R.drawable.ic_dropdown_icon),
+                        contentDescription = null,
+                    )
+                }
+            }
+        }
+
+        // 🔹 DROPDOWN MENU
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            dropdownItems.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(item) },
+                    onClick = {
+                        onUnitSelected(item)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun StepTabs(
+    steps: List<StepItem>,
+    selectedIndex: Int,
+    modifier: Modifier = Modifier,
+    onStepClick: (Int) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        steps.forEachIndexed { index, step ->
+
+            val isSelected = index <= selectedIndex - 1
+            val isSelectedPrevious = index <= selectedIndex
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable { onStepClick(index) }
+            ) {
+
+                // Circle with icon
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(CircleShape)
+                        .background(
+                            if (isSelected) Color(0xFF3D35EC) else if (isSelectedPrevious) Color(0xFF2D2587)
+                            else Color(0xFFF2F2F2)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(
+                            id = if (isSelected) step.selectedIcon else  step.icon
+                        ),
+                        contentDescription = step.title,
+                        //  tint = if (isSelected) Color.White else Color(0xFFD0D0D0),
+                        modifier = Modifier.size(42.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                // Title
+                Text(
+                    text = step.title,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    color = if (isSelected) Color(0xFF4338CA) else if (isSelectedPrevious) Color(0xFF4338CA)  else Color(0xFFCED4DA)
+                )
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_cross_icon),
+                contentDescription = "Back Icon",
+                modifier = Modifier.size(42.dp).clickable{onBackClick()}
+            )
+
+            Text(
+                text = "Complete Your Profile",
+                fontSize = 17.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium
+            )
+
+            Text(
+                text = "Skip for Now",
+                color = Color(0xFF211C64),
+                fontSize = 14.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.clickable { }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Step tabs using the new StepTabs component
+        val steps = listOf(
+            StepItem("Personal", R.drawable.ic_person_complete_icon, R.drawable.ic_check),
+            StepItem("General", R.drawable.ic_general_complete_icon, R.drawable.ic_check),
+            StepItem("History", R.drawable.ic_history_complete_icon, R.drawable.ic_check),
+            StepItem("Documents", R.drawable.ic_documents_complete_icon, R.drawable.ic_check)
+        )
+
+        StepTabs(
+            steps = steps,
+            selectedIndex = currentStep,
+            onStepClick = { /* You can handle step click if needed */ }
+        )
+    }
+}
+
+
+@Composable
+fun ProfilePhotoPicker(
+    label: String ,
+    fileName: String = "No file chosen",
+    onChooseClick: () -> Unit
+) {
+    Column {
+
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+            fontWeight = FontWeight.Normal
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .clip(RoundedCornerShape(40.dp))
+                .drawBehind {
+                    val stroke = Stroke(
+                        width = 2.dp.toPx(),
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f))
+                    )
+                    drawRoundRect(
+                        color = Color(0xFFBFC5D2),
+                        style = stroke,
+                        cornerRadius = CornerRadius(40.dp.toPx(), 40.dp.toPx())
+                    )
+                }
+                .padding(horizontal = 5.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                GradientButton2(
+                    text = "Choose File",
+                    onClick = onChooseClick,
+                    modifier = Modifier.width(130.dp)
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = fileName,
+                    fontSize = 13.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    color = Color(0xFF697383)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BloodGroupDropdown(
+    selected: String,
+    onSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+
+        Text(
+            text = "Blood Group *",
+            color = Color.Black,
+            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(bottom = 6.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFFBFC5D2),
+                    shape = RoundedCornerShape(50.dp)
+                )
+                .clickable { expanded = true }
+                .padding(horizontal = 20.dp, vertical = 16.dp)
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    text = if (selected.isEmpty()) "Select" else selected,
+                    color = if (selected.isEmpty()) Color.Gray else Color.Black
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.ic_dropdown_icon),
+                    contentDescription = null,
+                    modifier = Modifier.size(15.dp)
+                )
+            }
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            listOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-").forEach { group ->
+                DropdownMenuItem(
+                    text = { Text(group) },
+                    onClick = {
+                        onSelected(group)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+
+
+@Composable
+fun FileAttachment(
+    fileName: String,
+    onDeleteClick: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(25.dp))
+            .background(Color(0xFFDCD6FF))  // Light purple background like screenshot
+            .padding(horizontal = 5.dp, vertical = 5.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+
+        Image(
+            painter = painterResource(id = R.drawable.ic_files_icon),
+            contentDescription = "File Icon",
+            modifier = Modifier.size(48.dp)
+        )
+
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        // FILE NAME
+        Text(
+            text = fileName,
+            fontSize = 16.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+            fontWeight = FontWeight.Normal,
+            color = Color(0xFF4A3AFF),   // Purple file name
+            modifier = Modifier.weight(1f)
+        )
+
+        // RIGHT delete button
+
+        Image(
+            painter = painterResource(id = R.drawable.ic_delete_icon),
+            contentDescription = "Delete",
+            modifier = Modifier.size(48.dp).clickable{onDeleteClick()}
+        )
+
+    }
+}
+
+@Composable
+fun UniversalInputField(
+    title: String,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    rightIcon: Int? = null,
+    onClick: () -> Unit = {}
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
+        // ----- Title -----
+        Row {
+            Text(
+                text = title,
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(start = 12.dp,bottom = 8.dp)
+            )
+
+            if (isImportant)
+                Text(
+                    text = " *",
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+        }
+
+        // ----- Clickable Input Box -----
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .clip(RoundedCornerShape(28.dp))
+                .background(Color.Transparent)
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFF697383),
+                    shape = RoundedCornerShape(56.dp)
+                )
+                .clickable { onClick() },
+            contentAlignment = Alignment.CenterStart
+        ) {
+
+            // Placeholder or Value
+            Text(
+                text = if (value.isEmpty()) placeholder else value,
+                fontSize = 15.sp,
+                color = if (value.isEmpty()) Color(0xFF697383) else Color(0xFF697383),
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            // Right Icon (optional)
+            rightIcon?.let {
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 16.dp)
+                        .size(20.dp)
+                        .clickable { onClick() }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CancelButton(
+    cancelText : String = "Cancel" ,
+    modifier: Modifier = Modifier,
+    paddingHorizontal : Dp = 18.dp,
+    fontSize: TextUnit = 14.sp,
+    fontFamily : FontFamily = FontFamily(Font(R.font.onest_medium)),
+    onClick: () -> Unit
+) {
+
+    Box(
+        modifier = modifier
+            .width(120.dp)
+            .height(45.dp)
+            .clip(RoundedCornerShape(28.dp))
+            .border(
+                1.dp,
+                Color(0xFF181B1A),
+                RoundedCornerShape(28.dp)
+            )
+            .clickable { onClick() }
+            .padding(horizontal = paddingHorizontal),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Text(
+            text = cancelText,
+            fontFamily = FontFamily(Font(R.font.onest_medium)),
+            color = Color.Black,
+            fontSize = fontSize
+        )
+    }
+}
