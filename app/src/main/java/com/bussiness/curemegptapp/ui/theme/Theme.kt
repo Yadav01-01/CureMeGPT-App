@@ -9,7 +9,12 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+
+val TextWhite = Color.White
+val TextGray = Color(0xFFB0B0B0)
+val TextAAColor = Color(0xFFAAAAAA)
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,

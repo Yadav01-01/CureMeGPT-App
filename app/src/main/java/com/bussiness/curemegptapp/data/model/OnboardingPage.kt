@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.data
+package com.bussiness.curemegptapp.data.model
 
 data class OnboardingPage(
     val imageRes: Int,

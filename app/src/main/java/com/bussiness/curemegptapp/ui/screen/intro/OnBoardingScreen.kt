@@ -1,8 +1,7 @@
-package com.bussiness.curemegptapp.ui.screen
+package com.bussiness.curemegptapp.ui.screen.intro
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,15 +16,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -38,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.bussiness.curemegptapp.R
-import com.bussiness.curemegptapp.data.OnboardingPage
+import com.bussiness.curemegptapp.data.model.OnboardingPage
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.SkipButton
@@ -100,6 +96,7 @@ fun OnboardingScreen(navController: NavHostController) {
                 .padding(horizontal = 24.dp, vertical = 10.dp)
         ) {
             val isLastPage = pagerState.currentPage == onboardingPages.lastIndex
+            val isFirstPage = pagerState.currentPage == 0
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,14 +105,22 @@ fun OnboardingScreen(navController: NavHostController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (!isLastPage){
-                    SkipButton(onClick = { navController.navigate(AppDestination.Login)})
+                    SkipButton(onClick = {
+//                        navController.navigate(AppDestination.Login)
+                        scope.launch {
+                            pagerState.animateScrollToPage(onboardingPages.lastIndex)
+                        }
+                    })
                 }
                 Spacer(modifier = Modifier.width(16.dp))
-                ContinueButton(text = if (isLastPage) "Get Started" else "Continue", onClick = {
+                ContinueButton(text = if (isLastPage) "Get Started" else if (isFirstPage )"Next"  else "Continue", onClick = {
                     if (isLastPage) {
                         navController.navigate(AppDestination.Login)
                     } else {
-                        pagerState.currentPage + 1
+//                        pagerState.currentPage + 1
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
                     }
                 })
             }
