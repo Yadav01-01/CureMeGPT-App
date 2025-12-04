@@ -47,6 +47,12 @@ sealed class AppDestination {
     @Serializable
     data object MainScreen : AppDestination()
 
+    @Serializable
+    data object ThingNeedingAttention : AppDestination()
+
+    @Serializable
+    data object HealthSchedule : AppDestination()
+
 
 
 }

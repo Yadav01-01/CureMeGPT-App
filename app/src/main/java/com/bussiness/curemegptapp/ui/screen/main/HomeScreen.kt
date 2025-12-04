@@ -1,14 +1,21 @@
 package com.bussiness.curemegptapp.ui.screen.main
 
-
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +26,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -63,10 +72,42 @@ import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.HomeHeader
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.DpOffset
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bussiness.curemegptapp.navigation.AppDestination
+import com.bussiness.curemegptapp.ui.component.AppointmentBox
+import com.bussiness.curemegptapp.ui.component.AttentionItem
+import com.bussiness.curemegptapp.ui.component.GradientButton2
+import com.bussiness.curemegptapp.ui.component.GradientRedButton
+import com.bussiness.curemegptapp.ui.component.MoodOptionSelectable
+import com.bussiness.curemegptapp.ui.viewModel.main.AttentionItem
+import com.bussiness.curemegptapp.ui.viewModel.main.HomeViewModel
+import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController,
+               viewModel: HomeViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+    val selectedMood by viewModel.selectedMood
+
+    // Initialize or refresh data when screen appears
+    LaunchedEffect(Unit) {
+        // Future mein: viewModel.refreshData()
+        // For now, just use initial data
+    }
+
 
     Column(
         modifier = Modifier
@@ -91,123 +132,62 @@ fun HomeScreen(navController: NavHostController) {
 
             ) {
             Spacer(modifier = Modifier.height(23.dp))
-            WelcomeSection()
+            WelcomeSection(userGreating = uiState.userGreating, userName = uiState.userName)
+
             Spacer(modifier = Modifier.height(20.dp))
-            DailyMoodCheckCard()
+
+            DailyMoodCheckCard(     selectedMood = selectedMood,
+                onMoodSelected = { mood -> viewModel.updateMood(mood) }
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            ProfileCompletionBar()
+            ProfileCompletionBar(progress = uiState.profileCompletion)
             Spacer(modifier = Modifier.height(20.dp))
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F9FD)),
                 shape = RoundedCornerShape(30.dp)
             ) {
-                MedicationsAndAllergies()
+                MedicationsAndAllergies(    medications = uiState.medications,
+                    allergies = uiState.allergies)
 
                 Spacer(modifier = Modifier.height(20.dp))
-                RecommendedSteps()
+                RecommendedSteps(steps = uiState.recommendedSteps)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-            ThingsNeedingAttention()
+            ThingsNeedingAttention(
+                attentionItems = uiState.attentionItems,
+                onScheduleClick = { itemId ->
+                    viewModel.scheduleAttentionItem(itemId)
+                },
+                onViewAllClick = {
+                    navController.navigate(AppDestination.ThingNeedingAttention)
+                }
+
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            HealthOverviewSection()
+            HealthOverviewSection(alerts = uiState.alerts)
         }
     }
 }
 
-//    Scaffold(
-//        topBar = { HomeTopBar() }
-//    ) { paddingValues ->
-//        LazyColumn(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(paddingValues)
-//                .background(Color(0xFFF5F5F5)),
-//            contentPadding = PaddingValues(16.dp),
-//            verticalArrangement = Arrangement.spacedBy(16.dp)
-//        ) {
-//            item { WelcomeSection() }
-//            item { DailyMoodCheckCard() }
-//            item { ProfileCompletionBar() }
-//            item { MedicationsAndAllergies() }
-//            item { RecommendedSteps() }
-//            item { ThingsNeedingAttention() }
-//            item { HealthOverviewSection() }
-//        }
-//    }
-
-
-//
-//@Composable
-//fun HomeTopBar() {
-//    TopAppBar(
-//        title = {
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier.padding(start = 4.dp)
-//            ) {
-//                Image(
-//                    painter = painterResource(id = android.R.drawable.ic_dialog_info),
-//                    contentDescription = null,
-//                    modifier = Modifier.size(28.dp)
-//                )
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Text(
-//                    text = "CureMeGPT",
-//                    color = Color(0xFF5B4FE9),
-//                    fontSize = 20.sp,
-//                    fontWeight = FontWeight.SemiBold
-//                )
-//            }
-//        },
-//        actions = {
-//            IconButton(onClick = { }) {
-//                Image(
-//                    painter = painterResource(id = android.R.drawable.ic_popup_reminder),
-//                    contentDescription = "Notifications",
-//                    modifier = Modifier.size(24.dp)
-//                )
-//            }
-//            IconButton(onClick = { }) {
-//                Box(
-//                    modifier = Modifier
-//                        .size(40.dp)
-//                        .clip(CircleShape)
-//                        .background(Color(0xFFE8E4FF))
-//                ) {
-//                    Image(
-//                        painter = painterResource(id = android.R.drawable.ic_menu_myplaces),
-//                        contentDescription = "Profile",
-//                        modifier = Modifier
-//                            .align(Alignment.Center)
-//                            .size(24.dp)
-//                    )
-//                }
-//            }
-//        },
-//        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = Color.White
-//        )
-//    )
-//}
 
 @Composable
-fun WelcomeSection() {
+fun WelcomeSection(userGreating: String,userName: String) {
     Column(horizontalAlignment = Alignment.Start) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
-                text = "Hello ",
+                text = userGreating,
                 fontSize = 36.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 color = Color.Black
             )
             Text(
-                text = "James",
+                text = userName,
                 fontSize = 36.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
@@ -227,9 +207,11 @@ fun WelcomeSection() {
 
 
 @Composable
-fun DailyMoodCheckCard() {
+fun DailyMoodCheckCard(   selectedMood: String,
+                          onMoodSelected: (String) -> Unit
+) {
 
-    var selectedMood by remember { mutableStateOf("") }
+
 
     val moodList = listOf(
         Pair(R.drawable.mood1, "Low"),
@@ -294,7 +276,7 @@ fun DailyMoodCheckCard() {
                         label = item.second,
                         isSelected = selectedMood == item.second,
                         onClick = {
-                            selectedMood = item.second
+                            onMoodSelected(item.second)
                             Log.d("MOOD_SELECTED", "Selected Mood: $selectedMood")
                         }
                     )
@@ -320,44 +302,10 @@ fun DailyMoodCheckCard() {
     }
 }
 
-@Composable
-fun MoodOptionSelectable(
-    icon: Int,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(if (isSelected) Color.White else Color.Transparent)
-            .padding(horizontal = 8.dp, vertical = 6.dp)
-            .clickable { onClick() },
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = label,
-            modifier = Modifier.size(40.dp)
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = label,
-            color = if (isSelected) Color(0xFF4338CA) else Color.White,
-            fontSize = 13.sp,
-            fontFamily = FontFamily(Font(if (isSelected) R.font.urbanist_semibold else R.font.urbanist_medium)),
-            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
-        )
-    }
-}
 
 
 @Composable
-fun ProfileCompletionBar() {
+fun ProfileCompletionBar(progress: Float) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -372,7 +320,7 @@ fun ProfileCompletionBar() {
             color = Color(0xFF697383)
         )
         Text(
-            text = "50%",
+            text = "${(progress * 100).toInt()}%",
             fontSize = 16.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal,
@@ -382,7 +330,7 @@ fun ProfileCompletionBar() {
     Spacer(modifier = Modifier.height(5.dp))
 
     GradientProgressBar(
-        progress = 0.5f,
+        progress = progress,
         modifier = Modifier.fillMaxWidth()
     )
 
@@ -416,17 +364,18 @@ fun GradientProgressBar(
 
 
 @Composable
-fun MedicationsAndAllergies() {
+fun MedicationsAndAllergies( medications: List<String>,
+                             allergies: List<String>) {
 
-    val medications = listOf(
-        "Lisinopril 10mg",
-        "Vitamin D"
-    )
-
-    val allergies = listOf(
-        "Penicillin",
-        "Shellfish"
-    )
+//    val medications = listOf(
+//        "Lisinopril 10mg",
+//        "Vitamin D"
+//    )
+//
+//    val allergies = listOf(
+//        "Penicillin",
+//        "Shellfish"
+//    )
 
 
     Column(
@@ -449,7 +398,7 @@ fun MedicationsAndAllergies() {
             Image(
                 painter = painterResource(id = R.drawable.ic_edit_icon_cirlcular),
                 contentDescription = "Edit",
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(45.dp)
             )
         }
 
@@ -504,39 +453,39 @@ fun MedicationChip(text: String, backgroundColor: Color) {
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
-fun RecommendedSteps() {
-    val steps = listOf(
-        "Set a reminder for your blood pressure medication",
-        "Schedule your annual checkup",
-        "Complete emergency contact information"
-    )
+fun RecommendedSteps(steps: List<String>) {
+//    val steps = listOf(
+//        "Set a reminder for your blood pressure medication",
+//        "Schedule your annual checkup",
+//        "Complete emergency contact information"
+//    )
 
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 10.dp)
+    ) {
+        Text(
+            text = "Recommended Next Steps",
+            fontSize = 14.sp,
+            color = Color(0xFF697383),
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text(
-                text = "Recommended Next Steps",
-                fontSize = 14.sp,
-                color = Color(0xFF697383),
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // Replace LazyColumn with regular Column since we have only 3 items
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                steps.forEach { step ->
-                    RecommendedStepItem(step)
-                }
+            steps.forEach { step ->
+                RecommendedStepItem(step)
             }
         }
+    }
 
 }
 
@@ -563,7 +512,18 @@ fun RecommendedStepItem(text: String) {
 }
 
 @Composable
-fun ThingsNeedingAttention() {
+fun ThingsNeedingAttention(   attentionItems: List<AttentionItem>,
+                              onScheduleClick: (Int) -> Unit,
+                              onViewAllClick: () -> Unit) {
+
+    val attention = listOf(
+        Triple("Tooth Pain Symptoms Detected", "For: James Logan",true),
+        Triple("Overdue Dental Cleaning", "For: Rosy Logan",true),
+
+
+    )
+
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -571,79 +531,47 @@ fun ThingsNeedingAttention() {
     ) {
         Text(
             text = "Thing Needing Attention",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
+            fontSize = 20.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium,
             color = Color.Black
         )
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B4FE9)),
-            shape = RoundedCornerShape(20.dp)
-        ) {
-            Text("View All", fontSize = 12.sp)
-        }
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    AttentionItem(
-        title = "Tooth Pain Symptoms Detected",
-        subtitle = "For: James Logan",
-        isUrgent = true
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    AttentionItem(
-        title = "Overdue Dental Cleaning",
-        subtitle = "For: Rosy Logan",
-        isUrgent = true
-    )
-}
 
-@Composable
-fun AttentionItem(title: String, subtitle: String, isUrgent: Boolean) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Row(
+        GradientButton2(
+            text = "View All",
+            fontSize = 12.sp,
+            paddingHorizontal = 2.dp,
+            onClick = onViewAllClick,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .width(88.dp)
+                .height(42.dp)
+        )
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+
+    if (!attention.isEmpty()) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFFD32F2F)
+            attention.forEach { attention ->
+
+                AttentionItem(
+                    title = attention.first,
+                    subtitle = attention.second,
+                    isUrgent = attention.third
                 )
-                Text(
-                    text = subtitle,
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-            }
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                shape = RoundedCornerShape(20.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = android.R.drawable.ic_menu_my_calendar),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text("Schedule", fontSize = 12.sp)
             }
         }
+    }else{
+
     }
+
 }
 
+
+
 @Composable
-fun HealthOverviewSection() {
+fun HealthOverviewSection(alerts: List<String>) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -651,58 +579,98 @@ fun HealthOverviewSection() {
     ) {
         Text(
             text = "Health Overview",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
+            fontSize = 20.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium,
             color = Color.Black
         )
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B4FE9)),
-            shape = RoundedCornerShape(20.dp)
-        ) {
-            Image(
-                painter = painterResource(id = android.R.drawable.ic_menu_add),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text("Add", fontSize = 12.sp)
-        }
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        ProfileTab("James (Myself)", true)
-        ProfileTab("Rose Logan", false)
-        ProfileTab("Peter Logan", false)
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    UserHealthCard()
-}
 
-@Composable
-fun ProfileTab(name: String, isSelected: Boolean) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = if (isSelected) Color.Black else Color.White,
-        border = if (!isSelected) BorderStroke(1.dp, Color.LightGray) else null
-    ) {
-        Text(
-            text = name,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            fontSize = 12.sp,
-            color = if (isSelected) Color.White else Color.Black
+        GradientRedButton(
+            text = "Add",
+            icon = R.drawable.ic_plus_normal_icon,
+            width = 88.dp,
+            height = 42.dp,
+            fontSize = 14.sp,
+            imageSize = 16.dp,
+            gradientColors = listOf(
+                Color(0xFF4338CA),
+                Color(0xFF211C64)
+            ),
+            onClick = { /* Your action */ }
         )
     }
+    Spacer(modifier = Modifier.height(12.dp))
+
+    val profiles = listOf(
+        "James (Myself)",
+        "Rose Logan",
+        "Peter Logan"
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        profiles.forEach { name ->
+            ProfileTab(
+                name = name,
+                isSelected = name == "James (Myself)",
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+
+
+
+    Spacer(modifier = Modifier.height(42.dp))
+    UserHealthCard(alerts = alerts)
+
+    Spacer(modifier = Modifier.height(71.dp))
 }
 
 @Composable
-fun UserHealthCard() {
+fun ProfileTab(
+    name: String,
+    isSelected: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(50.dp),
+        color = if (isSelected) Color.Black else Color.White,
+        border = if (!isSelected) BorderStroke(1.dp, Color(0xFF697383)) else null,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp, vertical = 3.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = name,
+                fontSize = 12.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium,
+                color = if (isSelected) Color.White else Color(0xFF697383)
+            )
+        }
+    }
+
+}
+
+
+@Composable
+fun UserHealthCard(alerts: List<String>) {
+    val alerts = listOf(
+        "Blood pressure medication reminder",
+        "Annual checkup due"
+    )
+
+
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF0EFFB)),
+        shape = RoundedCornerShape(30.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
@@ -712,58 +680,69 @@ fun UserHealthCard() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFE8E4FF))
+                            .width(65.dp)
+                            .height(70.dp)
+                            .clip(RoundedCornerShape(20.dp))
+
                     ) {
                         Image(
-                            painter = painterResource(id = android.R.drawable.ic_menu_myplaces),
+                            painter = painterResource(id = R.drawable.ic_profile_image),
                             contentDescription = null,
                             modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(32.dp)
+                                .matchParentSize()
                         )
                     }
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(7.dp))
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = "James Logan",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                                fontWeight = FontWeight.Medium,
+                                maxLines = 1,
+                                modifier = Modifier.width(110.dp)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(7.dp))
                             Surface(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(20.dp),
                                 color = Color(0xFFE8E4FF)
                             ) {
                                 Text(
                                     text = "40 yrs",
                                     fontSize = 10.sp,
-                                    color = Color(0xFF5B4FE9),
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                    color = Color(0xFF211C64),
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
                         }
                         Text(
                             text = "Self",
-                            fontSize = 12.sp,
-                            color = Color.Gray
+                            fontSize = 14.sp,
+                            color = Color(0xFF374151),
+                            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                            fontWeight = FontWeight.Medium
                         )
                         Text(
                             text = "Last checkup: 45 days ago",
-                            fontSize = 12.sp,
-                            color = Color.Gray
+                            fontSize = 14.sp,
+                            color = Color(0xFF374151),
+                            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
-                IconButton(onClick = { }) {
+
                     Image(
-                        painter = painterResource(id = android.R.drawable.ic_menu_edit),
+                        painter = painterResource(id = R.drawable.ic_edit_icon_cirlcular),
                         contentDescription = "Edit",
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(45.dp).clickable(){
+
+                        }
                     )
-                }
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -771,69 +750,69 @@ fun UserHealthCard() {
             Text(
                 text = "Active Alerts",
                 fontSize = 14.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                color = Color.Black
+                color = Color(0xFF697383)
             )
+
             Spacer(modifier = Modifier.height(8.dp))
-            AlertItem("Blood pressure medication reminder")
-            Spacer(modifier = Modifier.height(8.dp))
-            AlertItem("Annual checkup due")
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                alerts.forEach { alert ->
+                    AlertItem(alert)
+                }
+            }
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Button(
-                    onClick = { },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = android.R.drawable.ic_menu_my_calendar),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Schedule", fontSize = 12.sp)
-                }
-                OutlinedButton(
-                    onClick = { },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF5B4FE9)),
-                    shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, Color(0xFF5B4FE9))
-                ) {
-                    Image(
-                        painter = painterResource(id = android.R.drawable.ic_menu_info_details),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Ask AI", fontSize = 12.sp)
-                }
-                OutlinedButton(
-                    onClick = { },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Gray),
-                    shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, Color.LightGray)
-                ) {
-                    Image(
-                        painter = painterResource(id = android.R.drawable.ic_menu_my_calendar),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        "Appointment in 7 Days",
-                        fontSize = 10.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        maxItemsInEachRow = 3   // Optional: control max items in a row
+                    ) {
+
+                        GradientRedButton(
+                            text = "Schedule",
+                            icon = R.drawable.ic_schedule_attention_icon,
+                            width = 101.dp,
+                            height = 42.dp,
+                            imageSize = 16.dp,
+                            fontSize = 12.sp,
+                            horizontalPadding = 12.dp,
+                            modifier = Modifier.alignByBaseline(),
+                            onClick = { }
+                        )
+
+                        GradientRedButton(
+                            text = "Ask Ai",
+                            icon = R.drawable.ic_ask_ai_icon,
+                            width = 80.dp,
+                            height = 42.dp,
+                            imageSize = 18.dp,
+                            fontSize = 12.sp,
+                            horizontalPadding = 10.dp,
+                            modifier = Modifier.alignByBaseline(),
+                            gradientColors = listOf(
+                                Color(0xFF4338CA),
+                                Color(0xFF211C64)
+                            ),
+                            onClick = { }
+                        )
+
+                        AppointmentBox(
+                            text = "Appointment in 7 Days",
+                            modifier = Modifier
+                                .width(180.dp)
+                                .height(42.dp).alignByBaseline(),
+                            iconRes = R.drawable.ic_appointed_icon
+                        )
+                    }
+
         }
     }
 }
@@ -843,635 +822,38 @@ fun AlertItem(alertText: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFF3E8FF), RoundedCornerShape(12.dp))
-            .padding(12.dp),
+            .background(Color(0xFFDFD5FC), RoundedCornerShape(50.dp))
+            .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_alert_notification),
             contentDescription = null,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(29.dp)
         )
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = alertText,
             fontSize = 13.sp,
-            color = Color.Black,
-            modifier = Modifier.weight(1f)
+            color = Color(0xFF181818),
+            modifier = Modifier.weight(1f),
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium
+
         )
     }
 }
 
-/*
-@Composable
-fun HomeScreen(navController: NavHostController) {
-    Scaffold(
-        topBar = { HomeTopBar() }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(Color(0xFFF5F5F5)),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item { WelcomeSection() }
-            item { DailyMoodCheckCard() }
-            item { ProfileCompletionBar() }
-            item { MedicationsAndAllergies() }
-            item { RecommendedSteps() }
-            item { ThingsNeedingAttention() }
-            item { HealthOverviewSection() }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeTopBar() {
-    TopAppBar(
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 4.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = android.R.drawable.ic_dialog_info),
-                    contentDescription = null,
-                    tint = Color(0xFF5B4FE9),
-                    modifier = Modifier.size(28.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "CureMeGPT",
-                    color = Color(0xFF5B4FE9),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { }) {
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notifications",
-                    tint = Color.Gray
-                )
-            }
-            IconButton(onClick = { }) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFE8E4FF))
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "Profile",
-                        tint = Color(0xFF5B4FE9),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(24.dp)
-                    )
-                }
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.White
-        )
-    )
-}
-
-@Composable
-fun WelcomeSection() {
-    Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = "Hello ",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.Black
-            )
-            Text(
-                text = "James",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF5B4FE9)
-            )
-        }
-        Text(
-            text = "Here's your health overview for today",
-            fontSize = 14.sp,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun DailyMoodCheckCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF5B4FE9))
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Face,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Daily Mood Check",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White
-                    )
-                }
-                IconButton(
-                    onClick = { },
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close",
-                        tint = Color.White
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                MoodOption("😢", "Low")
-                MoodOption("😕", "Down")
-                MoodOption("😐", "Neutral")
-                MoodOption("🙂", "Good")
-                MoodOption("😄", "Great")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextButton(
-                onClick = { },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = "Skip for Now",
-                    color = Color.White,
-                    fontSize = 14.sp
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun MoodOption(emoji: String, label: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = emoji,
-            fontSize = 36.sp
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = label,
-            fontSize = 12.sp,
-            color = Color.White
-        )
-    }
-}
-
-@Composable
-fun ProfileCompletionBar() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Profile Completion",
-            fontSize = 14.sp,
-            color = Color.Gray
-        )
-        Text(
-            text = "50%",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black
-        )
-    }
-    Spacer(modifier = Modifier.height(8.dp))
-    LinearProgressIndicator(
-        progress = 0.5f,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp)
-            .clip(RoundedCornerShape(4.dp)),
-        color = Color(0xFF5B4FE9),
-        trackColor = Color(0xFFE0E0E0)
-    )
-}
-
-@Composable
-fun MedicationsAndAllergies() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Current Medications",
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MedicationChip("Lisinopril 10mg", Color(0xFFE8E4FF))
-                MedicationChip("Vitamin D", Color(0xFFE8E4FF))
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Allergies",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MedicationChip("Penicillin", Color(0xFFFFE5E5))
-                MedicationChip("Shellfish", Color(0xFFFFE5E5))
-            }
-        }
-    }
-}
-
-@Composable
-fun MedicationChip(text: String, backgroundColor: Color) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = backgroundColor
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            fontSize = 12.sp,
-            color = if (backgroundColor == Color(0xFFE8E4FF)) Color(0xFF5B4FE9) else Color(0xFFD32F2F)
-        )
-    }
-}
-
-@Composable
-fun RecommendedSteps() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Recommended Next Steps",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            RecommendedStepItem("Set a reminder for your blood pressure medication")
-            Spacer(modifier = Modifier.height(8.dp))
-            RecommendedStepItem("Schedule your annual checkup")
-            Spacer(modifier = Modifier.height(8.dp))
-            RecommendedStepItem("Complete emergency contact information")
-        }
-    }
-}
-
-@Composable
-fun RecommendedStepItem(text: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = android.R.drawable.ic_menu_add),
-            contentDescription = null,
-            tint = Color(0xFF5B4FE9),
-            modifier = Modifier.size(20.dp)
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = text,
-            fontSize = 14.sp,
-            color = Color.Black
-        )
-    }
-}
-
-@Composable
-fun ThingsNeedingAttention() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Thing Needing Attention",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black
-        )
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B4FE9)),
-            shape = RoundedCornerShape(20.dp)
-        ) {
-            Text("View All", fontSize = 12.sp)
-        }
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    AttentionItem(
-        title = "Tooth Pain Symptoms Detected",
-        subtitle = "For: James Logan",
-        isUrgent = true
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    AttentionItem(
-        title = "Overdue Dental Cleaning",
-        subtitle = "For: Rosy Logan",
-        isUrgent = true
-    )
-}
-
-@Composable
-fun AttentionItem(title: String, subtitle: String, isUrgent: Boolean) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFFD32F2F)
-                )
-                Text(
-                    text = subtitle,
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-            }
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                shape = RoundedCornerShape(20.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text("Schedule", fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-@Composable
-fun HealthOverviewSection() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Health Overview",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black
-        )
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B4FE9)),
-            shape = RoundedCornerShape(20.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text("Add", fontSize = 12.sp)
-        }
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        ProfileTab("James (Myself)", true)
-        ProfileTab("Rose Logan", false)
-        ProfileTab("Peter Logan", false)
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    UserHealthCard()
-}
-
-@Composable
-fun ProfileTab(name: String, isSelected: Boolean) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = if (isSelected) Color.Black else Color.White,
-        border = if (!isSelected) BorderStroke(1.dp, Color.LightGray) else null
-    ) {
-        Text(
-            text = name,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            fontSize = 12.sp,
-            color = if (isSelected) Color.White else Color.Black
-        )
-    }
-}
-
-@Composable
-fun UserHealthCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFE8E4FF))
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = null,
-                            tint = Color(0xFF5B4FE9),
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(32.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "James Logan",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Surface(
-                                shape = RoundedCornerShape(12.dp),
-                                color = Color(0xFFE8E4FF)
-                            ) {
-                                Text(
-                                    text = "40 yrs",
-                                    fontSize = 10.sp,
-                                    color = Color(0xFF5B4FE9),
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                                )
-                            }
-                        }
-                        Text(
-                            text = "Self",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "Last checkup: 45 days ago",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit",
-                        tint = Color.Gray
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Active Alerts",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            AlertItem("Blood pressure medication reminder")
-            Spacer(modifier = Modifier.height(8.dp))
-            AlertItem("Annual checkup due")
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Button(
-                    onClick = { },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Schedule", fontSize = 12.sp)
-                }
-                OutlinedButton(
-                    onClick = { },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF5B4FE9)),
-                    shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, Color(0xFF5B4FE9))
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Ask AI", fontSize = 12.sp)
-                }
-                OutlinedButton(
-                    onClick = { },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Gray),
-                    shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, Color.LightGray)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Appointment in 7 Days", fontSize = 10.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            }
-        }
-    }
-}
 
 
- */
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     val navController = rememberNavController()
     HomeScreen(navController = navController)
 }
+
+
+
+
+

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 
 @Composable
-fun SkipButton(onClick: () -> Unit) {
+fun SkipButton(title : String = "Skip",onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
         modifier = Modifier
@@ -39,7 +39,7 @@ fun SkipButton(onClick: () -> Unit) {
         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp)
     ) {
         Text(
-            text = "Skip",
+            text = title,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = FontFamily(Font(R.font.urbanist_semibold))
@@ -59,7 +59,7 @@ fun ContinueButton(text : String ,onClick: () -> Unit) {
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth().height(55.dp)
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
@@ -69,7 +69,7 @@ fun ContinueButton(text : String ,onClick: () -> Unit) {
                     ),
                     shape = RoundedCornerShape(45)
                 )
-                .padding(horizontal = 32.dp, vertical = 12.dp),
+                .padding(horizontal = 32.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(

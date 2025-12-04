@@ -76,7 +76,7 @@ fun LoginScreen(navController: NavHostController) {
         Spacer(Modifier.height(28.dp))
 
         // Gradient Login Button
-        GradientButton(text = "Login", onClick = { /*TODO*/ })
+        GradientButton(text = "Login", onClick = { navController.navigate(AppDestination.MainScreen) })
 
         Spacer(modifier = Modifier.weight(1f))
 

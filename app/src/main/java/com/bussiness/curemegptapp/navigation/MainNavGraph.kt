@@ -10,14 +10,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.bussiness.curemegptapp.ui.screen.auth.ResetScreen
-import com.bussiness.curemegptapp.ui.screen.intro.SplashScreen
 import com.bussiness.curemegptapp.ui.screen.main.HomeScreen
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
-import com.bussiness.curemegptapp.ui.screen.auth.ResetScreen
-import com.bussiness.curemegptapp.ui.screen.main.HomeScreen
+import com.bussiness.curemegptapp.ui.screen.main.schedule.HealthScheduleScreen
+import com.bussiness.curemegptapp.ui.screen.main.ThingNeedingAttentionScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -29,23 +25,28 @@ fun MainNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = AppDestination.Home::class.qualifiedName!!,
+        startDestination = AppDestination.Home,
         modifier = modifier.background(Color.Transparent)
     ) {
 
-        composable(AppDestination.Home::class.qualifiedName!!) {
+        composable<AppDestination.Home> {
             HomeScreen(navController)
         }
 
-        composable(AppDestination.Schedule::class.qualifiedName!!) {
+        composable<AppDestination.Schedule> {
+            HealthScheduleScreen(navController)
+        }
+        composable<AppDestination.Family> {
             ProfileCompletionScreen(navController)
         }
-        composable(AppDestination.Family::class.qualifiedName!!) {
+        composable<AppDestination.Reports> {
             ProfileCompletionScreen(navController)
         }
-        composable(AppDestination.Reports::class.qualifiedName!!) {
-            ProfileCompletionScreen(navController)
+
+        composable<AppDestination.ThingNeedingAttention> {
+            ThingNeedingAttentionScreen(navController)
         }
+
 
     }
 }

@@ -1,7 +1,9 @@
 package com.bussiness.curemegptapp.ui.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -13,11 +15,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 
 @Composable
@@ -98,3 +108,296 @@ fun HomeHeader(
         }
     }
 }
+
+@Composable
+fun GradientRedButton(
+    text: String,
+    icon: Int? = null,
+    width: Dp = 109.dp,
+    height: Dp = 39.dp,
+    gradientColors: List<Color> = listOf(
+        Color(0xFFF31D1D),
+        Color(0xFF8D1111)
+    ),
+    modifier :Modifier  = Modifier,
+    imageSize : Dp = 10.dp,
+    horizontalPadding : Dp =16.dp,
+    verticalPadding : Dp =8.dp,
+    fontSize : TextUnit  = 12.sp,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+        shape = RoundedCornerShape(31.dp),
+        contentPadding = PaddingValues(horizontal = horizontalPadding, vertical =verticalPadding),
+        modifier = modifier
+            .width(width)
+            .height(height)
+            .background(
+                brush = Brush.horizontalGradient(gradientColors),
+                shape = RoundedCornerShape(31.dp)
+            )
+    ) {
+
+        // Icon (optional)
+        icon?.let {
+            Image(
+                painter = painterResource(id = it),
+                contentDescription = null,
+                modifier = Modifier.size(imageSize)
+            )
+            Spacer(modifier = Modifier.width(7.dp))
+        }
+
+        // Text
+        Text(
+            text = text,
+            fontSize = fontSize,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium,
+            color = Color.White
+        )
+    }
+}
+
+@Composable
+fun AppointmentBox(
+    text: String,
+    iconRes: Int,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .border(1.dp, Color(0xFF697383), RoundedCornerShape(30.dp))
+            .clip(RoundedCornerShape(20.dp))
+            .clickable { onClick() }
+            .padding(horizontal = 10.dp, vertical = 6.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = text,
+                fontSize = 12.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = Color(0xFF697383),
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium
+            )
+        }
+    }
+}
+
+
+@Composable
+fun AttentionItem(title: String, subtitle: String, isUrgent: Boolean) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .border(color = Color(0xFFFDCBCB), width = 1.dp, shape = RoundedCornerShape(30.dp))
+            .background(color = Color(0xFFFFF6F6), shape = RoundedCornerShape(30.dp)),
+
+        ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFFD32F2F)
+                )
+                Text(
+                    text = subtitle,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF4338CA)
+                )
+            }
+
+            GradientRedButton(
+                text = "Schedule",
+                icon = R.drawable.ic_schedule_attention_icon,
+                onClick = { /* Your action */ }
+            )
+
+        }
+    }
+}
+
+
+@Composable
+fun MoodOptionSelectable(
+    icon: Int,
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(if (isSelected) Color.White else Color.Transparent)
+            .padding(horizontal = 8.dp, vertical = 6.dp)
+            .clickable { onClick() },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Image(
+            painter = painterResource(id = icon),
+            contentDescription = label,
+            modifier = Modifier.size(40.dp)
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+            text = label,
+            color = if (isSelected) Color(0xFF4338CA) else Color.White,
+            fontSize = 13.sp,
+            fontFamily = FontFamily(Font(if (isSelected) R.font.urbanist_semibold else R.font.urbanist_medium)),
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+fun GradientProgressBar(
+    progress: Float,
+    modifier: Modifier = Modifier
+) {
+    val gradientColors = listOf(
+        Color(0xFF5B4FE9),
+        Color(0xFF4338CA)
+    )
+
+    Box(
+        modifier = modifier
+            .height(10.dp)
+            .clip(RoundedCornerShape(50))
+            .background(Color(0xFFD9D9D9))   // Track color
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(progress)
+                .clip(RoundedCornerShape(50))
+                .background(brush = Brush.horizontalGradient(gradientColors))
+        )
+    }
+}
+
+
+@Composable
+fun AlertItem(alertText: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFDFD5FC), RoundedCornerShape(50.dp))
+            .padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_alert_notification),
+            contentDescription = null,
+            modifier = Modifier.size(29.dp)
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = alertText,
+            fontSize = 13.sp,
+            color = Color(0xFF181818),
+            modifier = Modifier.weight(1f),
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium
+
+        )
+    }
+}
+
+@Composable
+fun MedicationChip(text: String, backgroundColor: Color) {
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = backgroundColor
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            fontSize = 12.sp,
+            color = if (backgroundColor == Color(0xFFD5D2F3)) Color(0xFF211C64) else Color(
+                0xFFF31D1D
+            )
+        )
+    }
+}
+
+@Composable
+fun RecommendedStepItem(text: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_recommended_icon),
+            contentDescription = null,
+            modifier = Modifier.size(25.dp)
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF181818)
+        )
+    }
+}
+
+@Composable
+fun ProfileTab(
+    name: String,
+    isSelected: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(50.dp),
+        color = if (isSelected) Color.Black else Color.White,
+        border = if (!isSelected) BorderStroke(1.dp, Color(0xFF697383)) else null,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp, vertical = 3.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = name,
+                fontSize = 12.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium,
+                color = if (isSelected) Color.White else Color(0xFF697383)
+            )
+        }
+    }
+
+}
+
+

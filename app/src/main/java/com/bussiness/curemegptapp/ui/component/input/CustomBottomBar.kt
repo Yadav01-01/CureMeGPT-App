@@ -81,19 +81,14 @@ fun CustomBottomBar(
             }
         }
 
-        // ⭐ Center Button
-//        Box(
-//            modifier = Modifier
-//                .size(70.dp)
-//                .align(Alignment.TopCenter)
-//        ) {
+
             Image(
                 painter = painterResource(id = R.drawable.ic_middle_icon),
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.TopCenter)
                     .size(140.dp)
             )
-       // }
+
     }
 }
 
