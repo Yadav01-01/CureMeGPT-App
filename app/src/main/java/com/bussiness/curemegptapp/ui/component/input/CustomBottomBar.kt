@@ -1,22 +1,32 @@
 package com.bussiness.curemegptapp.ui.component.input
 
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,16 +35,13 @@ import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.data.model.BottomItem
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.util.AppConstant
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.runtime.remember
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 
 
 @Composable
 fun CustomBottomBar(
     selectedIndex: Int,
-    onItemSelected: (Int) -> Unit
+    onItemSelected: (Int) -> Unit,
+    onClickAIIcon : () -> Unit
 ) {
 
     val items = listOf(
@@ -81,19 +88,21 @@ fun CustomBottomBar(
             }
         }
 
-        // ⭐ Center Button
-//        Box(
-//            modifier = Modifier
-//                .size(70.dp)
-//                .align(Alignment.TopCenter)
-//        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_middle_icon),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.TopCenter)
-                    .size(140.dp)
-            )
-       // }
+        Image(
+            painter = painterResource(id = R.drawable.ic_middle_icon),
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .size(140.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
+                    onClickAIIcon()
+                }
+        )
+
+
     }
 }
 
@@ -111,21 +120,19 @@ fun BottomBarItem(
             .clip(RoundedCornerShape(18.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null   // ⭐ Ripple removed
+                indication = null
             ) {
                 onClick()
             }
 
     ) {
 
-        // ⭐ Drawable background when selected
         if (selected) {
             Image(
                 painter = painterResource(id = R.drawable.selected_item_bg),
                 contentDescription = null,
                 modifier = Modifier
                     .matchParentSize()
-                   // .clip(RoundedCornerShape(18.dp))
             )
         }
 
@@ -162,7 +169,8 @@ fun BottomBarItem(
 fun CustomBottomBarPreview() {
     CustomBottomBar(
         selectedIndex = 0,
-        onItemSelected = {}
+        onItemSelected = {},
+        onClickAIIcon = {}
     )
 }
 

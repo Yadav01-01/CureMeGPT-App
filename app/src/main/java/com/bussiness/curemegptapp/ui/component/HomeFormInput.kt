@@ -57,9 +57,6 @@ fun HomeHeader(
             )
 
             // Profile Image
-
-
-
             Row(
                 modifier = modifier.width(74.dp).height(52.dp)
                     .background(

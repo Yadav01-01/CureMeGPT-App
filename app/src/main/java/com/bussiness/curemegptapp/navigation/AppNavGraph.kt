@@ -32,8 +32,6 @@ fun AppNavGraph(navController: NavHostController,modifier : Modifier = Modifier)
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
-            .statusBarsPadding()
-            .navigationBarsPadding()
     ) {
         NavHost(
             navController = navController,

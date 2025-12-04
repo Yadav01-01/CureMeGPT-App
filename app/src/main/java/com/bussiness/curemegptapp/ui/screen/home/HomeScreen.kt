@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.ui.screen.main
+package com.bussiness.curemegptapp.ui.screen.home
 
 
 import android.util.Log
@@ -18,8 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -29,16 +29,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -63,6 +57,7 @@ import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.HomeHeader
 import androidx.compose.foundation.lazy.items
+import com.bussiness.curemegptapp.navigation.AppDestination
 
 
 @Composable
@@ -72,15 +67,16 @@ fun HomeScreen(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
+            .statusBarsPadding()
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HomeHeader(
-            logoRes = R.drawable.ic_logo,               // Aapke project ke drawable
+            logoRes = R.drawable.ic_logo,
             notificationRes = R.drawable.ic_notification_home_icon,
             profileRes = R.drawable.ic_profile_image,
             onClick = {
-
+                navController.navigate(AppDestination.ChatScreen)
             }
         )
         Column(
@@ -115,82 +111,6 @@ fun HomeScreen(navController: NavHostController) {
         }
     }
 }
-
-//    Scaffold(
-//        topBar = { HomeTopBar() }
-//    ) { paddingValues ->
-//        LazyColumn(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(paddingValues)
-//                .background(Color(0xFFF5F5F5)),
-//            contentPadding = PaddingValues(16.dp),
-//            verticalArrangement = Arrangement.spacedBy(16.dp)
-//        ) {
-//            item { WelcomeSection() }
-//            item { DailyMoodCheckCard() }
-//            item { ProfileCompletionBar() }
-//            item { MedicationsAndAllergies() }
-//            item { RecommendedSteps() }
-//            item { ThingsNeedingAttention() }
-//            item { HealthOverviewSection() }
-//        }
-//    }
-
-
-//
-//@Composable
-//fun HomeTopBar() {
-//    TopAppBar(
-//        title = {
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier.padding(start = 4.dp)
-//            ) {
-//                Image(
-//                    painter = painterResource(id = android.R.drawable.ic_dialog_info),
-//                    contentDescription = null,
-//                    modifier = Modifier.size(28.dp)
-//                )
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Text(
-//                    text = "CureMeGPT",
-//                    color = Color(0xFF5B4FE9),
-//                    fontSize = 20.sp,
-//                    fontWeight = FontWeight.SemiBold
-//                )
-//            }
-//        },
-//        actions = {
-//            IconButton(onClick = { }) {
-//                Image(
-//                    painter = painterResource(id = android.R.drawable.ic_popup_reminder),
-//                    contentDescription = "Notifications",
-//                    modifier = Modifier.size(24.dp)
-//                )
-//            }
-//            IconButton(onClick = { }) {
-//                Box(
-//                    modifier = Modifier
-//                        .size(40.dp)
-//                        .clip(CircleShape)
-//                        .background(Color(0xFFE8E4FF))
-//                ) {
-//                    Image(
-//                        painter = painterResource(id = android.R.drawable.ic_menu_myplaces),
-//                        contentDescription = "Profile",
-//                        modifier = Modifier
-//                            .align(Alignment.Center)
-//                            .size(24.dp)
-//                    )
-//                }
-//            }
-//        },
-//        colors = TopAppBarDefaults.topAppBarColors(
-//            containerColor = Color.White
-//        )
-//    )
-//}
 
 @Composable
 fun WelcomeSection() {
@@ -305,7 +225,7 @@ fun DailyMoodCheckCard() {
 
             // ---------- SKIP BUTTON ----------
             TextButton(
-                onClick = { },
+                onClick = {  },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text(
@@ -862,613 +782,6 @@ fun AlertItem(alertText: String) {
     }
 }
 
-/*
-@Composable
-fun HomeScreen(navController: NavHostController) {
-    Scaffold(
-        topBar = { HomeTopBar() }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(Color(0xFFF5F5F5)),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item { WelcomeSection() }
-            item { DailyMoodCheckCard() }
-            item { ProfileCompletionBar() }
-            item { MedicationsAndAllergies() }
-            item { RecommendedSteps() }
-            item { ThingsNeedingAttention() }
-            item { HealthOverviewSection() }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeTopBar() {
-    TopAppBar(
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 4.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = android.R.drawable.ic_dialog_info),
-                    contentDescription = null,
-                    tint = Color(0xFF5B4FE9),
-                    modifier = Modifier.size(28.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "CureMeGPT",
-                    color = Color(0xFF5B4FE9),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-        },
-        actions = {
-            IconButton(onClick = { }) {
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notifications",
-                    tint = Color.Gray
-                )
-            }
-            IconButton(onClick = { }) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFE8E4FF))
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "Profile",
-                        tint = Color(0xFF5B4FE9),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(24.dp)
-                    )
-                }
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.White
-        )
-    )
-}
-
-@Composable
-fun WelcomeSection() {
-    Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = "Hello ",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.Black
-            )
-            Text(
-                text = "James",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF5B4FE9)
-            )
-        }
-        Text(
-            text = "Here's your health overview for today",
-            fontSize = 14.sp,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun DailyMoodCheckCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF5B4FE9))
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Face,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(28.dp)
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Daily Mood Check",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White
-                    )
-                }
-                IconButton(
-                    onClick = { },
-                    modifier = Modifier.size(24.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close",
-                        tint = Color.White
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                MoodOption("😢", "Low")
-                MoodOption("😕", "Down")
-                MoodOption("😐", "Neutral")
-                MoodOption("🙂", "Good")
-                MoodOption("😄", "Great")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextButton(
-                onClick = { },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = "Skip for Now",
-                    color = Color.White,
-                    fontSize = 14.sp
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun MoodOption(emoji: String, label: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = emoji,
-            fontSize = 36.sp
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = label,
-            fontSize = 12.sp,
-            color = Color.White
-        )
-    }
-}
-
-@Composable
-fun ProfileCompletionBar() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Profile Completion",
-            fontSize = 14.sp,
-            color = Color.Gray
-        )
-        Text(
-            text = "50%",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black
-        )
-    }
-    Spacer(modifier = Modifier.height(8.dp))
-    LinearProgressIndicator(
-        progress = 0.5f,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp)
-            .clip(RoundedCornerShape(4.dp)),
-        color = Color(0xFF5B4FE9),
-        trackColor = Color(0xFFE0E0E0)
-    )
-}
-
-@Composable
-fun MedicationsAndAllergies() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Current Medications",
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit",
-                    tint = Color.Gray,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MedicationChip("Lisinopril 10mg", Color(0xFFE8E4FF))
-                MedicationChip("Vitamin D", Color(0xFFE8E4FF))
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Allergies",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MedicationChip("Penicillin", Color(0xFFFFE5E5))
-                MedicationChip("Shellfish", Color(0xFFFFE5E5))
-            }
-        }
-    }
-}
-
-@Composable
-fun MedicationChip(text: String, backgroundColor: Color) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = backgroundColor
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            fontSize = 12.sp,
-            color = if (backgroundColor == Color(0xFFE8E4FF)) Color(0xFF5B4FE9) else Color(0xFFD32F2F)
-        )
-    }
-}
-
-@Composable
-fun RecommendedSteps() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Recommended Next Steps",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            RecommendedStepItem("Set a reminder for your blood pressure medication")
-            Spacer(modifier = Modifier.height(8.dp))
-            RecommendedStepItem("Schedule your annual checkup")
-            Spacer(modifier = Modifier.height(8.dp))
-            RecommendedStepItem("Complete emergency contact information")
-        }
-    }
-}
-
-@Composable
-fun RecommendedStepItem(text: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = android.R.drawable.ic_menu_add),
-            contentDescription = null,
-            tint = Color(0xFF5B4FE9),
-            modifier = Modifier.size(20.dp)
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = text,
-            fontSize = 14.sp,
-            color = Color.Black
-        )
-    }
-}
-
-@Composable
-fun ThingsNeedingAttention() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Thing Needing Attention",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black
-        )
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B4FE9)),
-            shape = RoundedCornerShape(20.dp)
-        ) {
-            Text("View All", fontSize = 12.sp)
-        }
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    AttentionItem(
-        title = "Tooth Pain Symptoms Detected",
-        subtitle = "For: James Logan",
-        isUrgent = true
-    )
-    Spacer(modifier = Modifier.height(8.dp))
-    AttentionItem(
-        title = "Overdue Dental Cleaning",
-        subtitle = "For: Rosy Logan",
-        isUrgent = true
-    )
-}
-
-@Composable
-fun AttentionItem(title: String, subtitle: String, isUrgent: Boolean) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFFD32F2F)
-                )
-                Text(
-                    text = subtitle,
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
-            }
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                shape = RoundedCornerShape(20.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text("Schedule", fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-@Composable
-fun HealthOverviewSection() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Health Overview",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black
-        )
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B4FE9)),
-            shape = RoundedCornerShape(20.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text("Add", fontSize = 12.sp)
-        }
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        ProfileTab("James (Myself)", true)
-        ProfileTab("Rose Logan", false)
-        ProfileTab("Peter Logan", false)
-    }
-    Spacer(modifier = Modifier.height(12.dp))
-    UserHealthCard()
-}
-
-@Composable
-fun ProfileTab(name: String, isSelected: Boolean) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = if (isSelected) Color.Black else Color.White,
-        border = if (!isSelected) BorderStroke(1.dp, Color.LightGray) else null
-    ) {
-        Text(
-            text = name,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            fontSize = 12.sp,
-            color = if (isSelected) Color.White else Color.Black
-        )
-    }
-}
-
-@Composable
-fun UserHealthCard() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
-                            .background(Color(0xFFE8E4FF))
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = null,
-                            tint = Color(0xFF5B4FE9),
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(32.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "James Logan",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Surface(
-                                shape = RoundedCornerShape(12.dp),
-                                color = Color(0xFFE8E4FF)
-                            ) {
-                                Text(
-                                    text = "40 yrs",
-                                    fontSize = 10.sp,
-                                    color = Color(0xFF5B4FE9),
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                                )
-                            }
-                        }
-                        Text(
-                            text = "Self",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                        Text(
-                            text = "Last checkup: 45 days ago",
-                            fontSize = 12.sp,
-                            color = Color.Gray
-                        )
-                    }
-                }
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit",
-                        tint = Color.Gray
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Active Alerts",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            AlertItem("Blood pressure medication reminder")
-            Spacer(modifier = Modifier.height(8.dp))
-            AlertItem("Annual checkup due")
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Button(
-                    onClick = { },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F)),
-                    shape = RoundedCornerShape(20.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Schedule", fontSize = 12.sp)
-                }
-                OutlinedButton(
-                    onClick = { },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFF5B4FE9)),
-                    shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, Color(0xFF5B4FE9))
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Info,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Ask AI", fontSize = 12.sp)
-                }
-                OutlinedButton(
-                    onClick = { },
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Gray),
-                    shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(1.dp, Color.LightGray)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Appointment in 7 Days", fontSize = 10.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            }
-        }
-    }
-}
-
-
- */
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
