@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -175,6 +176,77 @@ fun ProfileInputMultipleLineField(
                 .padding(horizontal = 8.dp)
                 .clip(shape)
                 .border(1.dp, Color(0xFFC3C6CB), shape),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+    }
+}
+
+@Composable
+fun ProfileInputMultipleLineField2(
+    label: String,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    heightOfEditText : Dp = 90.dp,
+    paddingHorizontal: Dp  = 90.dp,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    borderColor: Color = Color(0xFFC3C6CB),
+    textColor: Color = Color(0xFFB8B9BD),
+) {
+
+    val shape = RoundedCornerShape(30.dp)
+
+    Column(modifier = modifier.fillMaxWidth()) {
+
+        // 🔹 Label Text (top of field)
+
+        Row {
+            Text(
+                text = label,
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(start = 12.dp, bottom = 6.dp)
+            )
+            if (isImportant) {
+                Text(
+                    text = "*",
+                    fontSize = 15.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding( bottom = 6.dp)
+                )
+            }
+
+        }
+
+        // 🔹 TextField
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    color = textColor,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(heightOfEditText)
+                .padding(horizontal = paddingHorizontal)
+                .clip(shape)
+                .border(1.dp, borderColor, shape),
             colors = TextFieldDefaults.colors(
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White,
@@ -841,11 +913,12 @@ fun UniversalInputField(
     placeholder: String,
     value: String,
     rightIcon: Int? = null,
+    modifier: Modifier= Modifier,
     onClick: () -> Unit = {}
 ) {
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
@@ -946,3 +1019,108 @@ fun CancelButton(
         )
     }
 }
+
+
+@Composable
+fun TopBarHeader1(title: String, onBackClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth() .padding(16.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_cross_icon),
+                contentDescription = "Back Icon",
+                modifier = Modifier.size(42.dp).clickable{onBackClick()}
+            )
+Spacer(Modifier.width(19.dp))
+            Text(
+                text = title,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium
+            )
+
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+        HorizontalDivider(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFEBE1FF)))
+
+    }
+}
+
+
+@Composable
+fun ProfileInputSmallField(
+    label: String,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+
+    val shape = RoundedCornerShape(30.dp)
+
+    Column(modifier = modifier.fillMaxWidth()) {
+
+        // 🔹 Label Text (top of field)
+
+        Row {
+            Text(
+                text = label,
+                fontSize = 15.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                color = Color.Black,
+                modifier = Modifier.padding( bottom = 6.dp)
+            )
+            if (isImportant) {
+                Text(
+                    text = "*",
+                    fontSize = 15.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding( bottom = 6.dp)
+                )
+            }
+
+        }
+
+        // 🔹 TextField
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    color = Color(0xFFB8B9BD),
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                )
+            },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clip(shape)
+                .border(1.dp, Color(0xFF697383), shape),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+    }
+}
+

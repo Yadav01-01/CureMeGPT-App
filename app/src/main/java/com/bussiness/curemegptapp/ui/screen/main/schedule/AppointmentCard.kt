@@ -36,10 +36,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.GradientRedButton
+import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
 
 @Composable
-fun AppointmentCard(appointment: Appointment) {
+fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
+                    onDeleteClick: () -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
+
     var checkedState by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.fillMaxWidth().wrapContentHeight(),
@@ -90,8 +93,8 @@ fun AppointmentCard(appointment: Appointment) {
                         modifier = Modifier,
                         checked = checkedState,
                         onCheckedChange = { checkedState = it },
-                        onEditClick = {  },
-                        onDeleteClick = {  })
+                        onEditClick = { onEditClick()},
+                        onDeleteClick = { onDeleteClick()  })
                 }
 
 
@@ -215,7 +218,6 @@ fun AppointmentCard(appointment: Appointment) {
                         onClick = { /* Your action */ }
                     )
                 }
-
 
 
             }

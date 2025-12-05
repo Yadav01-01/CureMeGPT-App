@@ -122,6 +122,9 @@ fun HomeScreen(navController: NavHostController,
             profileRes = R.drawable.ic_profile_image,
             onClick = {
 
+            },
+            onClickNotification = {
+                navController.navigate(AppDestination.AlertScreen)
             }
         )
         Column(

@@ -53,6 +53,15 @@ sealed class AppDestination {
     @Serializable
     data object HealthSchedule : AppDestination()
 
+    @Serializable
+    data object ScheduleNewAppointment : AppDestination()
+
+    @Serializable
+    data object AddMedication : AppDestination()
+
+    @Serializable
+    data object AlertScreen : AppDestination()
+
 
 
 }

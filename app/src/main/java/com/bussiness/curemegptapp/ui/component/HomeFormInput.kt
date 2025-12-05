@@ -39,6 +39,7 @@ fun HomeHeader(
     paddingHorizontal: Dp = 16.dp,
     paddingVertical: Dp = 10.dp,
     onClick: () -> Unit,
+    onClickNotification: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -63,7 +64,9 @@ fun HomeHeader(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(45.dp)
-                    .padding(end = 8.dp)
+                    .padding(end = 8.dp).clickable(){
+                        onClickNotification()
+                    }
             )
 
             // Profile Image

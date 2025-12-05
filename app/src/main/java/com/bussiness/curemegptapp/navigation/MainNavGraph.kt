@@ -14,6 +14,9 @@ import com.bussiness.curemegptapp.ui.screen.main.HomeScreen
 import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
 import com.bussiness.curemegptapp.ui.screen.main.schedule.HealthScheduleScreen
 import com.bussiness.curemegptapp.ui.screen.main.ThingNeedingAttentionScreen
+import com.bussiness.curemegptapp.ui.screen.main.addMedication.AddMedicationScreen
+import com.bussiness.curemegptapp.ui.screen.main.alert.AlertScreen
+import com.bussiness.curemegptapp.ui.screen.main.scheduleNewAppointment.ScheduleNewAppointmentScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -45,6 +48,17 @@ fun MainNavGraph(
 
         composable<AppDestination.ThingNeedingAttention> {
             ThingNeedingAttentionScreen(navController)
+        }
+
+        composable<AppDestination.ScheduleNewAppointment> {
+            ScheduleNewAppointmentScreen(navController)
+        }
+        composable<AppDestination.AddMedication> {
+            AddMedicationScreen(navController)
+        }
+
+        composable<AppDestination.AlertScreen> {
+            AlertScreen(navController)
         }
 
 

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -47,7 +48,7 @@ fun CustomPowerSpinner(
     var expanded by remember { mutableStateOf(false) }
     var selectedReason by remember { mutableStateOf(selectedText) }
 
-    Box(modifier = modifier.background(Color.White)) {
+    Box(modifier = modifier.background(Color.White) ) {
         // Main button
         Card(
             modifier = Modifier
@@ -73,7 +74,7 @@ fun CustomPowerSpinner(
                     )
 
                 Image(
-                    painter = painterResource(if (expanded) R.drawable.ic_dropdown_icon else R.drawable.ic_dropdown_show),
+                    painter = painterResource(if (expanded) R.drawable.ic_dropdown_show else R.drawable.ic_dropdown_icon),
                     contentDescription = "",
                 )
             }
@@ -126,7 +127,7 @@ fun CustomPowerSpinner(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier .fillMaxWidth()
+            modifier = Modifier .fillMaxWidth().heightIn(max = 300.dp)
                 .padding(horizontal = 15.dp, vertical = 5.dp)
                // .border(1.dp, Color(0xFF808080), RoundedCornerShape(12.dp))
                 .background(Color.White, RoundedCornerShape(12.dp)),

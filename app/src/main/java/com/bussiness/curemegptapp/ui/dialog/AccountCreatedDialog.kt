@@ -37,6 +37,7 @@ import com.bussiness.curemegptapp.ui.component.GradientButton1
 fun AccountCreatedDialog(
     title: String = "Account Created\nSuccessfully!",
     description: String = "Your account is ready. Start exploring now!",
+    icon : Int = R.drawable.ic_check,
     onDismiss: () -> Unit,
     onSetupProfile: () -> Unit,
     onGoToAskAI: () -> Unit

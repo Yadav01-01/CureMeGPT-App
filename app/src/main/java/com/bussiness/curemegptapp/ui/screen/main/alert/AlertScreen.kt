@@ -1,0 +1,271 @@
+package com.bussiness.curemegptapp.ui.screen.main.alert
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.bussiness.curemegptapp.ui.component.TopBarHeader1
+import com.bussiness.curemegptapp.R
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.bussiness.curemegptapp.ui.screen.main.schedule.MedicationsCard
+
+
+
+@Composable
+fun AlertScreen(
+    navController: NavHostController
+) {
+    val alertList = listOf(
+        AlertModel(
+            id = 1,
+            name = "Rosy Logan",
+            title = "Medication Reminder",
+            description = "Time to take your Lisinopril 10mg. Don't forget to take it with food.",
+            time = "Just Now",
+            priority = "",
+            actionRequired = false
+        ),
+        AlertModel(
+            id = 2,
+            name = "James Logan",
+            title = "Urgent: Health Report Available",
+            description = "Your recent blood test results show elevated cholesterol levels. Please schedule a follow-up with your doctor.",
+            time = "30m ago",
+            priority = "High",
+            actionRequired = true
+        ),
+        AlertModel(
+            id = 3,
+            name = "James Logan",
+            title = "Dental Cleaning Today",
+            description = "Don't forget your dental cleaning appointment today at 2:00 PM with Dr. Sarah Johnson.",
+            time = "32m ago",
+            priority = "Medium",
+            actionRequired = false
+        )
+    )
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFFFFFF))
+    ) {
+
+        TopBarHeader1(title = "Alerts", onBackClick = {})
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 19.dp)
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 50.dp, top = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+
+            ) {
+                items(alertList) { item ->
+                    AlertCard(
+                        name = item.name,
+                        title = item.title,
+                        description = item.description,
+                        time = item.time,
+                        showTags = item.priority.isNotEmpty(),
+                        priority = item.priority,
+                        actionRequired = item.actionRequired
+                    )
+                }
+            }
+
+        }
+
+
+        }
+
+}
+
+
+@Composable
+fun AlertCard(
+    name: String,
+    title: String,
+    description: String,
+    time: String,
+    showTags: Boolean,
+    priority: String = "",
+    actionRequired: Boolean = false
+) {
+    var checked by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp))
+            .border(1.dp, Color(0xFFE7E6F8), RoundedCornerShape(30.dp))
+            .background(Color(0xFFF9F9FD))
+            .padding(20.dp)
+    ) {
+
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(
+                text = "For: $name",
+                color = Color(0xFF211C64),
+                fontSize = 12.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium
+            )
+
+            Text(
+                text = time,
+                color = Color.Black,
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = title,
+            color = Color.Black,
+            fontSize = 14.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+            fontWeight = FontWeight.Normal
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = description,
+            color = Color(0xFF404657),
+            fontSize = 15.sp,
+            lineHeight = 20.sp
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        if (showTags) {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+
+                PriorityTag(
+                    label = priority,
+                    color = if (priority == "High") Color(0xFFEB5757) else Color(0xFFFFA24C)
+                )
+
+                if (actionRequired) {
+                    ActionRequiredTag()
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_appointed_gray_icon),
+                contentDescription = "",
+                tint = Color.White,
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(Color(0xFF413BD1), CircleShape)
+                    .padding(10.dp)
+            )
+
+            Spacer(Modifier.width(16.dp))
+
+            Row(
+                modifier = Modifier.clickable { checked = !checked },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = checked,
+                    onCheckedChange = { checked = it }
+                )
+                Text(
+                    "Mark As Complete",
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PriorityTag(label: String, color: Color) {
+    Box(
+        modifier = Modifier
+            .border(1.dp, color, RoundedCornerShape(50.dp))
+            .padding(vertical = 4.dp, horizontal = 12.dp)
+    ) {
+        Text(
+            text = label,
+            color = color,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+fun ActionRequiredTag() {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(50.dp))
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(Color(0xFFE74C3C), Color(0xFFAA0015))
+                )
+            )
+            .padding(vertical = 5.dp, horizontal = 14.dp)
+    ) {
+        Text(
+            text = "Action Required",
+            color = Color.White,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+data class AlertModel(
+    val id: Int,
+    val name: String,
+    val title: String,
+    val description: String,
+    val time: String,
+    val priority: String = "",
+    val actionRequired: Boolean = false,
+)

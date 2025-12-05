@@ -902,8 +902,15 @@ fun DocumentsStep(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+
     }
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun ProfileCompletionScreenPreview() {
+    val navController = rememberNavController()
+    ProfileCompletionScreen(navController = navController)
+}

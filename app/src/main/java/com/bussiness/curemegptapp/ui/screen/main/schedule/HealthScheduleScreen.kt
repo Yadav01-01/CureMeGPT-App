@@ -34,7 +34,10 @@ import com.bussiness.curemegptapp.ui.sheet.FilterAppointmentsBottomSheet
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.RoundedCustomCheckbox
+import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
+import com.bussiness.curemegptapp.ui.sheet.FilterFamilyMembersSheet
 
 data class Appointment(
     val title: String,
@@ -45,14 +48,43 @@ data class Appointment(
     val location: String,
     val description: String,
     val icon: Int,
-    val isVisibleItem : Boolean = true
+    val isVisibleItem: Boolean = true
+)
+
+data class Medication(
+    val id: Int = 0,
+    val icon: Int,
+    val title: String,
+
+    val patientName: String,
+    val medicationType: String,
+    val frequency: String,
+    val days: String,
+    val times: List<MedicationTime>,
+    val startDate: String,
+    val endDate: String,
+    val instructions: String,
+    val isVisibleItem: Boolean = false
+)
+
+data class MedicationTime(
+    val time: String,
+    val isChecked: Boolean = false
 )
 
 @Composable
 fun HealthScheduleScreen(navController: NavHostController) {
     var showSheet by remember { mutableStateOf(false) }
+    var showSheet1 by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog1 by remember { mutableStateOf(false) }
+    var members: List<String> = listOf(
+        "James (Myself)",
+        "Rose Logan (Spouse)",
+        "Peter Logan (Son)"
+    )
     val appointments = listOf(
         Appointment(
             title = "Normal Check-up",
@@ -109,13 +141,81 @@ fun HealthScheduleScreen(navController: NavHostController) {
         )
     )
 
+    val medication = listOf(
+        Medication(
+            icon = R.drawable.ic_medication_icon, // You'll need to add this icon
+            title = "Albuterol Inhaler 2 puffs",
+            patientName = "Peter Logan",
+            medicationType = "Medication",
+            frequency = "Weekly",
+            days = "Monday, Tuesday",
+            times = listOf(
+                MedicationTime("09:00 AM", false),
+                MedicationTime("09:00 PM", false),
+                MedicationTime("10:00 AM", false),
+                MedicationTime("04:00 PM", false)
+            ),
+            startDate = "08/28/2025",
+            endDate = "10/28/2025",
+            instructions = "For asthma symptoms",
+            isVisibleItem = true
+        ),
+        Medication(
+            icon = R.drawable.ic_medication_icon, // You'll need to add this icon
+            title = "Albuterol Inhaler",
+            patientName = "Peter Logan",
+            medicationType = "Medication",
+            frequency = "Weekly",
+            days = "Monday, Tuesday",
+            times = listOf(
+                MedicationTime("09:00 AM", false),
+                MedicationTime("09:00 PM", false),
+                MedicationTime("10:00 AM", false),
+                MedicationTime("04:00 PM", false)
+            ),
+            startDate = "08/28/2025",
+            endDate = "10/28/2025",
+            instructions = "For asthma symptoms",
+            isVisibleItem = true
+        ),
+        Medication(
+            icon = R.drawable.ic_medication_icon, // You'll need to add this icon
+            title = "Supplements Name",
+            patientName = "Peter Logan",
+            medicationType = "Medication",
+            frequency = "Weekly",
+            days = "Monday, Tuesday",
+            times = listOf(
+                MedicationTime("09:00 AM", false),
+                MedicationTime("09:00 PM", false),
+                MedicationTime("10:00 AM", false),
+                MedicationTime("04:00 PM", false),
+                MedicationTime("11:00 AM", false),
+                MedicationTime("12:00 PM", false),
+                MedicationTime("13:00 AM", false),
+                MedicationTime("14:00 PM", false)
+            ),
+            startDate = "08/28/2025",
+            endDate = "10/28/2025",
+            instructions = "For asthma symptoms",
+            isVisibleItem = true
+        )
+    )
+
     val filteredList = appointments.filter { item ->
+        item.title.contains(searchQuery, ignoreCase = true)
+    }
+    val filteredList1 = medication.filter { item ->
         item.title.contains(searchQuery, ignoreCase = true)
     }
 
 
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFFFFFFF))) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFFFFFF))
+    ) {
 
         Column(
             modifier = Modifier
@@ -199,9 +299,11 @@ fun HealthScheduleScreen(navController: NavHostController) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_filter_icon),
                         contentDescription = "Filter",
-                        modifier = Modifier.wrapContentSize().clickable() {
-                            showSheet = true
-                        }
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .clickable() {
+                                showSheet = true
+                            }
                     )
 
                 }
@@ -215,7 +317,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(filteredList) { appointment ->
-                        AppointmentCard(appointment = appointment)
+                        AppointmentCard(appointment = appointment, onEditClick = {}, onDeleteClick = {showDeleteDialog = true})
                     }
                 }
             } else {
@@ -272,9 +374,11 @@ fun HealthScheduleScreen(navController: NavHostController) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_filter_icon),
                         contentDescription = "Filter",
-                        modifier = Modifier.wrapContentSize().clickable() {
-                            showSheet = true
-                        }
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .clickable() {
+                                showSheet1 = true
+                            }
                     )
 
                 }
@@ -287,8 +391,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
                     contentPadding = PaddingValues(bottom = 100.dp, start = 16.dp, end = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    items(filteredList) { appointment ->
-                        MedicationsCard(appointment = appointment)
+                    items(filteredList1) { medication ->
+                        MedicationsCard(medication = medication, onEditClick = {}, onDeleteClick = {showDeleteDialog1 = true})
                     }
                 }
 
@@ -297,25 +401,27 @@ fun HealthScheduleScreen(navController: NavHostController) {
         }
 
 
-            GradientRedButton(
-                text = "Schedule",
-                icon = R.drawable.ic_plus_normal_icon,
-                width = 150.dp,
-                height = 55.dp,
-                fontSize = 16.sp,
-                imageSize = 24.dp,
-                modifier = Modifier.align(Alignment.BottomEnd).padding(horizontal = 15.dp, vertical = 30.dp),
-                gradientColors = listOf(
-                    Color(0xFF4338CA),
-                    Color(0xFF211C64)
-                ),
-                onClick = { /* Your action */ }
-            )
+        GradientRedButton(
+            text = if (selectedTab == 0) "Schedule" else "Add Medication",
+            icon = R.drawable.ic_plus_normal_icon,
+            width = if (selectedTab == 0) 150.dp else 177.dp,
+            height = 55.dp,
+            fontSize = 16.sp,
+            imageSize = 22.dp,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(horizontal = 15.dp, vertical = 30.dp),
+            gradientColors = listOf(
+                Color(0xFF4338CA),
+                Color(0xFF211C64)
+            ),
+            onClick = {  if (selectedTab == 0) navController.navigate(AppDestination.ScheduleNewAppointment) else navController.navigate(AppDestination.AddMedication) /* Your action */ }
+        )
 
     }
 
 
-    if (showSheet){
+    if (showSheet) {
         BottomSheetDialog(
             onDismissRequest = {
 
@@ -337,7 +443,58 @@ fun HealthScheduleScreen(navController: NavHostController) {
                 }
             )
 
-        }}
+        }
+    }
+
+    if (showSheet1) {
+        BottomSheetDialog(
+            onDismissRequest = {
+
+                showSheet1 = false
+            },
+            properties = BottomSheetDialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = false,
+                dismissWithAnimation = true,
+                enableEdgeToEdge = false,
+            )
+        ) {
+
+            FilterFamilyMembersSheet(
+                members = members
+            )
+
+        }
+    }
+
+
+    if (showDeleteDialog) {
+        AlertCardDialog(
+            icon = R.drawable.ic_delete_icon_new,
+            title = "Delete Appointment?",
+            message = "Are you sure you want to delete Peter’s appointment? This action cannot be undone.",
+            confirmText = "Delete",
+            cancelText = "Cancel",
+            onDismiss = { showDeleteDialog = false},
+            onConfirm = {  showDeleteDialog = false
+            }
+        )
+
+    }
+
+    if (showDeleteDialog1) {
+        AlertCardDialog(
+            icon = R.drawable.ic_delete_icon_new,
+            title = "Delete Medication?",
+            message = "Are you sure you want to delete Rosy’s medication? This action cannot be undone.",
+            confirmText = "Delete",
+            cancelText = "Cancel",
+            onDismiss = { showDeleteDialog1 = false},
+            onConfirm = {  showDeleteDialog1 = false
+            }
+        )
+
+    }
 }
 
 

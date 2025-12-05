@@ -1,9 +1,10 @@
 package com.bussiness.curemegptapp.ui.screen.main.schedule
 
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,9 +46,11 @@ import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.GradientRedButton
 
 @Composable
-fun MedicationsCard(appointment: Appointment) {
-    var showMenu by remember { mutableStateOf(false) }
+fun MedicationsCard(medication: Medication,onEditClick: () -> Unit,
+                    onDeleteClick: () -> Unit) {
+    var timeStates by remember { mutableStateOf(medication.times.map { it.isChecked }) }
     var checkedState by remember { mutableStateOf(false) }
+
     Surface(
         modifier = Modifier.fillMaxWidth().wrapContentHeight(),
         shape = RoundedCornerShape(40.dp),
@@ -50,7 +58,9 @@ fun MedicationsCard(appointment: Appointment) {
         border =  BorderStroke(1.dp, Color(0xFFE7E6F8))
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min) .padding(20.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min) .padding(20.dp)
         ) {
             // Icon Column
             Box(
@@ -58,11 +68,15 @@ fun MedicationsCard(appointment: Appointment) {
                     .width(60.dp)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(30.dp))
-                    .border(color = Color(0xFF181818), width = 2.dp, shape = RoundedCornerShape(40.dp)),
+                    .border(
+                        color = Color(0xFF181818),
+                        width = 2.dp,
+                        shape = RoundedCornerShape(40.dp)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = appointment.icon),
+                    painter = painterResource(id = medication.icon),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp),
                 )
@@ -74,56 +88,268 @@ fun MedicationsCard(appointment: Appointment) {
             Column(
                 modifier = Modifier.weight(1f)
             ) {
+                // Title and Menu
+           /*     Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = medication.title,
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                            fontWeight = FontWeight.Medium,
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = medication.dosage,
+                            fontSize = 12.sp,
+                            color = Color(0xFF666666),
+                            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+
+                    // Menu Icon (Three dots - you'll need to add this icon)
+                    Box(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { *//* Handle menu click *//* },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        // Replace with your menu icon
+                        Text(
+                            text = "⋮",
+                            fontSize = 20.sp,
+                            color = Color(0xFF666666)
+                        )
+                    }
+                }*/
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(
-                        text = appointment.title,
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = medication.title,
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                            fontWeight = FontWeight.Medium,
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = "For: ${medication.patientName}",
+                            fontSize = 14.sp,
+                            color = Color(0xFF4338CA),
+                            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
 
 
-                    PostContentMenu(
+                    EditDeleteMenu(
                         modifier = Modifier,
-                        checked = checkedState,
-                        onCheckedChange = { checkedState = it },
-                        onEditClick = {  },
-                        onDeleteClick = {  })
+                       onEditClick = {  },
+                        onDeleteClick = {  onDeleteClick() })
+                }
+
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+
+                // Medication Type
+                Text(
+                    text = "Medication Type: ${medication.medicationType}",
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal
+                )
+
+                Spacer(modifier = Modifier.height(13.dp))
+
+                // Frequency Badge
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = Color(0xFFE8E4FF)
+                ) {
+                    Text(
+                        text = medication.frequency,
+                        fontSize = 10.sp,
+                        color = Color(0xFF211C64),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                        fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Days
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_days_name_icon),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = medication.days,
+                        fontSize = 14.sp,
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Times with Checkboxes - Using Manual Grid (2 columns)
+                val times = medication.times
+                Row{
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_date_health_icon),
+                        contentDescription = null,
+                        modifier = Modifier.size(29.dp),
+                    )
+                    Spacer(modifier = Modifier.width(9.dp))
+
+
+                    Column {
+                    // First row (2 items)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // First column items
+                        times.take(2).forEachIndexed { index, timeSlot ->
+                            Box(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                TimeSlotItem(
+                                    time = timeSlot.time,
+
+                                )
+                            }
+                        }
+                    }
+
+                    // Second row (2 items) - if we have more than 2 times
+                    if (times.size > 2) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            // Second column items
+                            times.drop(2).take(2).forEachIndexed { originalIndex, timeSlot ->
+                                val index = originalIndex + 2
+                                Box(
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    TimeSlotItem(
+                                        time = timeSlot.time,
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                        if (times.size > 4) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                // Second column items
+                                times.drop(4).take(2).forEachIndexed { originalIndex, timeSlot ->
+                                    val index = originalIndex + 2
+                                    Box(
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        TimeSlotItem(
+                                            time = timeSlot.time,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        if (times.size > 6) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                // Second column items
+                                times.drop(6).take(2).forEachIndexed { originalIndex, timeSlot ->
+                                    val index = originalIndex + 2
+                                    Box(
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        TimeSlotItem(
+                                            time = timeSlot.time,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        if (times.size > 8) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                // Second column items
+                                times.drop(8).take(2).forEachIndexed { originalIndex, timeSlot ->
+                                    val index = originalIndex + 2
+                                    Box(
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        TimeSlotItem(
+                                            time = timeSlot.time,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        if (times.size > 10) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                // Second column items
+                                times.drop(10).take(2).forEachIndexed { originalIndex, timeSlot ->
+                                    val index = originalIndex + 2
+                                    Box(
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        TimeSlotItem(
+                                            time = timeSlot.time,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                }
                 }
 
 
 
+                Spacer(modifier = Modifier.height(10.dp))
 
-                Spacer(modifier = Modifier.height(4.dp))
-
-
-
-                Text(
-                    text = "For: ${appointment.patientName}",
-                    fontSize = 14.sp,
-                    color = Color(0xFF4338CA),
-                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                    fontWeight = FontWeight.Normal
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Medication Type: Medication",
-                    fontSize = 14.sp,
-                    color = Color(0xFF374151),
-                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                    fontWeight = FontWeight.Normal
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                // Date and Time
+                // Date Range
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -131,57 +357,36 @@ fun MedicationsCard(appointment: Appointment) {
                         painter = painterResource(id = R.drawable.ic_calender_health_icon),
                         contentDescription = null,
                         modifier = Modifier.size(29.dp),
-
-                        )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = appointment.date,
-                        fontSize = 14.sp,
+                        text = "${medication.startDate}",
+                        fontSize = 12.sp,
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                         fontWeight = FontWeight.Normal
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
+
                     Image(
-                        painter = painterResource(id = R.drawable.ic_date_health_icon),
+                        painter = painterResource(id = R.drawable.ic_calender_health_icon),
                         contentDescription = null,
                         modifier = Modifier.size(29.dp),
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+
                     Text(
-                        text = appointment.time,
-                        fontSize = 14.sp,
+                        text = "${medication.endDate}",
+                        fontSize = 12.sp,
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                         fontWeight = FontWeight.Normal
                     )
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                // Location
-                Row(
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_location_health_icon),
-                        contentDescription = null,
-                        modifier = Modifier.size(29.dp),
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = appointment.location,
-                        fontSize = 14.sp,
-                        color = Color.Black,
-                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                        fontWeight = FontWeight.Normal,
-                        lineHeight = 20.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                // Description
+                // Instructions
                 Row(
                     verticalAlignment = Alignment.Top
                 ) {
@@ -190,33 +395,14 @@ fun MedicationsCard(appointment: Appointment) {
                         contentDescription = null,
                         modifier = Modifier.size(29.dp),
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = appointment.description,
+                        text = medication.instructions,
                         fontSize = 14.sp,
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                if(appointment.isVisibleItem){
-                    // View Summary Button
-                    GradientRedButton(
-                        text = "View Summary",
-                        icon = R.drawable.ic_summary_view_icon,
-                        width = 155.dp,
-                        height = 35.dp,
-                        fontSize = 14.sp,
-                        imageSize = 18.dp,
-                        modifier = Modifier.align(Alignment.End),
-                        gradientColors = listOf(
-                            Color(0xFF4338CA),
-                            Color(0xFF211C64)
-                        ),
-                        onClick = { /* Your action */ }
+                        fontWeight = FontWeight.Normal,
+                        lineHeight = 20.sp
                     )
                 }
 
@@ -227,21 +413,55 @@ fun MedicationsCard(appointment: Appointment) {
     }
 }
 
+@Composable
+fun TimeSlotItem(
+    time: String,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(50.dp))
+            .border(
+                width = 1.dp,
+                color = Color(0xFF211C64),
+                shape = RoundedCornerShape(50.dp)
+            )
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        contentAlignment = Alignment.Center   // ✅ Center horizontally + vertically
+    ) {
+
+        Text(
+            text = time,
+            fontSize = 13.sp,
+            color = Color.Black,
+            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+            fontWeight = FontWeight.Normal
+        )
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun MedicationsCardPreview() {
-
-    val sampleAppointment = Appointment(
-        icon = R.drawable.ic_calender_health_icon,
-        title = "Dental Check-up",
-        doctor = "Dr. Vipin Khatri",
-        patientName = "Rohit Sharma",
-        date = "12 Dec 2025",
-        time = "10:30 AM",
-        location = "CureMe Hospital, 2nd Floor",
-        description = "Regular follow-up appointment for dental cleaning.",
+    val sampleMedication = Medication(
+        icon = R.drawable.ic_medication_icon,
+        title = "Albuterol Inhaler 2 puffs",
+        patientName = "Peter Logan",
+        medicationType = "Medication",
+        frequency = "Weekly",
+        days = "Monday, Tuesday",
+        times = listOf(
+            MedicationTime("09:00 AM", false),
+            MedicationTime("09:00 PM", false),
+            MedicationTime("10:00 AM", false),
+            MedicationTime("04:00 PM", false)
+        ),
+        startDate = "08/28/2025",
+        endDate = "10/28/2025",
+        instructions = "For asthma symptoms",
         isVisibleItem = true
     )
 
-    MedicationsCard(appointment = sampleAppointment)
+    MedicationsCard(medication = sampleMedication, onEditClick = {}, onDeleteClick = {})
 }

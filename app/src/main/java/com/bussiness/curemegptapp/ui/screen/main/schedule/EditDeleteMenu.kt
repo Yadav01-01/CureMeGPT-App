@@ -26,11 +26,10 @@ import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.RoundedCustomCheckbox
 
+
 @Composable
-fun PostContentMenu(
+fun EditDeleteMenu(
     modifier: Modifier = Modifier,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
@@ -57,30 +56,11 @@ fun PostContentMenu(
             containerColor = Color.White,
             shape = RoundedCornerShape(15.dp) //  outer curve applied
         ) {
+
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = "Mark As Complete",
-                        fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                        color = Color(0xFF374151),
-                        fontSize = 16.sp
-                    )
-                },
-                leadingIcon = {
-                    RoundedCustomCheckbox(
-                        checked = checked,
-                        onCheckedChange = { onCheckedChange(it) }
-                    )
-                },
-                onClick = {
-                    expanded = false
-                  //  onEditClick()
-                }
-            )
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = "Reschedule",
+                        text = "Edit",
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                         color = Color(0xFF374151),
                         fontSize = 16.sp
@@ -97,7 +77,6 @@ fun PostContentMenu(
                 onClick = {
                     expanded = false
                     onEditClick()
-
                 }
             )
             DropdownMenuItem(
