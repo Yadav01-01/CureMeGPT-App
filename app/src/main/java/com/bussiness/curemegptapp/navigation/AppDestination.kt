@@ -62,6 +62,9 @@ sealed class AppDestination {
     @Serializable
     data object AlertScreen : AppDestination()
 
+    @Serializable
+    data object FamilyPersonProfile : AppDestination()
+
 
 
 }

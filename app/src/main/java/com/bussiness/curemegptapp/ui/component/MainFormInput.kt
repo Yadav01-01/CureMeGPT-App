@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -78,8 +79,8 @@ fun SettingHeader(title: String, onBackClick: () -> Unit) {
 
 
         }
-        HorizontalDivider(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFFEBE1FF)))
-
+       // HorizontalDivider(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFFEBE1FF)))
+        Divider(color = Color(0xFFEBE1FF), thickness = 2.dp)
     }
 }
 
@@ -105,8 +106,8 @@ fun CommonHeader(
                 fontWeight = FontWeight.Medium
             )
         }
-        HorizontalDivider(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFFEBE1FF)))
-
+        //HorizontalDivider(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFFEBE1FF)))
+        Divider(color = Color(0xFFEBE1FF), thickness = 2.dp)
     }
 }
 

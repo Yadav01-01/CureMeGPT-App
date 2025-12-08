@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -1030,7 +1031,7 @@ fun TopBarHeader1(title: String, onBackClick: () -> Unit) {
 
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth() .padding(16.dp),
+            modifier = Modifier.fillMaxWidth() .padding( horizontal = 20.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -1050,9 +1051,9 @@ Spacer(Modifier.width(19.dp))
 
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
-        HorizontalDivider(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFEBE1FF)))
 
+       // HorizontalDivider(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFEBE1FF)))
+        Divider(color = Color(0xFFEBE1FF), thickness = 1.dp)
     }
 }
 

@@ -323,7 +323,7 @@ fun RoundedCustomCheckbox(
             .size(28.dp)
             .clip(RoundedCornerShape(cornerRadius))
             .background(
-                if (checked) darkBlue else Color.White
+                if (checked) darkBlue else Color.Unspecified
             )
             .border(
                 width = 1.dp,
