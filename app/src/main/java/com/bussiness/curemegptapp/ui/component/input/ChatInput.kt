@@ -1,9 +1,6 @@
 package com.bussiness.curemegptapp.ui.component.input
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,19 +26,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,11 +46,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.data.model.ChatMessage
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors
-import com.bussiness.curemegptapp.viewmodel.ChatViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -141,214 +126,247 @@ fun ChatHeader(
                     )
                 }
             }
-
         }
     }
 }
 
-@Composable
-fun BottomMessageBar(
-    modifier: Modifier = Modifier,
-    viewModel: ChatViewModel
-) {
-    var showAttachmentMenu by remember { mutableStateOf(false) }
-
-    val message by viewModel.currentMessage.collectAsState()
-    val images by viewModel.selectedImages.collectAsState()
-    val pdfFiles by viewModel.selectedPdfs.collectAsState()
-
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri -> if (uri != null) viewModel.onImageSelected(uri) }
-
-    val pdfPickerLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri -> if (uri != null) viewModel.onPdfSelected(uri) }
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(horizontal = 10.dp, vertical = 6.dp)
-    ) {
-
-        // --------------------
-        //  IMAGE + PDF PREVIEWS
-        // --------------------
-        if (images.isNotEmpty() || pdfFiles.isNotEmpty()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                horizontalArrangement = Arrangement.Start
-            ) {
-
-                // IMAGE PREVIEW CHIP LIST
-                images.forEach { uri ->
-                    Box(
-                        modifier = Modifier
-                            .size(70.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Color(0xFFF5F0FF))
-                    ) {
-                        AsyncImage(
-                            model = uri,
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                        Icon(
-                            painter = painterResource(R.drawable.remove_ic),
-                            contentDescription = "Remove",
-                            tint = Color.Unspecified,
-                            modifier = Modifier
-                                .size(22.dp)
-                                .background(Color(0x80000000), CircleShape)
-                                .align(Alignment.TopEnd)
-                                .clickable { viewModel.removeImage(uri) }
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-
-                // PDF PREVIEW CHIP
-                pdfFiles.forEach { pdf ->
-                    Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(Color(0xFFF5F0FF))
-                            .padding(horizontal = 12.dp, vertical = 10.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.pdf_ic),
-                            contentDescription = null,
-                            tint = Color.Unspecified
-                        )
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            text = pdf.name,
-                            fontSize = 13.sp,
-                            maxLines = 1
-                        )
-                        Spacer(Modifier.width(6.dp))
-                        Icon(
-                            painter = painterResource(R.drawable.remove_ic),
-                            contentDescription = "Remove",
-                            tint = Color.Gray,
-                            modifier = Modifier
-                                .size(18.dp)
-                                .clickable { viewModel.removePdf(pdf) }
-                        )
-                    }
-                }
-            }
-        }
-
-        // --------------------
-        //  MAIN INPUT BAR
-        // --------------------
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            // INPUT BUBBLE
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = 54.dp, max = 150.dp)
-                    .background(Color(0xFFF5F0FF), RoundedCornerShape(40.dp))
-                    .padding(start = 4.dp, end = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                // ATTACH ICON
-                Box {
-                    IconButton(onClick = { showAttachmentMenu = true }) {
-                        Icon(
-                            painter = painterResource(R.drawable.attach_ic),
-                            contentDescription = "Attach",
-                            tint = Color.Unspecified
-                        )
-                    }
-
-                    DropdownMenu(
-                        expanded = showAttachmentMenu,
-                        onDismissRequest = { showAttachmentMenu = false }
-                    ) {
-                        DropdownMenuItem(
-                            text = { Text("Image") },
-                            onClick = {
-                                showAttachmentMenu = false
-                                imagePickerLauncher.launch("image/*")
-                            }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("PDF") },
-                            onClick = {
-                                showAttachmentMenu = false
-                                pdfPickerLauncher.launch("application/pdf")
-                            }
-                        )
-                    }
-                }
-
-                Spacer(Modifier.width(4.dp))
-
-                // AUTO EXPANDING TEXTFIELD
-                TextField(
-                    value = message,
-                    onValueChange = { viewModel.onMessageChange(it) },
-                    placeholder = { Text("Ask anything…") },
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = Color(0xFF4338CA),
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent
-                    ),
-                    maxLines = 4,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(Modifier.width(10.dp))
-
-            // --------------------
-            //  MIC / SEND button (Animated)
-            // --------------------
-            val hasText = message.trim().isNotEmpty() ||
-                    images.isNotEmpty() || pdfFiles.isNotEmpty()
-
-            val scale by animateFloatAsState(if (hasText) 1f else 0f)
-
-            IconButton(
-                modifier = Modifier
-                    .size(52.dp),
-                onClick = {  if (hasText) viewModel.sendMessage()
-                else viewModel.startVoiceInput()}
-            ) {
-                if (hasText) {
-                    Icon(
-                        painter = painterResource(R.drawable.send_ic),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier.wrapContentSize()
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(R.drawable.voiceinc_ic),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier.wrapContentSize()
-                    )
-                }
-            }
-        }
-    }
-}
+//@Composable
+//fun BottomMessageBar(
+//    modifier: Modifier = Modifier,
+//    state: ChatInputState,
+//    onEvent: (ChatInputEvent) -> Unit
+//) {
+//    var showAttachmentMenu by remember { mutableStateOf(false) }
+//
+//    val imagePickerLauncher = rememberLauncherForActivityResult(
+//        ActivityResultContracts.GetContent()
+//    ) { uri -> uri?.let { onEvent(ChatInputEvent.OnImageSelected(it)) } }
+//
+//    val pdfPickerLauncher = rememberLauncherForActivityResult(
+//        ActivityResultContracts.GetContent()
+//    ) { uri ->
+//        uri?.let {
+//            onEvent(ChatInputEvent.OnPdfSelected(PdfFile(it, "Document.pdf")))
+//        }
+//    }
+//
+//    Column(
+//        modifier = modifier
+//            .fillMaxWidth()
+//            .background(Color.White)
+//            .navigationBarsPadding()
+//            .padding(horizontal = 12.dp, vertical = 6.dp)
+//    ) {
+//
+//        // -------------------------------
+//        // Attachments Preview Row
+//        // -------------------------------
+//        if (state.images.isNotEmpty() || state.pdfFiles.isNotEmpty()) {
+//            AttachmentPreviewRow(
+//                state = state,
+//                onEvent = onEvent
+//            )
+//            Spacer(Modifier.height(6.dp))
+//        }
+//
+//        // -------------------------------
+//        // Main Input Box
+//        // -------------------------------
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(Color.White),
+//            verticalAlignment = Alignment.Bottom
+//        ) {
+//
+//            // -------------------------------
+//            //     CHATGPT STYLE INPUT
+//            // -------------------------------
+//            Row(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .background(Color(0xFFF2F4F7), RoundedCornerShape(24.dp))
+//                    .padding(horizontal = 12.dp, vertical = 6.dp),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//
+//                // ATTACH BUTTON
+//                Box {
+//                    IconButton(
+//                        onClick = { showAttachmentMenu = true },
+//                        modifier = Modifier.size(38.dp)
+//                    ) {
+//                        Icon(
+//                            painter = painterResource(R.drawable.attach_ic),
+//                            contentDescription = "Attach",
+//                            tint = Color(0xFF6B7280)
+//                        )
+//                    }
+//
+//                    DropdownMenu(
+//                        expanded = showAttachmentMenu,
+//                        onDismissRequest = { showAttachmentMenu = false }
+//                    ) {
+//                        DropdownMenuItem(
+//                            text = { Text("Image") },
+//                            onClick = {
+//                                showAttachmentMenu = false
+//                                imagePickerLauncher.launch("image/*")
+//                            }
+//                        )
+//                        DropdownMenuItem(
+//                            text = { Text("PDF") },
+//                            onClick = {
+//                                showAttachmentMenu = false
+//                                pdfPickerLauncher.launch("application/pdf")
+//                            }
+//                        )
+//                    }
+//                }
+//
+//                // MESSAGE FIELD
+//                BasicTextField(
+//                    value = state.message,
+//                    onValueChange = { onEvent(ChatInputEvent.OnMessageChanged(it)) },
+//                    maxLines = 4,
+//                    textStyle = LocalTextStyle.current.copy(
+//                        fontSize = 16.sp,
+//                        color = Color.Black
+//                    ),
+//                    decorationBox = { innerTextField ->
+//                        if (state.message.isEmpty()) {
+//                            Text(
+//                                "Message…",
+//                                color = Color(0xFF9CA3AF),
+//                                fontSize = 16.sp
+//                            )
+//                        }
+//                        innerTextField()
+//                    },
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .padding(horizontal = 6.dp)
+//                )
+//            }
+//
+//            Spacer(Modifier.width(10.dp))
+//
+//            // -----------------------------------
+//            //   ANIMATED MIC → SEND BUTTON
+//            // -----------------------------------
+//            val canSend = state.message.isNotBlank()
+//                    || state.images.isNotEmpty()
+//                    || state.pdfFiles.isNotEmpty()
+//
+//            IconButton(
+//                onClick = {
+//                    if (canSend) onEvent(ChatInputEvent.OnSendClicked)
+//                    else onEvent(ChatInputEvent.OnMicClicked)
+//                },
+//                modifier = Modifier
+//                    .size(52.dp)
+//                    .clip(CircleShape)
+//                    .background(Color(0xFF6633FF))
+//            ) {
+//                AnimatedContent(
+//                    targetState = canSend,
+//                    label = ""
+//                ) { isSending ->
+//                    if (isSending) {
+//                        Icon(
+//                            painter = painterResource(R.drawable.send_ic),
+//                            contentDescription = "Send",
+//                            tint = Color.White
+//                        )
+//                    } else {
+//                        Icon(
+//                            painter = painterResource(R.drawable.voiceinc_ic),
+//                            contentDescription = "Voice Input",
+//                            tint = Color.White
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun AttachmentPreviewRow(
+//    state: ChatInputState,
+//    onEvent: (ChatInputEvent) -> Unit
+//) {
+//    Row(
+//        modifier = Modifier.fillMaxWidth(),
+//        horizontalArrangement = Arrangement.Start
+//    ) {
+//
+//        // IMAGES
+//        state.images.forEach { uri ->
+//            Box(
+//                modifier = Modifier
+//                    .size(70.dp)
+//                    .clip(RoundedCornerShape(14.dp))
+//                    .background(Color(0xFFEDE9FF))
+//            ) {
+//                AsyncImage(
+//                    model = uri,
+//                    contentDescription = null,
+//                    modifier = Modifier.fillMaxSize(),
+//                    contentScale = ContentScale.Crop
+//                )
+//
+//                Icon(
+//                    painter = painterResource(R.drawable.remove_ic),
+//                    contentDescription = "Remove",
+//                    tint = Color.White,
+//                    modifier = Modifier
+//                        .padding(4.dp)
+//                        .size(22.dp)
+//                        .background(Color(0x80000000), CircleShape)
+//                        .align(Alignment.TopEnd)
+//                        .clickable { onEvent(ChatInputEvent.RemoveImage(uri)) }
+//                )
+//            }
+//            Spacer(Modifier.width(8.dp))
+//        }
+//
+//        // PDF FILES
+//        state.pdfFiles.forEach { pdf ->
+//            Surface(
+//                color = Color(0xFFF5F0FF),
+//                shape = RoundedCornerShape(16.dp),
+//                tonalElevation = 1.dp,
+//                modifier = Modifier.padding(end = 6.dp)
+//            ) {
+//                Row(
+//                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Icon(
+//                        painter = painterResource(R.drawable.pdf_ic),
+//                        contentDescription = null
+//                    )
+//                    Spacer(Modifier.width(6.dp))
+//                    Text(
+//                        pdf.fileName,
+//                        fontSize = 13.sp,
+//                        maxLines = 1
+//                    )
+//                    Spacer(Modifier.width(6.dp))
+//                    Icon(
+//                        painter = painterResource(R.drawable.remove_ic),
+//                        contentDescription = "Remove",
+//                        tint = Color.Gray,
+//                        modifier = Modifier
+//                            .size(18.dp)
+//                            .clickable { onEvent(ChatInputEvent.RemovePdf(pdf)) }
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 
@@ -433,12 +451,14 @@ fun ChatBubble(message: ChatMessage) {
                                 LocalConfiguration.current.screenWidthDp.dp * 0.7f
                         )
                 ) {
-                    Text(
-                        text = message.text,
-                        color = if (message.isUser) Color.White else Color.Black,
-                        fontSize = 14.sp,
-                        modifier = Modifier.padding(12.dp)
-                    )
+                    message.text?.let {
+                        Text(
+                            text = it,
+                            color = if (message.isUser) Color.White else Color.Black,
+                            fontSize = 14.sp,
+                            modifier = Modifier.padding(12.dp)
+                        )
+                    }
                 }
 
                 // Bot reaction bar (left side)
@@ -462,13 +482,6 @@ fun ChatBubble(message: ChatMessage) {
 
         }
         }
-}
-
-
-
-fun formatTime(timestamp: Long): String {
-    val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
-    return sdf.format(Date(timestamp))
 }
 
 fun formatDate(timestamp: Long): String {
@@ -569,11 +582,8 @@ fun ReactionIcon(
                 modifier = Modifier.size(18.dp)
             )
         }
-
     }
 }
-
-
 
 @Composable
 fun AIChatHeader(

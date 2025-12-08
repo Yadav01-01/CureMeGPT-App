@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,14 +18,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.navigation.AppDestination
+import com.bussiness.curemegptapp.ui.component.BottomMessageBar
 import com.bussiness.curemegptapp.ui.component.input.AIChatHeader
-import com.bussiness.curemegptapp.ui.component.input.BottomMessageBar
 import com.bussiness.curemegptapp.ui.component.input.NewCaseContent
 import com.bussiness.curemegptapp.viewmodel.ChatViewModel
 
 @Composable
 fun AIChatScreen(navController: NavHostController) {
     val viewModel: ChatViewModel = hiltViewModel()
+    val uiState = viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,7 +59,7 @@ fun AIChatScreen(navController: NavHostController) {
                 "What should I do if I feel dizzy often?"
             ),
             onProfileChange = {},
-            onNewCaseClick = {},
+            onNewCaseClick = { navController.navigate(AppDestination.ChatScreen)},
             onQuestionClick = {}
         )
     }
@@ -65,11 +67,13 @@ fun AIChatScreen(navController: NavHostController) {
     Box(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 15.dp)
     ) {
-        BottomMessageBar(
-            modifier = Modifier
-                .align(Alignment.BottomCenter),
-            viewModel = viewModel
-        )
+//        BottomMessageBar(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 16.dp, vertical = 10.dp).align(Alignment.BottomCenter),
+//            state = uiState.value,
+//            onEvent = viewModel::onEvent
+//        )
     }
 
 }

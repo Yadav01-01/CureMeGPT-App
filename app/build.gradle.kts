@@ -77,10 +77,12 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
 
-    //hilt
+    // hilt
     implementation (libs.hilt.android)
     kapt (libs.hilt.compiler)
     // Hilt for Jetpack Compose
     implementation (libs.androidx.hilt.navigation.compose)
+    // speech
+    implementation (libs.accompanist.permissions.v0360)
 
 }

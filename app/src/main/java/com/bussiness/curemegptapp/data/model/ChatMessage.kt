@@ -1,18 +1,19 @@
 package com.bussiness.curemegptapp.data.model
 
 import android.net.Uri
-import com.bussiness.curemegptapp.viewmodel.ChatViewModel
+
+data class PdfData(
+    val uri: Uri,
+    val name: String
+)
 
 data class ChatMessage(
-    val text: String = "",
+    val id: String = java.util.UUID.randomUUID().toString(),
+    val text: String? = null,
     val isUser: Boolean = false,
-    val timestamp: Long = 0L,
-
+    val timestamp: Long = System.currentTimeMillis(),
     val images: List<Uri> = emptyList(),
-    val pdfs: List<ChatViewModel.PdfData> = emptyList(),
-
-    val attachmentUri: Uri? = null,
-    val attachmentType: String? = null
+    val pdfs: List<PdfData> = emptyList()
 )
 
 

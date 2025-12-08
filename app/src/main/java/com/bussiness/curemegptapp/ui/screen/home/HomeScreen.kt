@@ -76,7 +76,7 @@ fun HomeScreen(navController: NavHostController) {
             notificationRes = R.drawable.ic_notification_home_icon,
             profileRes = R.drawable.ic_profile_image,
             onClick = {
-                navController.navigate(AppDestination.ChatScreen)
+
             }
         )
         Column(

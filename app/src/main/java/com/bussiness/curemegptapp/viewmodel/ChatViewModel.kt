@@ -4,141 +4,94 @@ import android.app.Application
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bussiness.curemegptapp.data.model.ChatMessage
+import com.bussiness.curemegptapp.data.model.PdfData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+
+data class ChatInputState(
+    val message: String = "",
+    val images: List<Uri> = emptyList(),
+    val pdfs: List<PdfData> = emptyList(),
+    val isRecording: Boolean = false
+)
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val app: Application
 ) : ViewModel() {
 
-    // ----------------------------------------------------------------
-    // INITIAL SAMPLE MESSAGES
-    // ----------------------------------------------------------------
-    private val _messages = MutableStateFlow(
-        listOf(
-            ChatMessage(
-                text = "hey last a few hours and usually get worse in the evening.",
-                isUser = true,
-                timestamp = System.currentTimeMillis() - 1000 * 60 * 60 * 2
-            ),
-            ChatMessage(
-                text = "I’m here to help, James! 😊\n\n" +
-                        "How long do the headaches usually last?\n" +
-                        "Do they get worse in morning/evening?",
-                isUser = false,
-                timestamp = System.currentTimeMillis() - 1000 * 60 * 60
-            ),
-            ChatMessage(
-                text = "Yes, I feel some pain in my molar when drinking cold water.",
-                isUser = true,
-                timestamp = System.currentTimeMillis() - 1000 * 60 * 45
-            ),
-            ChatMessage(
-                text = "Thanks for sharing. Evening headaches can be linked to stress or teeth grinding.\n\nHave you noticed jaw clenching or tooth sensitivity?",
-                isUser = false,
-                timestamp = System.currentTimeMillis() - 1000 * 60 * 4
-            )
-        )
-    )
+    private val _uiState = MutableStateFlow(ChatInputState())
+    val uiState: StateFlow<ChatInputState> = _uiState
+
+    private val _messages = MutableStateFlow<List<ChatMessage>>(emptyList())
     val messages: StateFlow<List<ChatMessage>> = _messages
 
-
-    // ----------------------------------------------------------------
-    // MESSAGE TEXT
-    // ----------------------------------------------------------------
-    private val _currentMessage = MutableStateFlow("")
-    val currentMessage: StateFlow<String> get() = _currentMessage
-
-    fun onMessageChange(value: String) {
-        _currentMessage.value = value.take(250)
+    fun onMessageChange(newText: String) {
+        _uiState.update { it.copy(message = newText.take(1000)) }
     }
 
-
-    // ----------------------------------------------------------------
-    // SELECTED IMAGES
-    // ----------------------------------------------------------------
-    private val _selectedImages = MutableStateFlow<List<Uri>>(emptyList())
-    val selectedImages: StateFlow<List<Uri>> get() = _selectedImages
-
-    fun onImageSelected(uri: Uri) {
-        _selectedImages.value += uri
+    fun addImage(uri: Uri) {
+        _uiState.update { it.copy(images = it.images + uri) }
     }
 
     fun removeImage(uri: Uri) {
-        _selectedImages.value -= uri
+        _uiState.update { it.copy(images = it.images - uri) }
     }
 
-
-    // ----------------------------------------------------------------
-    // SELECTED PDF FILES
-    // ----------------------------------------------------------------
-    data class PdfData(
-        val uri: Uri,
-        val name: String = "Document.pdf"
-    )
-
-    private val _selectedPdfs = MutableStateFlow<List<PdfData>>(emptyList())
-    val selectedPdfs: StateFlow<List<PdfData>> get() = _selectedPdfs
-
-    fun onPdfSelected(uri: Uri) {
-        _selectedPdfs.value += PdfData(
-            uri = uri,
-            name = getPdfFileName(uri)
-        )
+    fun addPdf(uri: Uri) {
+        val name = getPdfName(uri)
+        _uiState.update { it.copy(pdfs = it.pdfs + PdfData(uri, name)) }
     }
 
     fun removePdf(pdf: PdfData) {
-        _selectedPdfs.value -= pdf
+        _uiState.update { it.copy(pdfs = it.pdfs - pdf) }
     }
 
-    private fun getPdfFileName(uri: Uri): String {
-        return app.contentResolver.query(uri, null, null, null, null)
-            ?.use { cursor ->
-                val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                cursor.moveToFirst()
-                if (index >= 0) cursor.getString(index) else "Document.pdf"
-            } ?: "Document.pdf"
+    fun toggleRecording() {
+        _uiState.update { it.copy(isRecording = !it.isRecording) }
     }
 
+    fun stopRecording() {
+        _uiState.update { it.copy(isRecording = false) }
+    }
 
-    // ----------------------------------------------------------------
-    // SEND MESSAGE (TEXT + IMAGES + PDF)
-    // ----------------------------------------------------------------
-    fun sendMessage() {
-        val text = _currentMessage.value.trim()
-        val imgs = _selectedImages.value
-        val pdfs = _selectedPdfs.value
+    fun sendMessageFromInput() {
+        val s = _uiState.value
+        if (s.message.isBlank() && s.images.isEmpty() && s.pdfs.isEmpty()) return
 
-        if (text.isEmpty() && imgs.isEmpty() && pdfs.isEmpty())
-            return
-
-        val time = System.currentTimeMillis()
-
-        val message = ChatMessage(
-            text = text,
+        val msg = ChatMessage(
+            text = s.message.takeIf { it.isNotBlank() },
             isUser = true,
-            timestamp = time,
-            images = imgs,
-            pdfs = pdfs
+            images = s.images,
+            pdfs = s.pdfs
         )
+        _messages.update { it + msg }
 
-        _messages.value += message
+        // reset input
+        _uiState.update { ChatInputState() }
 
-        // Reset inputs
-        _currentMessage.value = ""
-        _selectedImages.value = emptyList()
-        _selectedPdfs.value = emptyList()
+        // Example: simulate AI response
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(800)
+            _messages.update {
+                it + ChatMessage(text = "Thanks — I got that. Here's a sample reply.", isUser = false)
+            }
+        }
     }
 
-
-    // ----------------------------------------------------------------
-    // VOICE INPUT
-    // ----------------------------------------------------------------
-    fun startVoiceInput() {
-        println("Voice input started… (implement STT here)")
+    // Helper to read filename from content resolver
+    private fun getPdfName(uri: Uri): String {
+        return app.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            cursor.moveToFirst()
+            if (index >= 0) cursor.getString(index) else "document.pdf"
+        } ?: "document.pdf"
     }
 }

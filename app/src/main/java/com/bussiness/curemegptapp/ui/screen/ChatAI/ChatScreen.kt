@@ -1,7 +1,13 @@
 package com.bussiness.curemegptapp.ui.screen.ChatAI
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bussiness.curemegptapp.R
-import com.bussiness.curemegptapp.ui.component.input.BottomMessageBar
+import com.bussiness.curemegptapp.ui.component.BottomMessageBar
 import com.bussiness.curemegptapp.ui.component.input.ChatHeader
 import com.bussiness.curemegptapp.ui.component.input.CommunityChatSection
 import com.bussiness.curemegptapp.viewmodel.ChatViewModel
@@ -22,8 +28,10 @@ import com.bussiness.curemegptapp.viewmodel.ChatViewModel
 fun ChatScreen(navController: NavHostController) {
 
     val viewModel: ChatViewModel = hiltViewModel()
-    val listState = rememberLazyListState()
+    val uiState by viewModel.uiState.collectAsState()
     val messages by viewModel.messages.collectAsState()
+    val listState = rememberLazyListState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,22 +56,23 @@ fun ChatScreen(navController: NavHostController) {
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .imePadding()  // keyboard push up
+                .imePadding()
         ) {
-
-            // TODO: Replace with your messages list
-             CommunityChatSection(
+            CommunityChatSection(
                 messages = messages,
                 listState = listState,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 65.dp)
+                    .padding(bottom = 90.dp)
             )
 
-            /** MESSAGE INPUT BAR */
+
             BottomMessageBar(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter),
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(horizontal = 5.dp, vertical = 10.dp),
+                state = uiState,
                 viewModel = viewModel
             )
         }
