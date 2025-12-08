@@ -94,10 +94,11 @@ import com.bussiness.curemegptapp.ui.viewModel.main.HomeViewModel
 import java.time.format.DateTimeFormatter
 
 
-
 @Composable
-fun HomeScreen(navController: NavHostController,
-               viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavHostController,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
     val selectedMood by viewModel.selectedMood
 
@@ -121,7 +122,7 @@ fun HomeScreen(navController: NavHostController,
             notificationRes = R.drawable.ic_notification_home_icon,
             profileRes = R.drawable.ic_profile_image,
             onClick = {
-
+                navController.navigate(AppDestination.MyProfileScreen)
             },
             onClickNotification = {
                 navController.navigate(AppDestination.AlertScreen)
@@ -139,7 +140,8 @@ fun HomeScreen(navController: NavHostController,
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            DailyMoodCheckCard(     selectedMood = selectedMood,
+            DailyMoodCheckCard(
+                selectedMood = selectedMood,
                 onMoodSelected = { mood -> viewModel.updateMood(mood) }
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -150,8 +152,10 @@ fun HomeScreen(navController: NavHostController,
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F9FD)),
                 shape = RoundedCornerShape(30.dp)
             ) {
-                MedicationsAndAllergies(    medications = uiState.medications,
-                    allergies = uiState.allergies)
+                MedicationsAndAllergies(
+                    medications = uiState.medications,
+                    allergies = uiState.allergies
+                )
 
                 Spacer(modifier = Modifier.height(20.dp))
                 RecommendedSteps(steps = uiState.recommendedSteps)
@@ -176,7 +180,7 @@ fun HomeScreen(navController: NavHostController,
 
 
 @Composable
-fun WelcomeSection(userGreating: String,userName: String) {
+fun WelcomeSection(userGreating: String, userName: String) {
     Column(horizontalAlignment = Alignment.Start) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -210,10 +214,10 @@ fun WelcomeSection(userGreating: String,userName: String) {
 
 
 @Composable
-fun DailyMoodCheckCard(   selectedMood: String,
-                          onMoodSelected: (String) -> Unit
+fun DailyMoodCheckCard(
+    selectedMood: String,
+    onMoodSelected: (String) -> Unit
 ) {
-
 
 
     val moodList = listOf(
@@ -290,7 +294,7 @@ fun DailyMoodCheckCard(   selectedMood: String,
 
             // ---------- SKIP BUTTON ----------
             TextButton(
-                onClick = {  },
+                onClick = { },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text(
@@ -304,7 +308,6 @@ fun DailyMoodCheckCard(   selectedMood: String,
         }
     }
 }
-
 
 
 @Composable
@@ -367,8 +370,10 @@ fun GradientProgressBar(
 
 
 @Composable
-fun MedicationsAndAllergies( medications: List<String>,
-                             allergies: List<String>) {
+fun MedicationsAndAllergies(
+    medications: List<String>,
+    allergies: List<String>
+) {
 
 //    val medications = listOf(
 //        "Lisinopril 10mg",
@@ -515,16 +520,16 @@ fun RecommendedStepItem(text: String) {
 }
 
 @Composable
-fun ThingsNeedingAttention(   attentionItems: List<AttentionItem>,
-                              onScheduleClick: (Int) -> Unit,
-                              onViewAllClick: () -> Unit) {
+fun ThingsNeedingAttention(
+    attentionItems: List<AttentionItem>,
+    onScheduleClick: (Int) -> Unit,
+    onViewAllClick: () -> Unit
+) {
 
     val attention = listOf(
-        Triple("Tooth Pain Symptoms Detected", "For: James Logan",true),
-        Triple("Overdue Dental Cleaning", "For: Rosy Logan",true),
-
-
-    )
+        Triple("Tooth Pain Symptoms Detected", "For: James Logan", true),
+        Triple("Overdue Dental Cleaning", "For: Rosy Logan", true),
+        )
 
 
     Row(
@@ -565,12 +570,11 @@ fun ThingsNeedingAttention(   attentionItems: List<AttentionItem>,
                 )
             }
         }
-    }else{
+    } else {
 
     }
 
 }
-
 
 
 @Composable
@@ -738,13 +742,15 @@ fun UserHealthCard(alerts: List<String>) {
                     }
                 }
 
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_edit_icon_cirlcular),
-                        contentDescription = "Edit",
-                        modifier = Modifier.size(45.dp).clickable(){
+                Image(
+                    painter = painterResource(id = R.drawable.ic_edit_icon_cirlcular),
+                    contentDescription = "Edit",
+                    modifier = Modifier
+                        .size(45.dp)
+                        .clickable() {
 
                         }
-                    )
+                )
 
             }
 
@@ -772,49 +778,50 @@ fun UserHealthCard(alerts: List<String>) {
             Spacer(modifier = Modifier.height(16.dp))
 
 
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        maxItemsInEachRow = 3   // Optional: control max items in a row
-                    ) {
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                maxItemsInEachRow = 3   // Optional: control max items in a row
+            ) {
 
-                        GradientRedButton(
-                            text = "Schedule",
-                            icon = R.drawable.ic_schedule_attention_icon,
-                            width = 101.dp,
-                            height = 42.dp,
-                            imageSize = 16.dp,
-                            fontSize = 12.sp,
-                            horizontalPadding = 12.dp,
-                            modifier = Modifier.alignByBaseline(),
-                            onClick = { }
-                        )
+                GradientRedButton(
+                    text = "Schedule",
+                    icon = R.drawable.ic_schedule_attention_icon,
+                    width = 101.dp,
+                    height = 42.dp,
+                    imageSize = 16.dp,
+                    fontSize = 12.sp,
+                    horizontalPadding = 12.dp,
+                    modifier = Modifier.alignByBaseline(),
+                    onClick = { }
+                )
 
-                        GradientRedButton(
-                            text = "Ask Ai",
-                            icon = R.drawable.ic_ask_ai_icon,
-                            width = 80.dp,
-                            height = 42.dp,
-                            imageSize = 18.dp,
-                            fontSize = 12.sp,
-                            horizontalPadding = 10.dp,
-                            modifier = Modifier.alignByBaseline(),
-                            gradientColors = listOf(
-                                Color(0xFF4338CA),
-                                Color(0xFF211C64)
-                            ),
-                            onClick = { }
-                        )
+                GradientRedButton(
+                    text = "Ask Ai",
+                    icon = R.drawable.ic_ask_ai_icon,
+                    width = 80.dp,
+                    height = 42.dp,
+                    imageSize = 18.dp,
+                    fontSize = 12.sp,
+                    horizontalPadding = 10.dp,
+                    modifier = Modifier.alignByBaseline(),
+                    gradientColors = listOf(
+                        Color(0xFF4338CA),
+                        Color(0xFF211C64)
+                    ),
+                    onClick = { }
+                )
 
-                        AppointmentBox(
-                            text = "Appointment in 7 Days",
-                            modifier = Modifier
-                                .width(180.dp)
-                                .height(42.dp).alignByBaseline(),
-                            iconRes = R.drawable.ic_appointed_icon
-                        )
-                    }
+                AppointmentBox(
+                    text = "Appointment in 7 Days",
+                    modifier = Modifier
+                        .width(180.dp)
+                        .height(42.dp)
+                        .alignByBaseline(),
+                    iconRes = R.drawable.ic_appointed_icon
+                )
+            }
 
         }
     }

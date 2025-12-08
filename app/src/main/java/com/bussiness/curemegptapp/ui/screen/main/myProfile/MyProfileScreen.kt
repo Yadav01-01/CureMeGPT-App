@@ -1,16 +1,37 @@
-package com.bussiness.curemegptapp.ui.screen.main.familyPersonProfile
+package com.bussiness.curemegptapp.ui.screen.main.myProfile
 
+//MyProfileScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,19 +49,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
-import com.bussiness.curemegptapp.ui.screen.main.familyMembersScreen.FamilyMembersScreen
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors
-import com.bussiness.curemegptapp.ui.viewModel.main.FamilyProfileViewModel
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import com.bussiness.curemegptapp.ui.viewModel.main.Document
 import com.bussiness.curemegptapp.ui.viewModel.main.FamilyMember
+import com.bussiness.curemegptapp.ui.viewModel.main.MyProfileViewModel
 
 
 @Composable
-fun FamilyPersonProfileScreen(
+fun MyProfileScreen(
     navController: NavHostController,
-    viewModel: FamilyProfileViewModel = viewModel()
+    viewModel: MyProfileViewModel = viewModel()
 ) {
 
     val familyMember by viewModel.familyMember.collectAsState()
@@ -71,15 +89,15 @@ fun FamilyPersonProfileScreen(
 
         // Success State
         familyMember?.let { member ->
-            FamilyMemberProfileContent(
+            ProfileContent(
                 member = member,
                 navController = navController,
                 onEditClick = {
                     // Handle edit click
                 },
-                onDeleteClick = {
-                    viewModel.deleteFamilyMember()
-                    navController.popBackStack()
+                onSettingClick = {
+//                    viewModel.deleteFamilyMember()
+//                    navController.popBackStack()
                 },
                 onDownloadClick = { documentId ->
                     // Handle download
@@ -97,11 +115,11 @@ fun FamilyPersonProfileScreen(
 }
 
 @Composable
-fun FamilyMemberProfileContent(
+fun ProfileContent(
     member: FamilyMember,
     navController: NavHostController,
     onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit,
+    onSettingClick: () -> Unit,
     onDownloadClick: (String) -> Unit
 ) {
     LazyColumn(
@@ -148,7 +166,7 @@ fun FamilyMemberProfileContent(
                         }
 
                         Text(
-                            text = member.name,
+                            text = "My Profile",
                             fontSize = 20.sp,
                             fontFamily = FontFamily(Font(R.font.onest_medium)),
                             fontWeight = FontWeight.Medium,
@@ -168,12 +186,12 @@ fun FamilyMemberProfileContent(
                         }
 
                         IconButton(
-                            onClick = onDeleteClick,
+                            onClick = onSettingClick,
                             modifier = Modifier.size(48.dp)
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.ic_delete_icon_circle),
-                                contentDescription = "Delete"
+                                painter = painterResource(id = R.drawable.ic_setting_icon),
+                                contentDescription = "Setting"
                             )
                         }
                     }
@@ -227,16 +245,18 @@ fun FamilyMemberProfileContent(
         // Personal Information
         item {
             SectionTitle("Personal Information")
-            InfoCard {
-                InfoRow("Full Name", member.name)
-                InfoRow("Contact Number", member.contactNumber)
-                InfoRow("Email Address", member.email)
-                InfoRow("Relation to You", member.relation)
-                InfoRow("Date of Birth", member.dateOfBirth)
-                InfoRow("Gender", member.gender)
-                InfoRow("Height (cm/ft)", member.height)
-                InfoRow("Weight (kg/lb)", member.weight, isLast = true)
-            }
+//            InfoCard {
+//                InfoRow("Full Name", member.name)
+//                InfoRow("Contact Number", member.contactNumber)
+//                InfoRow("Email Address", member.email)
+//                InfoRow("Relation to You", member.relation)
+//                InfoRow("Date of Birth", member.dateOfBirth)
+//                InfoRow("Gender", member.gender)
+//                InfoRow("Height (cm/ft)", member.height)
+//                InfoRow("Weight (kg/lb)", member.weight, isLast = true)
+//            }
+
+            PersonalInformationSection(member)
         }
 
         // General Health
@@ -258,14 +278,20 @@ fun FamilyMemberProfileContent(
                 InfoRow("Surgical History", member.surgicalHistory)
 
                 Column {
-                    InfoRow("Current Medications", if (member.currentMedications.isNotEmpty()) member.currentMedications[0] else "--")
+                    InfoRow(
+                        "Current Medications",
+                        if (member.currentMedications.isNotEmpty()) member.currentMedications[0] else "--"
+                    )
                     member.currentMedications.drop(1).forEach { medication ->
                         InfoRow("", medication)
                     }
                 }
 
                 Column {
-                    InfoRow("Current Supplements", if (member.currentSupplements.isNotEmpty()) member.currentSupplements[0] else "--")
+                    InfoRow(
+                        "Current Supplements",
+                        if (member.currentSupplements.isNotEmpty()) member.currentSupplements[0] else "--"
+                    )
                     member.currentSupplements.drop(1).forEach { supplement ->
                         InfoRow("", supplement)
                     }
@@ -286,6 +312,191 @@ fun FamilyMemberProfileContent(
         }
     }
 }
+
+@Composable
+fun PersonalInformationSection(member: FamilyMember) {
+    var selected by remember { mutableStateOf("name") }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+
+        // Row 1
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            SelectableInfoBox(
+                icon = R.drawable.ic_profile_unselected,   // change as needed
+                value = member.name,
+                isSelected = selected == "name",
+                onClick = { selected = "name" },
+                modifier = Modifier.weight(1f)
+            )
+
+
+            SelectableInfoBox(
+                icon = R.drawable.ic_dob,
+                value = member.dateOfBirth,
+                isSelected = selected == "dob",
+                onClick = { selected = "dob" },
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Row 2
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            SelectableInfoBox(
+                icon = R.drawable.ic_weight,
+                value = member.weight,
+                isSelected = selected == "weight",
+                onClick = { selected = "weight" },
+                modifier = Modifier.weight(1f)
+            )
+
+            SelectableInfoBox(
+                icon = R.drawable.ic_phone,
+                value = member.contactNumber,
+                isSelected = selected == "phone",
+                onClick = { selected = "phone" },
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Row 3
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            SelectableInfoBox(
+                icon = R.drawable.ic_height,
+                value = member.height,
+                isSelected = selected == "height",
+                onClick = { selected = "height" },
+                modifier = Modifier.weight(1f)
+            )
+
+            SelectableInfoBox(
+                icon = R.drawable.ic_gender,
+                value = member.gender,
+                isSelected = selected == "gender",
+                onClick = { selected = "gender" },
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Full Width Row (Email)
+        SelectableInfoBox(
+            icon = R.drawable.ic_email,
+            value = member.email,
+            isSelected = selected == "email",
+            onClick = { selected = "email" },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+//@Composable
+//fun InfoBox(
+//    icon: Int,
+//    value: String,
+//    modifier: Modifier = Modifier
+//) {
+//    Box(
+//        modifier = modifier
+//            .height(120.dp)
+//            .clip(RoundedCornerShape(26.dp))
+//            .background(Color(0xFF4238CA))
+//            .padding(20.dp)
+//    ) {
+//        // Icon Container
+////        Box(
+////            modifier = Modifier
+////                .size(52.dp)
+////                .clip(CircleShape)
+////                .border(2.dp, Color(0x66FFFFFF), CircleShape)
+////                .padding(10.dp)
+////        ) {
+//            Image(
+//                painter = painterResource(id = icon),
+//                contentDescription = null,
+//                modifier = Modifier.fillMaxSize().size(52.dp).padding(10.dp),
+//            )
+//     //   }
+//
+//        // Value (Bottom Right)
+//        Text(
+//            text = value,
+//            color = Color.Black,
+//            fontSize = 18.sp,
+//            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+//            modifier = Modifier
+//                .align(Alignment.BottomEnd)
+//        )
+//    }
+//}
+
+@Composable
+fun SelectableInfoBox(
+    icon: Int,
+    value: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    val backgroundColor = if (isSelected) Color(0xFF382FAA) else Color(0xFFF9F9FD)
+    val borderColor = if (isSelected) Color(0xFF382FAA) else Color(0xFFE7E6F8)
+    val iconBg = if (isSelected) Color.White else Color.Unspecified
+    val textColor = if (isSelected) Color.White else Color.Black
+
+    Box(
+        modifier = modifier
+            .height(135.dp)
+            .clip(RoundedCornerShape(36.dp))
+            .background(backgroundColor)
+            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(36.dp))
+            .clickable { onClick() }
+            .padding(15.dp)
+    ) {
+
+        // Icon circle
+        Box(
+            modifier = Modifier
+                .size(53.dp)
+                .clip(CircleShape)
+                .background(iconBg)
+
+        ) {
+            Image(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        // Value
+        Text(
+            text = value,
+            color = textColor,
+            fontSize = 17.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+        )
+    }
+}
+
 
 @Composable
 fun DocumentItem(
@@ -337,252 +548,6 @@ fun DocumentItem(
     }
 }
 
-
-/*
-@Composable
-fun FamilyPersonProfileScreen(navController: NavHostController, viewModel: FamilyProfileViewModel = viewModel()) {
-
-    val familyMember by viewModel.familyMember.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF8F8F8))
-    ) {
-        // Error State
-
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            item {
-                // Header with curved background
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(240.dp)
-                ) {
-                    // Purple background
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .background(
-                                brush = Brush.linearGradient(AppGradientColors),
-                                RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
-                            )
-                    )
-
-                    // Top bar
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 48.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_back_nav_blue_icon),
-                                contentDescription = "Back",
-                                modifier = Modifier
-                                    .size(45.dp)
-                            )
-
-                            Text(
-                                text = "Rose Logan",
-                                fontSize = 20.sp,
-                                fontFamily = FontFamily(Font(R.font.onest_medium)),
-                                fontWeight = FontWeight.Medium,
-                                color = Color.White
-                            )
-                        }
-
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_edit_icon_circle),
-                                contentDescription = "Edit",
-                                modifier = Modifier
-                                    .size(48.dp)
-                            )
-
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_delete_icon_circle),
-                                contentDescription = "Delete",
-                                modifier = Modifier
-                                    .size(48.dp)
-                            )
-
-                        }
-                    }
-
-                    // Profile image
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .offset(y = 40.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(156.dp)
-                                .clip(CircleShape)
-                                .background(Color.White)
-                                .padding(13.dp)
-                        ) {
-
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_profile_image),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CircleShape),
-                                contentScale = ContentScale.Crop
-                            )
-
-                        }
-                        // Upload button
-
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_upload_icon),
-                            contentDescription = "Upload",
-                            modifier = Modifier
-                                .size(39.dp)
-                                .align(Alignment.BottomEnd)
-                                .offset(x = (-8).dp, y = (-8).dp)
-
-                        )
-
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(56.dp))
-            }
-
-            // Personal Information
-            item {
-                SectionTitle("Personal Information")
-                InfoCard {
-                    InfoRow("Full Name", "Rose Logan")
-
-                    InfoRow("Contact Number", "+1 555 987 654")
-
-                    InfoRow("Email Address", "rosy@gmail.com")
-
-                    InfoRow("Relation to You", "Spouse")
-
-                    InfoRow("Date of Birth", "05/08/1995")
-
-                    InfoRow("Gender", "Female")
-
-                    InfoRow("Height (cm/ft)", "150 Cm")
-
-                    InfoRow("Weight (kg/lb)", "55 Kg", isLast = true)
-                }
-            }
-
-            //  Spacer(Modifier.height(20.dp))
-
-            // General Health
-            item {
-                SectionTitle("General Health")
-                InfoCard {
-                    InfoRow("Blood Group", "O+")
-
-                    InfoRow("Known Allergies", "Nuts")
-
-                    InfoRow("Emergency Contact", "--")
-
-                    InfoRow("Emergency Ph.", "--", isLast = true)
-                }
-            }
-
-            // Medical History
-            item {
-                SectionTitle("Medical History")
-                InfoCard {
-                    InfoRow("Chronic Conditions", "Hypertension")
-
-                    InfoRow("Surgical History", "--")
-
-                    Column {
-                        InfoRow("Current Medications", "--")
-                        repeat(4) {
-                            InfoRow("", "--")
-                        }
-                    }
-
-                    Column {
-                        InfoRow("Current Supplements", "--")
-                        repeat(3) {
-                            InfoRow("", "--")
-
-                        }
-                    }
-                }
-            }
-
-            // Documents
-            item {
-                SectionTitle("Documents")
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 19.dp, vertical = 4.dp),
-                    shape = RoundedCornerShape(26.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFD9D7F4))
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth() .padding(horizontal = 5.dp, vertical = 6.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_files_icon),
-                                contentDescription = "File Icon",
-                                modifier = Modifier.size(41.dp,55.dp)
-                            )
-                            Text(
-                                text = "Demo_1.Pdf",
-                                fontSize = 16.sp,
-                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                                fontWeight = FontWeight.Normal,
-                                color = Color(0xFF4338CA)
-                            )
-                        }
-//                        IconButton(
-//                            onClick = {},
-//                            modifier = Modifier
-//                                .size(48.dp)
-//                                .background(Color(0xFFF8F8F8), CircleShape)
-//                        ) {
-
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_download_icon),
-                                contentDescription = "Download",
-                                modifier = Modifier.size(48.dp)
-                            )
-                     //   }
-                    }
-                }
-                Spacer(modifier = Modifier.height(32.dp))
-            }
-        }
-    }
-}
-*/
 
 @Composable
 fun SectionTitle(title: String) {
@@ -651,7 +616,7 @@ fun InfoRow(
 
 @Preview(showBackground = true)
 @Composable
-fun FamilyPersonProfileScreenPreview() {
+fun MyProfileScreenPreview() {
     val navController = rememberNavController()
-    FamilyPersonProfileScreen(navController = navController)
+    MyProfileScreen(navController = navController)
 }

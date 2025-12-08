@@ -24,6 +24,7 @@ import com.bussiness.curemegptapp.ui.screen.ChatAI.AIChatScreen
 import com.bussiness.curemegptapp.ui.screen.home.HomeScreen
 import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
 import com.bussiness.curemegptapp.ui.screen.ChatAI.ChatScreen
+import com.bussiness.curemegptapp.ui.screen.main.myProfile.MyProfileScreen
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -76,6 +77,10 @@ fun MainNavGraph(
         }
         composable<AppDestination.FamilyPersonProfile> {
             FamilyPersonProfileScreen(navController)
+        }
+
+        composable<AppDestination.MyProfileScreen> {
+            MyProfileScreen(navController)
         }
 
 

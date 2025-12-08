@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.data.model.BottomItem
 import com.bussiness.curemegptapp.navigation.AppDestination
@@ -61,7 +62,7 @@ fun CustomBottomBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(135.dp)
+                .height(105.dp)
                 .background(Color.Transparent)
         )
 
@@ -97,12 +98,28 @@ fun CustomBottomBar(
 //                    .size(140.dp)
 //            )
 //=======
+
+
+//        Image(
+//            painter = painterResource(id = R.drawable.ic_middle_icon2),
+//            contentDescription = null,
+//            modifier = Modifier
+//                .align(Alignment.TopCenter)
+//                .size(140.dp)
+//                .clickable(
+//                    interactionSource = remember { MutableInteractionSource() },
+//                    indication = null
+//                ) {
+//                    onClickAIIcon()
+//                }
+//        )
+
         Image(
-            painter = painterResource(id = R.drawable.ic_middle_icon),
+            painter = painterResource(id = R.drawable.ic_middle_icon2),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .size(140.dp)
+                .size(65.dp,77.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
@@ -110,8 +127,6 @@ fun CustomBottomBar(
                     onClickAIIcon()
                 }
         )
-
-
 
     }
 }

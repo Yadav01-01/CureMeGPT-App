@@ -71,6 +71,9 @@ sealed class AppDestination {
     @Serializable
     data object ChatScreen : AppDestination()
 
+    @Serializable
+    data object MyProfileScreen : AppDestination()
+
 
 
 

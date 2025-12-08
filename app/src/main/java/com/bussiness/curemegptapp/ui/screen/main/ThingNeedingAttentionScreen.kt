@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +41,7 @@ fun ThingNeedingAttentionScreen(navController: NavHostController){
         )
 
     Column (Modifier.fillMaxSize()
-        .background(Color.White)) {
+        .background(Color.White) .statusBarsPadding()) {
 
         SettingHeader(title = "Thing Needing Attention", onBackClick = {
 
