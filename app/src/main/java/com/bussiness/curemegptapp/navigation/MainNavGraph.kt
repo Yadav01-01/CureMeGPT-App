@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.bussiness.curemegptapp.ui.screen.main.HomeScreen
+
 import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
 import com.bussiness.curemegptapp.ui.screen.main.schedule.HealthScheduleScreen
 import com.bussiness.curemegptapp.ui.screen.main.ThingNeedingAttentionScreen
@@ -19,6 +19,12 @@ import com.bussiness.curemegptapp.ui.screen.main.alert.AlertScreen
 import com.bussiness.curemegptapp.ui.screen.main.familyMembersScreen.FamilyMembersScreen
 import com.bussiness.curemegptapp.ui.screen.main.familyPersonProfile.FamilyPersonProfileScreen
 import com.bussiness.curemegptapp.ui.screen.main.scheduleNewAppointment.ScheduleNewAppointmentScreen
+
+import com.bussiness.curemegptapp.ui.screen.ChatAI.AIChatScreen
+import com.bussiness.curemegptapp.ui.screen.home.HomeScreen
+import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
+import com.bussiness.curemegptapp.ui.screen.ChatAI.ChatScreen
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -34,6 +40,7 @@ fun MainNavGraph(
         modifier = modifier.background(Color.Transparent)
     ) {
 
+
         composable<AppDestination.Home> {
             HomeScreen(navController)
         }
@@ -47,6 +54,11 @@ fun MainNavGraph(
         composable<AppDestination.Reports> {
             ProfileCompletionScreen(navController)
         }
+
+
+        composable<AppDestination.AIChatScreen> { AIChatScreen(navController) }
+        composable<AppDestination.ChatScreen> { ChatScreen(navController) }
+
 
         composable<AppDestination.ThingNeedingAttention> {
             ThingNeedingAttentionScreen(navController)

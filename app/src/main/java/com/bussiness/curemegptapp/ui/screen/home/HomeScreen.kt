@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.ui.screen.main
+package com.bussiness.curemegptapp.ui.screen.home
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -25,10 +25,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -38,16 +41,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,7 +56,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -72,6 +69,7 @@ import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.HomeHeader
 import androidx.compose.foundation.lazy.items
+
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -96,6 +94,7 @@ import com.bussiness.curemegptapp.ui.viewModel.main.HomeViewModel
 import java.time.format.DateTimeFormatter
 
 
+
 @Composable
 fun HomeScreen(navController: NavHostController,
                viewModel: HomeViewModel = hiltViewModel()) {
@@ -113,11 +112,12 @@ fun HomeScreen(navController: NavHostController,
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
+            .statusBarsPadding()
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HomeHeader(
-            logoRes = R.drawable.ic_logo,               // Aapke project ke drawable
+            logoRes = R.drawable.ic_logo,
             notificationRes = R.drawable.ic_notification_home_icon,
             profileRes = R.drawable.ic_profile_image,
             onClick = {
@@ -290,7 +290,7 @@ fun DailyMoodCheckCard(   selectedMood: String,
 
             // ---------- SKIP BUTTON ----------
             TextButton(
-                onClick = { },
+                onClick = {  },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text(
@@ -846,8 +846,6 @@ fun AlertItem(alertText: String) {
         )
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable

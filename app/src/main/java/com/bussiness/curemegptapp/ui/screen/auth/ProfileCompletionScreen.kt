@@ -63,6 +63,7 @@ fun ProfileCompletionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .background(Color(0xFFFFFFFF))
     ) {
         // Top Bar

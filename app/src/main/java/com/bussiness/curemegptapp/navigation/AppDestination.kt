@@ -65,6 +65,13 @@ sealed class AppDestination {
     @Serializable
     data object FamilyPersonProfile : AppDestination()
 
+    @Serializable
+    data object AIChatScreen : AppDestination()
+
+    @Serializable
+    data object ChatScreen : AppDestination()
+
+
 
 
 }
