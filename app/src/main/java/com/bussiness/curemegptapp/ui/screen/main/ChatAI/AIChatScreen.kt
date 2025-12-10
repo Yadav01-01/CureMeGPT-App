@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.ui.screen.ChatAI
+package com.bussiness.curemegptapp.ui.screen.main.ChatAI
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,10 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
-import com.bussiness.curemegptapp.ui.component.BottomMessageBar
 import com.bussiness.curemegptapp.ui.component.input.AIChatHeader
 import com.bussiness.curemegptapp.ui.component.input.NewCaseContent
-import com.bussiness.curemegptapp.viewmodel.ChatViewModel
+import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
 
 @Composable
 fun AIChatScreen(navController: NavHostController) {

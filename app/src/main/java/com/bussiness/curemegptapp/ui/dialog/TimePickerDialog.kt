@@ -4,6 +4,7 @@ package com.bussiness.curemegptapp.ui.dialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -94,7 +95,8 @@ fun TimePickerDialog(
                         contentDescription = "Close",
                         modifier = Modifier
                             .size(43.dp)
-                            .clickable { onDismiss() }
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                                indication = null) { onDismiss() }
                     )
                 }
 
@@ -217,7 +219,8 @@ fun DropdownField(
             modifier = Modifier
                 .clip(RoundedCornerShape(25.dp))
                 .background(Color(0xFFF5F5F5))
-                .clickable { expanded.value = true }
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { expanded.value = true }
                 .padding(horizontal = 12.dp, vertical = 4.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -271,7 +274,8 @@ fun TimePeriodButton(
             .height(32.dp)
             .clip(RoundedCornerShape(47.dp))
             .background(if (isSelected) Color(0xFF4A35C9) else Color(0xFFF5F5F5))
-            .clickable { onClick() },
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null) { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Text(

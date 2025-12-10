@@ -88,4 +88,6 @@ dependencies {
     // speech
     implementation (libs.accompanist.permissions.v0360)
 
+   // implementation ("com.github.skydoves:orchestra-colorpicker:1.2.7")
+
 }

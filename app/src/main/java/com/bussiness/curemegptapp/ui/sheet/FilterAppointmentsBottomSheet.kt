@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
@@ -84,7 +85,8 @@ fun FilterAppointmentsBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
-                .clickable {
+                .clickable(  interactionSource = remember { MutableInteractionSource() },
+                    indication = null){
                     selectedFilter = "Upcoming"
                 },
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -115,7 +117,8 @@ fun FilterAppointmentsBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(44.dp)
-                .clickable {
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                     selectedFilter = "Past"
                 },
             horizontalArrangement = Arrangement.SpaceBetween,

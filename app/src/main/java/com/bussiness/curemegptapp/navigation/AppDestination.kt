@@ -74,6 +74,42 @@ sealed class AppDestination {
     @Serializable
     data object MyProfileScreen : AppDestination()
 
+    @Serializable
+    data object ReportScreen : AppDestination()
+
+    @Serializable
+    data object SettingsScreen : AppDestination()
+
+    @Serializable
+    data object AboutScreen : AppDestination()
+
+    @Serializable
+    data object FrequentlyAskQuestionsScreen : AppDestination()
+
+    @Serializable
+    data object PrivacyPolicyScreen : AppDestination()
+
+    @Serializable
+    data object TermsAndConditionsScreen : AppDestination()
+
+    @Serializable
+    data object AccountPrivacyScreen : AppDestination()
+
+    @Serializable
+    data object DeleteAccountScreen : AppDestination()
+
+    @Serializable
+    data object HelpSupportScreen : AppDestination()
+
+    @Serializable
+    data object EditProfileScreen : AppDestination()
+
+    @Serializable
+    data object AddFamilyMemberScreen : AppDestination()
+
+    @Serializable
+    data object EditFamilyMemberDetailsScreen : AppDestination()
+
 
 
 

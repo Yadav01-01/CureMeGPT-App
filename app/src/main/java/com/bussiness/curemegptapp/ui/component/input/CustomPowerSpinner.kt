@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -40,6 +42,7 @@ import com.bussiness.curemegptapp.R
 @Composable
 fun CustomPowerSpinner(
     modifier: Modifier = Modifier,
+    modifierDropDown: Modifier = Modifier,
     selectedText: String = "Select",
     onSelectionChanged: (String) -> Unit = {},
     menuPadding: Dp = 24.dp,
@@ -53,10 +56,12 @@ fun CustomPowerSpinner(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { expanded = !expanded },
+                .clickable(  interactionSource = remember { MutableInteractionSource() },
+                    indication = null){ expanded = !expanded },
             colors = CardDefaults.cardColors(containerColor = Color.White),
             border = BorderStroke(1.dp, Color(0xFF697383)),
-            shape = RoundedCornerShape(50.dp)
+            shape = RoundedCornerShape(50.dp),
+            elevation = CardDefaults.cardElevation(0.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -127,11 +132,14 @@ fun CustomPowerSpinner(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier .fillMaxWidth().heightIn(max = 300.dp)
+            modifier = modifierDropDown.fillMaxWidth().heightIn(max = 300.dp)
                 .padding(horizontal = 15.dp, vertical = 5.dp)
                // .border(1.dp, Color(0xFF808080), RoundedCornerShape(12.dp))
                 .background(Color.White, RoundedCornerShape(12.dp)),
-            containerColor = Color.Unspecified
+            containerColor = Color.White,
+           // elevation = MenuDefaults.DropdownMenuElevation(0.dp)   // 🔥 NO SHADOW
+            shape = RoundedCornerShape(12.dp),
+
         ) {
 
             reasons.forEachIndexed { index, reason ->
@@ -155,7 +163,8 @@ fun CustomPowerSpinner(
                             shape = RoundedCornerShape(50.dp)
                         )
 
-                        .clickable {
+                        .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                             selectedReason = reason
                             expanded = false
                             onSelectionChanged(reason)

@@ -4,6 +4,8 @@ package com.bussiness.curemegptapp.ui.screen.main.familyPersonProfile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -33,6 +35,11 @@ import com.bussiness.curemegptapp.ui.theme.AppGradientColors
 import com.bussiness.curemegptapp.ui.viewModel.main.FamilyProfileViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.bussiness.curemegptapp.navigation.AppDestination
+import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
 import com.bussiness.curemegptapp.ui.viewModel.main.Document
 import com.bussiness.curemegptapp.ui.viewModel.main.FamilyMember
 
@@ -46,6 +53,7 @@ fun FamilyPersonProfileScreen(
     val familyMember by viewModel.familyMember.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -78,8 +86,8 @@ fun FamilyPersonProfileScreen(
                     // Handle edit click
                 },
                 onDeleteClick = {
-                    viewModel.deleteFamilyMember()
-                    navController.popBackStack()
+                    showDeleteDialog = true
+
                 },
                 onDownloadClick = { documentId ->
                     // Handle download
@@ -93,6 +101,22 @@ fun FamilyPersonProfileScreen(
                 )
             }
         }
+    }
+
+    if (showDeleteDialog) {
+        AlertCardDialog(
+            icon = R.drawable.ic_delete_icon_new,
+            title = "Delete Member?",
+            message = "Are you sure you want to delete Peter’s profile? This action cannot be undone.",
+            confirmText = "Delete",
+            cancelText = "Cancel",
+            onDismiss = { showDeleteDialog = false},
+            onConfirm = {  showDeleteDialog = false
+                viewModel.deleteFamilyMember()
+                navController.popBackStack()
+            }
+        )
+
     }
 }
 
@@ -163,7 +187,11 @@ fun FamilyMemberProfileContent(
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_edit_icon_circle),
-                                contentDescription = "Edit"
+                                contentDescription = "Edit",
+                                modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                                    indication = null){
+                                    navController.navigate(AppDestination.EditFamilyMemberDetailsScreen)
+                                }
                             )
                         }
 
@@ -285,6 +313,8 @@ fun FamilyMemberProfileContent(
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
+
+
 }
 
 @Composable

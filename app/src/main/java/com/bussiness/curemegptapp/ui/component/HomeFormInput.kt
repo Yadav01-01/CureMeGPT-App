@@ -64,7 +64,8 @@ fun HomeHeader(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(45.dp)
-                    .padding(end = 8.dp).clickable(){
+                    .padding(end = 8.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                         onClickNotification()
                     }
             )
@@ -76,8 +77,7 @@ fun HomeHeader(
                         color = Color(0xFFEBE1FF),
                         shape = RoundedCornerShape(50) // Capsule shape
                     )
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
+                    .clickable(interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) { onClick() }
                     .padding(horizontal = 5.dp, vertical = 5.dp),
@@ -172,7 +172,8 @@ fun AppointmentBox(
         modifier = modifier
             .border(1.dp, Color(0xFF697383), RoundedCornerShape(30.dp))
             .clip(RoundedCornerShape(20.dp))
-            .clickable { onClick() }
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null) { onClick() }
             .padding(horizontal = 10.dp, vertical = 6.dp)
     ) {
         Row(
@@ -256,7 +257,8 @@ fun MoodOptionSelectable(
             .clip(RoundedCornerShape(16.dp))
             .background(if (isSelected) Color.White else Color.Transparent)
             .padding(horizontal = 8.dp, vertical = 6.dp)
-            .clickable { onClick() },
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){ onClick() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 

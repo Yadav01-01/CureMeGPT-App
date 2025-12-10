@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,13 +35,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.ui.viewModel.main.ChatInputState
 import com.bussiness.curemegptapp.util.SpeechRecognizerManager
-import com.bussiness.curemegptapp.viewmodel.ChatViewModel
+import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
 
 @Composable
 fun BottomMessageBar(
     modifier: Modifier = Modifier,
-    state: com.bussiness.curemegptapp.viewmodel.ChatInputState,
+    state: ChatInputState,
     viewModel: ChatViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -95,7 +97,8 @@ fun BottomMessageBar(
                 tint = Color.Unspecified,
                 modifier = Modifier
                     .wrapContentSize()
-                    .clickable { /*onAttachClick()*/ }
+                    .clickable ( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){ /*onAttachClick()*/ }
             )
 
             Spacer(modifier = Modifier.width(12.dp))

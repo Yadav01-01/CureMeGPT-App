@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.viewmodel
+package com.bussiness.curemegptapp.ui.viewModel.main
 
 import android.app.Application
 import android.net.Uri
@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bussiness.curemegptapp.data.model.ChatMessage
 import com.bussiness.curemegptapp.data.model.PdfData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -79,7 +80,7 @@ class ChatViewModel @Inject constructor(
 
         // Example: simulate AI response
         viewModelScope.launch {
-            kotlinx.coroutines.delay(800)
+            delay(800)
             _messages.update {
                 it + ChatMessage(text = "Thanks — I got that. Here's a sample reply.", isUser = false)
             }

@@ -135,7 +135,8 @@ fun DateTimePickerView(
                 Image(
                     painter = painterResource(id = R.drawable.ic_calender_icon), // Use calendar icon if available
                     contentDescription = "Calendar",
-                    modifier = Modifier.size(24.dp).clickable(onClick = {
+                    modifier = Modifier.size(24.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null,onClick = {
                         isCalendarVisible.value = true
                     })
                 )
@@ -149,7 +150,8 @@ fun DateTimePickerView(
             shape = RoundedCornerShape(28.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 24.dp).clickable{
+                .padding(bottom = 24.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null){
                     isCalendarVisible.value = true
                 }
         )
@@ -226,7 +228,8 @@ fun DateTimePickerView(
                             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                             color = TextDark,
                             modifier = Modifier
-                                .clickable { timePickerDialog.show() } // 🟢 Attach TimePickerDialog here
+                                .clickable( interactionSource = remember { MutableInteractionSource() },
+                                    indication = null) { timePickerDialog.show() } // 🟢 Attach TimePickerDialog here
                         )
                     }
 
@@ -246,7 +249,8 @@ fun DateTimePickerView(
                                     .height(30.dp)
                                     .clip(RoundedCornerShape(7.dp))
                                     .background(if (isAM.value) SelectedBlue else Color.Transparent)
-                                    .clickable {
+                                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                                        indication = null) {
                                         //  isAM.value = true
                                         if (!isAM.value) {
                                             isAM.value = true
@@ -273,7 +277,8 @@ fun DateTimePickerView(
                                     .height(30.dp)
                                     .clip(RoundedCornerShape(7.dp))
                                     .background(if (!isAM.value) SelectedBlue else Color.Transparent)
-                                    .clickable {
+                                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                                         //    isAM.value = false
                                         if (isAM.value) {
                                             isAM.value = false

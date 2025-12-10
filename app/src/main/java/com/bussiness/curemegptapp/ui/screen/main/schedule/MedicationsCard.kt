@@ -117,7 +117,8 @@ fun MedicationsCard(medication: Medication,onEditClick: () -> Unit,
                     Box(
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { *//* Handle menu click *//* },
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){ *//* Handle menu click *//* },
                         contentAlignment = Alignment.Center
                     ) {
                         // Replace with your menu icon

@@ -178,8 +178,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     color = Color(0xFF4338CA),
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_bold)),
-                    modifier = Modifier.clickable(
-                        interactionSource = remember { MutableInteractionSource() },
+                    modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
                         timeLeft = 30
@@ -202,7 +201,8 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     text = "Back",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontSize = 18.sp,
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                         navController.navigate(AppDestination.CreateAccount)
                     }
                 )
@@ -228,7 +228,8 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                         navController.navigate(AppDestination.Login)
                     }
                 )
@@ -283,7 +284,8 @@ fun OtpInputField(
                             if (index < otp.length) Color(0xFF4338CA) else Color(0xFFE5E7EB),
                             RoundedCornerShape(46.dp)
                         )
-                        .clickable {
+                        .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                             focusRequester.requestFocus()
                             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE)
                                     as InputMethodManager

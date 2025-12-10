@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -325,7 +327,8 @@ fun ChatHeader(
 //                        .size(22.dp)
 //                        .background(Color(0x80000000), CircleShape)
 //                        .align(Alignment.TopEnd)
-//                        .clickable { onEvent(ChatInputEvent.RemoveImage(uri)) }
+//                        .clickable( interactionSource = remember { MutableInteractionSource() },
+  //                      indication = null){ onEvent(ChatInputEvent.RemoveImage(uri)) }
 //                )
 //            }
 //            Spacer(Modifier.width(8.dp))
@@ -360,7 +363,8 @@ fun ChatHeader(
 //                        tint = Color.Gray,
 //                        modifier = Modifier
 //                            .size(18.dp)
-//                            .clickable { onEvent(ChatInputEvent.RemovePdf(pdf)) }
+//                            .clickable( interactionSource = remember { MutableInteractionSource() },
+ //                       indication = null){ onEvent(ChatInputEvent.RemovePdf(pdf)) }
 //                    )
 //                }
 //            }
@@ -566,7 +570,8 @@ fun ReactionIcon(
     Card(
         modifier = Modifier
             .size(30.dp)
-            .clickable { onClick() },
+            .clickable(  interactionSource = remember { MutableInteractionSource() },
+                indication = null){ onClick() },
         shape = CircleShape,
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -729,7 +734,8 @@ fun NewCaseContent(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .clickable { }
+                        .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){ }
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
                     Text(
@@ -757,7 +763,8 @@ fun NewCaseContent(
                 .height(55.dp)
                 .clip(RoundedCornerShape(45.dp))
                 .background(Brush.linearGradient(AppGradientColors))
-                .clickable { onNewCaseClick() }
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){ onNewCaseClick() }
                 .align(Alignment.CenterHorizontally),
             contentAlignment = Alignment.Center
         ) {
@@ -812,7 +819,8 @@ fun QuestionItem(
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
-            .clickable { onClick() }
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){ onClick() }
             .padding(horizontal = 16.dp, vertical = 18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

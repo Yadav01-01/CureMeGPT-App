@@ -14,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import com.bussiness.curemegptapp.data.model.PdfData
 import android.net.Uri
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -38,7 +40,8 @@ fun InlineAttachmentPreview(
             Box(modifier = Modifier.size(64.dp)) {
                 AsyncImage(model = uri, contentDescription = null, modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)))
                 Surface(
-                    modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable { onRemoveImage(uri) },
+                    modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable(  interactionSource = remember { MutableInteractionSource() },
+                        indication = null ){ onRemoveImage(uri) },
                     shape = CircleShape,
                     color = Color.Black.copy(alpha = 0.6f)
                 ) {
@@ -54,7 +57,8 @@ fun InlineAttachmentPreview(
                     Text(text = pdf.name, maxLines = 1)
                 }
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Surface(modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable { onRemovePdf(pdf) }, shape = CircleShape, color = Color.Black.copy(alpha = 0.6f)) {
+                    Surface(modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){ onRemovePdf(pdf) }, shape = CircleShape, color = Color.Black.copy(alpha = 0.6f)) {
 //                        Icon(Icons.Default.Close, contentDescription = null, tint = Color.White, modifier = Modifier.padding(2.dp))
                     }
                 }

@@ -3,6 +3,7 @@ package com.bussiness.curemegptapp.ui.screen.main.familyMembersScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
+import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
 import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialog
 import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialogProperties
 import com.bussiness.curemegptapp.ui.sheet.FilterFamilyMembersTypeSheet
@@ -77,6 +79,7 @@ fun FamilyMembersScreen(navController: NavHostController) {
 
     var searchQuery by remember { mutableStateOf("") }
     var showSheet by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
     var selectedFilter by remember { mutableStateOf("All Members") }
 
     // Filter options
@@ -170,7 +173,10 @@ fun FamilyMembersScreen(navController: NavHostController) {
             Image(
                 painter = painterResource(id = R.drawable.ic_family_person_add_icon),
                 contentDescription = "Add member",
-                modifier = Modifier.size(67.dp)
+                modifier = Modifier.size(67.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null){
+                    navController.navigate(AppDestination.AddFamilyMemberScreen)
+                }
             )
         }
 
@@ -255,7 +261,8 @@ fun FamilyMembersScreen(navController: NavHostController) {
                     contentDescription = "Filter",
                     modifier = Modifier
                         .wrapContentSize()
-                        .clickable {
+                        .clickable(  interactionSource = remember { MutableInteractionSource() },
+                            indication = null){
                             showSheet = true
                         }
 
@@ -337,7 +344,10 @@ fun FamilyMembersScreen(navController: NavHostController) {
                 items(filteredMembers) { member ->
                     FamilyMemberCard(member, onViewProfileClick = {
                         navController.navigate(AppDestination.FamilyPersonProfile)
-                    })
+                    },
+                        onDeleteProfileClick = {
+                            showDeleteDialog = true
+                        })
                 }
             }
         }
@@ -365,6 +375,19 @@ fun FamilyMembersScreen(navController: NavHostController) {
                 }
             )
         }
+    }
+    if (showDeleteDialog) {
+        AlertCardDialog(
+            icon = R.drawable.ic_delete_icon_new,
+            title = "Delete Member?",
+            message = "Are you sure you want to delete Peter’s profile? This action cannot be undone.",
+            confirmText = "Delete",
+            cancelText = "Cancel",
+            onDismiss = { showDeleteDialog = false},
+            onConfirm = {  showDeleteDialog = false
+            }
+        )
+
     }
 }
 
@@ -429,7 +452,10 @@ fun StatCard(
 }
 
 @Composable
-fun FamilyMemberCard(member: FamilyMember,onViewProfileClick: () -> Unit) {
+fun FamilyMemberCard(member: FamilyMember,
+                     onViewProfileClick: () -> Unit,
+                     onDeleteProfileClick: () -> Unit
+) {
     var checkedState by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -503,7 +529,7 @@ fun FamilyMemberCard(member: FamilyMember,onViewProfileClick: () -> Unit) {
                         checked = checkedState,
                         onCheckedChange = { checkedState = it },
                         onViewProfileClick = { onViewProfileClick()},
-                        onDeleteClick = { })
+                        onDeleteClick = { onDeleteProfileClick()})
                 }
 
                 Row(

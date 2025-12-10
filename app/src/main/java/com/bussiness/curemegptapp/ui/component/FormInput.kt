@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors
+import com.bussiness.curemegptapp.ui.theme.AppGradientColors2
 import com.bussiness.curemegptapp.ui.theme.Grey
 
 @Composable
@@ -184,9 +185,8 @@ fun GradientIconInputField(
                     Box(
                         modifier = Modifier
                             .size(40.dp)
-                            .clickable(
-                                interactionSource = interactionSource,
-                                indication = null
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
                             ) {
                                 passwordVisible = !passwordVisible
                             },
@@ -228,7 +228,8 @@ fun GradientButton(
             .background(
                 brush = Brush.linearGradient(AppGradientColors)
             )
-            .clickable(
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null,
                 enabled = enabled,
                 onClick = onClick
             ),
@@ -260,7 +261,8 @@ fun GradientButton1(
             .background(
                 brush = Brush.linearGradient(AppGradientColors)
             )
-            .clickable(
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null,
                 enabled = enabled,
                 onClick = onClick
             ),
@@ -274,6 +276,8 @@ fun GradientButton1(
         )
     }
 }
+
+
 
 @Composable
 fun GradientButton2(
@@ -294,7 +298,8 @@ fun GradientButton2(
             .background(
                 brush = Brush.linearGradient(AppGradientColors)
             )
-            .clickable(
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null,
                 enabled = enabled,
                 onClick = onClick
             ),
@@ -330,7 +335,8 @@ fun RoundedCustomCheckbox(
                 color = if (checked) darkBlue else Color.Black,
                 shape = RoundedCornerShape(cornerRadius)
             )
-            .clickable { onCheckedChange(!checked) },
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null) { onCheckedChange(!checked) },
         contentAlignment = Alignment.Center
     ) {
         if (checked) {
@@ -381,3 +387,69 @@ fun DisclaimerBox(
 
 }
 
+@Composable
+fun GradientRedButton1(
+    text: String,
+    fontSize: TextUnit = 16.sp,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    fontFamily : FontFamily = FontFamily(Font(R.font.urbanist_semibold)),
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .height(48.dp)
+            .clip(RoundedCornerShape(40.dp))
+            .background(
+                brush = Brush.linearGradient(AppGradientColors2)
+            )
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                enabled = enabled,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = fontSize,
+            fontFamily = fontFamily
+        )
+    }
+}
+
+
+@Composable
+fun GradientButton3(
+    text: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+
+    Box(
+        modifier = modifier
+            .height(55.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 18.dp)
+            .clip(RoundedCornerShape(45.dp))
+            .background(
+                brush = Brush.linearGradient(AppGradientColors)
+            )
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                enabled = enabled,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = FontFamily(Font(R.font.urbanist_semibold))
+        )
+    }
+}

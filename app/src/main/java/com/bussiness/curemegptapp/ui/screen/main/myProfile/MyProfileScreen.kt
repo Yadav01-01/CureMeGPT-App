@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.navigation.AppDestination
+import com.bussiness.curemegptapp.ui.component.DocumentItem
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors
 import com.bussiness.curemegptapp.ui.viewModel.main.Document
 import com.bussiness.curemegptapp.ui.viewModel.main.FamilyMember
@@ -94,10 +97,12 @@ fun MyProfileScreen(
                 navController = navController,
                 onEditClick = {
                     // Handle edit click
+                    navController.navigate(AppDestination.EditProfileScreen)
                 },
                 onSettingClick = {
 //                    viewModel.deleteFamilyMember()
 //                    navController.popBackStack()
+                    navController.navigate(AppDestination.SettingsScreen)
                 },
                 onDownloadClick = { documentId ->
                     // Handle download
@@ -406,45 +411,7 @@ fun PersonalInformationSection(member: FamilyMember) {
     }
 }
 
-//@Composable
-//fun InfoBox(
-//    icon: Int,
-//    value: String,
-//    modifier: Modifier = Modifier
-//) {
-//    Box(
-//        modifier = modifier
-//            .height(120.dp)
-//            .clip(RoundedCornerShape(26.dp))
-//            .background(Color(0xFF4238CA))
-//            .padding(20.dp)
-//    ) {
-//        // Icon Container
-////        Box(
-////            modifier = Modifier
-////                .size(52.dp)
-////                .clip(CircleShape)
-////                .border(2.dp, Color(0x66FFFFFF), CircleShape)
-////                .padding(10.dp)
-////        ) {
-//            Image(
-//                painter = painterResource(id = icon),
-//                contentDescription = null,
-//                modifier = Modifier.fillMaxSize().size(52.dp).padding(10.dp),
-//            )
-//     //   }
-//
-//        // Value (Bottom Right)
-//        Text(
-//            text = value,
-//            color = Color.Black,
-//            fontSize = 18.sp,
-//            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-//            modifier = Modifier
-//                .align(Alignment.BottomEnd)
-//        )
-//    }
-//}
+
 
 @Composable
 fun SelectableInfoBox(
@@ -466,7 +433,8 @@ fun SelectableInfoBox(
             .clip(RoundedCornerShape(36.dp))
             .background(backgroundColor)
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(36.dp))
-            .clickable { onClick() }
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null) { onClick() }
             .padding(15.dp)
     ) {
 
@@ -498,55 +466,7 @@ fun SelectableInfoBox(
 }
 
 
-@Composable
-fun DocumentItem(
-    document: Document,
-    onDownloadClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 19.dp, vertical = 4.dp),
-        shape = RoundedCornerShape(26.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFD9D7F4))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp, vertical = 6.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_files_icon),
-                    contentDescription = "File Icon",
-                    modifier = Modifier.size(41.dp, 55.dp)
-                )
-                Text(
-                    text = document.fileName,
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                    fontWeight = FontWeight.Normal,
-                    color = Color(0xFF4338CA)
-                )
-            }
 
-            IconButton(
-                onClick = onDownloadClick,
-                modifier = Modifier.size(48.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_download_icon),
-                    contentDescription = "Download"
-                )
-            }
-        }
-    }
-}
 
 
 @Composable

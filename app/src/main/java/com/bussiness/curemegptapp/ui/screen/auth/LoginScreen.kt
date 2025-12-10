@@ -2,6 +2,7 @@ package com.bussiness.curemegptapp.ui.screen.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,7 +67,8 @@ fun LoginScreen(navController: NavHostController) {
             modifier = Modifier
                 .padding(horizontal = 18.dp)
                 .align(Alignment.End)
-                .clickable{navController.navigate(AppDestination.Reset) },
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null){navController.navigate(AppDestination.Reset) },
             fontSize = 18.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             color = Color.Black,
@@ -100,7 +102,8 @@ fun LoginScreen(navController: NavHostController) {
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
-                modifier = Modifier.clickable { navController.navigate(AppDestination.CreateAccount) }
+                modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { navController.navigate(AppDestination.CreateAccount) }
             )
         }
     }

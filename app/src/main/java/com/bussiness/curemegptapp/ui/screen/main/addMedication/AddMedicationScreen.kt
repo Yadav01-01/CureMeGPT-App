@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -310,7 +311,8 @@ fun AddMedicationScreen(
                             contentDescription = "Add",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable {
+                                .clickable( interactionSource = remember { MutableInteractionSource() },
+                                    indication = null) {
 
                                     if (currentReminderTime[0].isNotBlank()) {
 
@@ -333,7 +335,8 @@ fun AddMedicationScreen(
                             contentDescription = "Remove",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable {
+                                .clickable( interactionSource = remember { MutableInteractionSource() },
+                                    indication = null) {
                                     val updatedList = currentReminderTime.toMutableList()
                                     updatedList.removeAt(index)
                                     currentReminderTime = updatedList
@@ -388,7 +391,8 @@ fun AddMedicationScreen(
                 color = Color.Gray,
                 modifier = Modifier
                     .padding(top = 4.dp)
-                    .clickable {
+                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null) {
                         filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
                     }
             )
@@ -410,7 +414,8 @@ fun AddMedicationScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {  checked = !checked },
+                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null) {  checked = !checked },
                 verticalAlignment = Alignment.Top
             ) {
 

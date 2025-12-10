@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -106,7 +107,8 @@ fun CalendarDialog(
                         contentDescription = "",
                         modifier = Modifier
                             .size(43.dp)
-                            .clickable { onDismiss() }
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                                indication = null) { onDismiss() }
                     )
                 }
 
@@ -193,7 +195,8 @@ fun MonthHeaderView(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.clickable { onClickMonthPicker() }
+            modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null) { onClickMonthPicker() }
         ) {
 
 
@@ -225,7 +228,8 @@ fun MonthHeaderView(
 
                 modifier = Modifier
                     .size(32.dp)
-                    .clickable { onPrevious() }
+                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null) { onPrevious() }
             )
 
 
@@ -235,7 +239,8 @@ fun MonthHeaderView(
                 contentDescription = "",
                 modifier = Modifier
                     .size(32.dp)
-                    .clickable { onNext() }
+                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null) { onNext() }
             )
         }
     }
@@ -297,7 +302,8 @@ fun DatesGrid(
                                 modifier = Modifier
                                     .size(42.dp)
                                     .clip(CircleShape)
-                                    .clickable { onSelectDate(date) }
+                                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                                        indication = null) { onSelectDate(date) }
                                     .background(
                                         if (isSelected) Color(0xFF4A35C9) else Color.Transparent
                                     ),
@@ -391,7 +397,8 @@ fun IOSMonthYearPicker(
                                 color = if (m == selectedMonth.value) Color(0xFF4A35C9) else Color.Black,
                                 modifier = Modifier
                                     .padding(6.dp)
-                                    .clickable {
+                                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                                        indication = null) {
                                         selectedMonth.value = m
                                     },
                                 textAlign = TextAlign.Center
@@ -409,7 +416,8 @@ fun IOSMonthYearPicker(
                                 color = if (y == selectedYear.value) Color(0xFF4A35C9) else Color.Black,
                                 modifier = Modifier
                                     .padding(6.dp)
-                                    .clickable {
+                                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                                        indication = null) {
                                         selectedYear.value = y
                                     },
                                 textAlign = TextAlign.Center

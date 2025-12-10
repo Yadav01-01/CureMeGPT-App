@@ -38,8 +38,12 @@ import com.bussiness.curemegptapp.ui.component.*
 import com.bussiness.curemegptapp.ui.viewModel.auth.ProfileCompletionViewModel
 
 import android.widget.Toast
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import com.bussiness.curemegptapp.navigation.AppDestination
+import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
 import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
 import com.bussiness.curemegptapp.ui.dialog.CompleteProfileDialog
@@ -183,6 +187,8 @@ fun PersonalInfoStep(
     var dateOfBirth by remember { mutableStateOf(profileData.dateOfBirth) }
     var gender by remember { mutableStateOf(profileData.gender) }
     var showDialog by remember { mutableStateOf(false) }
+    val genderOptions =
+        listOf("Male", "Female", "Other") // Added example options
 
     if (showDialog) {
         CalendarDialog(
@@ -276,9 +282,33 @@ fun PersonalInfoStep(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        GenderDropdown(
-            selected = gender,
-            onSelected = { gender = it }
+
+        Row {
+
+            Text(
+                text = "Gender",
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+            Text(
+                text = " *",
+                color = Color.Red,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+        }
+
+
+        CustomPowerSpinner(
+            selectedText = gender,
+            onSelectionChanged = { reason ->
+                gender = reason
+            },
+            menuPadding = 24.dp,
+            reasons = genderOptions // Pass the list of options here
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -362,6 +392,9 @@ fun GeneralInfoStep(
         "Latex", "Ibuprofen", "Shellfish", "Nuts",
         "Penicillin", "Others"
     )
+    val bloodOptions = listOf(
+        "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"
+    )
 
     Column(
         modifier = Modifier
@@ -369,18 +402,52 @@ fun GeneralInfoStep(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        BloodGroupDropdown(
-            selected = bloodGroup,
-            onSelected = { bloodGroup = it }
+        Row {
+
+            Text(
+                text = "Blood Group",
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+            Text(
+                text = " *",
+                color = Color.Red,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+        }
+
+
+        CustomPowerSpinner(
+            selectedText = bloodGroup,
+            onSelectionChanged = { reason ->
+                bloodGroup = reason
+            },
+            menuPadding = 24.dp,
+            reasons = bloodOptions // Pass the list of options here
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Known Allergies *",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
+        Row{
+
+
+            Text(
+                text = "Known Allergies",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                text = "*",
+                color = Color.Red,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            ) }
+
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -406,7 +473,8 @@ fun GeneralInfoStep(
                         .background(
                             if (isSelected) Color(0x205B4FFF) else Color.Transparent
                         )
-                        .clickable {
+                        .clickable( interactionSource = remember { MutableInteractionSource() },
+                            indication = null){
                             selectedAllergies = if (isSelected)
                                 selectedAllergies - item
                             else
@@ -499,11 +567,19 @@ fun HistoryStep(
             .padding(16.dp)
     ) {
 
-        Text(
-            text = "Chronic Conditions *",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
+        Row {
+            Text(
+                text = "Chronic Conditions",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                text = "*",
+                color = Color.Red,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            ) }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -533,7 +609,8 @@ fun HistoryStep(
                         .background(
                             if (isSelected) Color(0x205B4FFF) else Color.Transparent
                         )
-                        .clickable {
+                        .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                             selectedConditions =
                                 if (isSelected) selectedConditions - condition
                                 else selectedConditions + condition
@@ -629,7 +706,8 @@ fun HistoryStep(
                         contentDescription = "Add",
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable {
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
 
                                 // ⭐ Add tabhi hoga jab first field empty na ho
                                 if (currentMedications[0].isNotBlank()) {
@@ -653,7 +731,8 @@ fun HistoryStep(
                         contentDescription = "Remove",
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable {
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                                 val updated = currentMedications.toMutableList()
                                 updated.removeAt(index)
                                 currentMedications = updated
@@ -727,7 +806,8 @@ fun HistoryStep(
                         contentDescription = "Add",
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable {
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
 
                                 if (currentSupplements[0].isNotBlank()) {
 
@@ -750,7 +830,8 @@ fun HistoryStep(
                         contentDescription = "Remove",
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .clickable {
+                            .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                                 val updated = currentSupplements.toMutableList()
                                 updated.removeAt(index)
                                 currentSupplements = updated
@@ -824,7 +905,8 @@ fun DocumentsStep(
             color = Color.Gray,
             modifier = Modifier
                 .padding(top = 4.dp)
-                .clickable {
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null){
                     filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
                 }
         )

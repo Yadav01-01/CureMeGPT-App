@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.data.model.StepItem
+import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 
 
 @Composable
@@ -305,87 +307,7 @@ fun ProfileInputWithoutLabelField(
 }
 
 
-//@Composable
-//fun GenderDropdown() {
-//    var expanded by remember { mutableStateOf(false) }
-//    var selectedGender by remember { mutableStateOf("") }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//    ) {
-//
-//        Text(
-//            text = "Gender *",
-//            color = Color.Black,
-//            modifier = Modifier.padding(bottom = 6.dp)
-//        )
-//
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .border(
-//                    width = 1.dp,
-//                    color = Color(0xFFBFC5D2),
-//                    shape = RoundedCornerShape(50.dp)
-//                )
-//                .clickable { expanded = true }
-//                .padding(horizontal = 20.dp, vertical = 16.dp)
-//        ) {
-//
-//            Row(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//
-//                Text(
-//                    text = if (selectedGender.isEmpty()) "Select" else selectedGender,
-//                    color = if (selectedGender.isEmpty()) Color.Gray else Color.Black,
-//
-//                    )
-//
-//                Image(
-//                    painter = painterResource(id = R.drawable.ic_dropdown_icon),
-//                    contentDescription = null,
-//                    modifier = Modifier.size(15.dp)
-//                )
-//            }
-//        }
-//
-//        DropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//        ) {
-//
-//            DropdownMenuItem(
-//                text = { Text("Male") },
-//                onClick = {
-//                    selectedGender = "Male"
-//                    expanded = false
-//                }
-//            )
-//
-//            DropdownMenuItem(
-//                text = { Text("Female") },
-//                onClick = {
-//                    selectedGender = "Female"
-//                    expanded = false
-//                }
-//            )
-//
-//            DropdownMenuItem(
-//                text = { Text("Other") },
-//                onClick = {
-//                    selectedGender = "Other"
-//                    expanded = false
-//                }
-//            )
-//        }
-//    }
-//}
+
 
 @Composable
 fun GenderDropdown(
@@ -423,10 +345,11 @@ fun GenderDropdown(
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = Color(0xFFBFC5D2),
+                    color = Color(0xFF697383),
                     shape = RoundedCornerShape(50.dp)
                 )
-                .clickable { expanded = true }
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { expanded = true }
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             Row(
@@ -437,7 +360,7 @@ fun GenderDropdown(
                 Text(fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     fontWeight = FontWeight.Normal,
                     text = if (selected.isEmpty()) "Select" else selected,
-                    color = if (selected.isEmpty()) Color.Gray else Color.Black,
+                    color = if (selected.isEmpty()) Color(0xFF697383) else Color(0xFF697383),
                 )
 
                 Image(
@@ -539,7 +462,7 @@ fun Dropdown1(
                         text = placeholder,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                         fontWeight = FontWeight.Normal,
-                        color = Color(0xFFB8B9BD),
+                        color = Color(0xFF697383),
                         fontSize = 15.sp
                     )
                 },
@@ -548,7 +471,7 @@ fun Dropdown1(
                     .weight(1f)
                     .height(56.dp)
                     .clip(shape)
-                    .border(1.dp, Color(0xFFC3C6CB), shape),
+                    .border(1.dp, Color(0xFF697383), shape),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.White,
                     focusedContainerColor = Color.White,
@@ -560,42 +483,55 @@ fun Dropdown1(
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            // RIGHT SMALL DROPDOWN
-            Box(
-                modifier = Modifier
-                    .width(90.dp)
-                    .height(56.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .border(
-                        1.dp,
-                        Color(0xFFBFC5D2),
-                        RoundedCornerShape(30.dp)
-                    )
-                    .clickable { expanded = true }
-                    .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.CenterStart
-            ) {
+//            // RIGHT SMALL DROPDOWN
+//            Box(
+//                modifier = Modifier
+//                    .width(90.dp)
+//                    .height(56.dp)
+//                    .clip(RoundedCornerShape(30.dp))
+//                    .border(
+//                        1.dp,
+//                        Color(0xFFBFC5D2),
+//                        RoundedCornerShape(30.dp)
+//                    )
+//                    .clickable( interactionSource = remember { MutableInteractionSource() },
+   //                     indication = null){ expanded = true }
+//                    .padding(horizontal = 16.dp),
+//                contentAlignment = Alignment.CenterStart
+//            ) {
+//
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//
+//                    Text(
+//                        text = selectedUnit,
+//                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+//                        fontWeight = FontWeight.Normal,
+//                        color = Color.Black,
+//                        fontSize = 15.sp
+//                    )
+//
+//                    Image(
+//                        painter =painterResource(id = R.drawable.ic_dropdown_icon),
+//                        contentDescription = null,
+//                    )
+//                }
+//            }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Text(
-                        text = selectedUnit,
-                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                        fontWeight = FontWeight.Normal,
-                        color = Color.Black,
-                        fontSize = 15.sp
-                    )
-
-                    Image(
-                        painter =painterResource(id = R.drawable.ic_dropdown_icon),
-                        contentDescription = null,
-                    )
-                }
-            }
+            CustomPowerSpinner(
+                modifier = Modifier.width(90.dp)
+                    .height(56.dp),
+                modifierDropDown = Modifier.width(140.dp),
+                selectedText = selectedUnit,
+                onSelectionChanged = { reason ->
+                    onUnitSelected(reason)
+                },
+                menuPadding = 24.dp,
+                reasons = dropdownItems // Pass the list of options here
+            )
         }
 
         // 🔹 DROPDOWN MENU
@@ -636,7 +572,8 @@ fun StepTabs(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { onStepClick(index) }
+                modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { onStepClick(index) }
             ) {
 
                 // Circle with icon
@@ -677,7 +614,7 @@ fun StepTabs(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit) {
+fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit,title: String = "Complete Your Profile",skipDisplay : Boolean = true) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -685,32 +622,42 @@ fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit) {
             .padding(16.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
 
             Image(
                 painter = painterResource(id = R.drawable.ic_cross_icon),
                 contentDescription = "Back Icon",
-                modifier = Modifier.size(42.dp).clickable{onBackClick()}
+                modifier = Modifier.size(42.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null){onBackClick()}
             )
+            Spacer(Modifier.width(19.dp))
 
             Text(
-                text = "Complete Your Profile",
+                text = title,
                 fontSize = 17.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.weight(1f)
             )
 
-            Text(
-                text = "Skip for Now",
-                color = Color(0xFF211C64),
-                fontSize = 14.sp,
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier.clickable { }
-            )
+            if (skipDisplay){
+                if (currentStep >3){
+                    Text(
+                        text = "Skip for Now",
+                        color = Color(0xFF211C64),
+                        fontSize = 14.sp,
+                        fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                            indication = null) { }
+                    )
+                }
+            }
+
+
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -817,7 +764,8 @@ fun BloodGroupDropdown(
                     color = Color(0xFFBFC5D2),
                     shape = RoundedCornerShape(50.dp)
                 )
-                .clickable { expanded = true }
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { expanded = true }
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
 
@@ -901,7 +849,8 @@ fun FileAttachment(
         Image(
             painter = painterResource(id = R.drawable.ic_delete_icon),
             contentDescription = "Delete",
-            modifier = Modifier.size(48.dp).clickable{onDeleteClick()}
+            modifier = Modifier.size(48.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null){onDeleteClick()}
         )
 
     }
@@ -957,7 +906,8 @@ fun UniversalInputField(
                     color = Color(0xFF697383),
                     shape = RoundedCornerShape(56.dp)
                 )
-                .clickable { onClick() },
+                .clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { onClick() },
             contentAlignment = Alignment.CenterStart
         ) {
 
@@ -980,7 +930,8 @@ fun UniversalInputField(
                         .align(Alignment.CenterEnd)
                         .padding(end = 16.dp)
                         .size(20.dp)
-                        .clickable { onClick() }
+                        .clickable ( interactionSource = remember { MutableInteractionSource() },
+                            indication = null){ onClick() }
                 )
             }
         }
@@ -1007,14 +958,15 @@ fun CancelButton(
                 Color(0xFF181B1A),
                 RoundedCornerShape(28.dp)
             )
-            .clickable { onClick() }
+            .clickable( interactionSource = remember { MutableInteractionSource() },
+                indication = null) { onClick() }
             .padding(horizontal = paddingHorizontal),
         contentAlignment = Alignment.Center
     ) {
 
         Text(
             text = cancelText,
-            fontFamily = FontFamily(Font(R.font.onest_medium)),
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             color = Color.Black,
             fontSize = fontSize
         )
@@ -1039,7 +991,8 @@ fun TopBarHeader1(title: String, onBackClick: () -> Unit) {
             Image(
                 painter = painterResource(id = R.drawable.ic_cross_icon),
                 contentDescription = "Back Icon",
-                modifier = Modifier.size(42.dp).clickable{onBackClick()}
+                modifier = Modifier.size(42.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null){onBackClick()}
             )
 Spacer(Modifier.width(19.dp))
             Text(
@@ -1054,6 +1007,39 @@ Spacer(Modifier.width(19.dp))
 
        // HorizontalDivider(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFEBE1FF)))
         Divider(color = Color(0xFFEBE1FF), thickness = 1.dp)
+    }
+}
+
+@Composable
+fun TopBarHeader2(title: String, onBackClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth() .padding( horizontal = 20.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_cross_icon),
+                contentDescription = "Back Icon",
+                modifier = Modifier.size(42.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+                    indication = null){onBackClick()}
+            )
+            Spacer(Modifier.width(19.dp))
+            Text(
+                text = title,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                fontWeight = FontWeight.Medium
+            )
+
+        }
+
     }
 }
 
@@ -1124,4 +1110,7 @@ fun ProfileInputSmallField(
         )
     }
 }
+
+
+
 

@@ -223,7 +223,8 @@ fun AlertScreenPreview() {
 //            Spacer(Modifier.width(16.dp))
 //
 //            Row(
-//                modifier = Modifier.clickable { checked = !checked },
+//                modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+ //                       indication = null){ checked = !checked },
 //                verticalAlignment = Alignment.CenterVertically
 //            ) {
 //                Checkbox(

@@ -10,21 +10,36 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 
-import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
 import com.bussiness.curemegptapp.ui.screen.main.schedule.HealthScheduleScreen
-import com.bussiness.curemegptapp.ui.screen.main.ThingNeedingAttentionScreen
+import com.bussiness.curemegptapp.ui.screen.main.thingNeedingAttention.ThingNeedingAttentionScreen
 import com.bussiness.curemegptapp.ui.screen.main.addMedication.AddMedicationScreen
 import com.bussiness.curemegptapp.ui.screen.main.alert.AlertScreen
 import com.bussiness.curemegptapp.ui.screen.main.familyMembersScreen.FamilyMembersScreen
 import com.bussiness.curemegptapp.ui.screen.main.familyPersonProfile.FamilyPersonProfileScreen
 import com.bussiness.curemegptapp.ui.screen.main.scheduleNewAppointment.ScheduleNewAppointmentScreen
 
-import com.bussiness.curemegptapp.ui.screen.ChatAI.AIChatScreen
-import com.bussiness.curemegptapp.ui.screen.home.HomeScreen
-import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
-import com.bussiness.curemegptapp.ui.screen.ChatAI.ChatScreen
+import com.bussiness.curemegptapp.ui.screen.main.ChatAI.AIChatScreen
+import com.bussiness.curemegptapp.ui.screen.main.home.HomeScreen
+import com.bussiness.curemegptapp.ui.screen.main.ChatAI.ChatScreen
+import com.bussiness.curemegptapp.ui.screen.auth.NewPasswordScreen
+import com.bussiness.curemegptapp.ui.screen.auth.ResetScreen
+import com.bussiness.curemegptapp.ui.screen.auth.VerifyOtpScreen
+import com.bussiness.curemegptapp.ui.screen.main.addFamilyMemberScreen.AddFamilyMemberScreen
+import com.bussiness.curemegptapp.ui.screen.main.editFamilyMemberDetails.EditFamilyMemberDetailsScreen
+import com.bussiness.curemegptapp.ui.screen.main.editProfile.EditProfileScreen
+import com.bussiness.curemegptapp.ui.screen.main.healthReports.HealthReportsScreen
 import com.bussiness.curemegptapp.ui.screen.main.myProfile.MyProfileScreen
+import com.bussiness.curemegptapp.ui.screen.main.reports.ReportScreen
+import com.bussiness.curemegptapp.ui.screen.settings.SettingsScreen
+import com.bussiness.curemegptapp.ui.screen.settingsScreens.AboutScreen
+import com.bussiness.curemegptapp.ui.screen.settingsScreens.AccountPrivacyScreen
+import com.bussiness.curemegptapp.ui.screen.settingsScreens.DeleteAccountScreen
+import com.bussiness.curemegptapp.ui.screen.settingsScreens.FrequentlyAskQuestionsScreen
+import com.bussiness.curemegptapp.ui.screen.settingsScreens.HelpSupportScreen
+import com.bussiness.curemegptapp.ui.screen.settingsScreens.PrivacyPolicyScreen
+import com.bussiness.curemegptapp.ui.screen.settingsScreens.TermsAndConditionsScreen
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -53,7 +68,7 @@ fun MainNavGraph(
             FamilyMembersScreen(navController)
         }
         composable<AppDestination.Reports> {
-            ProfileCompletionScreen(navController)
+            HealthReportsScreen(navController)
         }
 
 
@@ -83,6 +98,52 @@ fun MainNavGraph(
             MyProfileScreen(navController)
         }
 
+        composable<AppDestination.ReportScreen> {
+            ReportScreen(navController)
+        }
+        composable<AppDestination.SettingsScreen> {
+            SettingsScreen(navController)
+        }
+        composable<AppDestination.AboutScreen> {
+            AboutScreen(navController)
+        }
+        composable<AppDestination.FrequentlyAskQuestionsScreen> {
+            FrequentlyAskQuestionsScreen(navController)
+        }
+        composable<AppDestination.PrivacyPolicyScreen> {
+            PrivacyPolicyScreen(navController)
+        }
+        composable<AppDestination.TermsAndConditionsScreen> {
+            TermsAndConditionsScreen(navController)
+        }
+        composable<AppDestination.AccountPrivacyScreen> {
+            AccountPrivacyScreen(navController)
+        }
+
+
+        composable<AppDestination.Reset> { ResetScreen(navController) }
+        // composable<AppDestination.VerifyOtp> { VerifyOtpScreen(navController) }
+        composable(
+            route = "verifyOtp?from={from}&email={email}",
+            arguments = listOf(
+                navArgument("from") { defaultValue = "" },
+                navArgument("email") { defaultValue = "" }
+            )
+        ) { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from") ?: ""
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            VerifyOtpScreen(navController, from, email)
+        }
+        composable<AppDestination.NewPassword> { NewPasswordScreen(navController) }
+
+        composable<AppDestination.DeleteAccountScreen> { DeleteAccountScreen(navController) }
+
+        composable<AppDestination.HelpSupportScreen> { HelpSupportScreen(navController) }
+        composable<AppDestination.EditProfileScreen> { EditProfileScreen(navController) }
+
+        composable<AppDestination.AddFamilyMemberScreen> { AddFamilyMemberScreen(navController) }
+
+        composable<AppDestination.EditFamilyMemberDetailsScreen> { EditFamilyMemberDetailsScreen(navController) }
 
     }
 }

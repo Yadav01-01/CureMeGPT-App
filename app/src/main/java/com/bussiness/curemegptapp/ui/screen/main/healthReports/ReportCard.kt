@@ -1,8 +1,7 @@
-package com.bussiness.curemegptapp.ui.screen.healthReports
+package com.bussiness.curemegptapp.ui.screen.main.healthReports
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,10 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,27 +33,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
-import com.bussiness.curemegptapp.ui.screen.main.schedule.EditDeleteMenu
-
-//ReportCard
+import com.bussiness.curemegptapp.ui.component.PriorityImageTag
 
 
 @Composable
-fun ReportCard() {
-   var checkedState by remember { mutableStateOf(false) }
+fun ReportCard(
+    icon: Int,
+    title: String,
+    patientName: String,
+    priority: String,
+    date: String,
+    note: String,
+    filesCount: Int,
+    onViewClick: () -> Unit,
+    onShareClick: () -> Unit
+) {
+
 
     Surface(
-        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
         shape = RoundedCornerShape(40.dp),
         color = Color(0xFFF6F5FC),
-        border =  BorderStroke(1.dp, Color(0xFFE0DFE5))
+        border = BorderStroke(1.dp, Color(0xFFE0DFE5))
     ) {
+
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min) .padding(20.dp)
+                .fillMaxWidth().height(IntrinsicSize.Min)
+                .padding(20.dp)
         ) {
-            // Icon Column
+
+            // ---------- ICON ----------
             Box(
                 modifier = Modifier
                     .width(60.dp)
@@ -72,7 +79,7 @@ fun ReportCard() {
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_app_reporting_icon),
+                    painter = painterResource(id = icon),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp),
                 )
@@ -80,11 +87,8 @@ fun ReportCard() {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Content Column
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-
+            // ---------- CONTENT ----------
+            Column(modifier = Modifier.weight(1f)) {
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -92,8 +96,9 @@ fun ReportCard() {
                     verticalAlignment = Alignment.Top
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
+
                         Text(
-                            text = "Dental X-ray Analysis",
+                            text = title,
                             fontSize = 16.sp,
                             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                             fontWeight = FontWeight.Medium,
@@ -102,38 +107,33 @@ fun ReportCard() {
                         Spacer(modifier = Modifier.height(4.dp))
 
                         Text(
-                            text = "For: Peter Logan",
+                            text = "For: $patientName",
                             fontSize = 14.sp,
                             color = Color(0xFF4338CA),
-                            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                            fontWeight = FontWeight.Normal
+                            fontFamily = FontFamily(Font(R.font.urbanist_regular))
                         )
                     }
 
-
-                    EditDeleteMenu(
-                        modifier = Modifier,
-                        onEditClick = {  },
-                        onDeleteClick = { })
+                    ViewShareMenu(
+                        onViewClick = onViewClick,
+                        onShareClick = onShareClick
+                    )
                 }
 
+                Spacer(modifier = Modifier.height(6.dp))
 
-                Spacer(modifier = Modifier.height(4.dp))
-
-var priority = "Attention"
-                // Medication Type
+                // ---------- PRIORITY TAG ----------
                 PriorityImageTag(
                     label = priority,
                     color = if (priority == "Attention") Color(0xFFF31D1D) else Color(0xFF19BB9B),
                     backgroundColor = if (priority == "Attention") Color(0xFFF6DFE6) else Color(0xFFD3ECEC),
                     borderColor = if (priority == "Attention") Color(0xFFF31D1D) else Color(0xFF19BB9B),
+                    icon = if (priority == "Attention") R.drawable.ic_attention_icon_red else R.drawable.ic_normal_icon_green
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-
-
-                // Days
+                // ---------- DATE ----------
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -144,17 +144,16 @@ var priority = "Attention"
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
-                        text = "08/26/2025",
+                        text = date,
                         fontSize = 14.sp,
                         color = Color.Black,
-                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                        fontWeight = FontWeight.Normal
+                        fontFamily = FontFamily(Font(R.font.urbanist_regular))
                     )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-
+                // ---------- NOTE / DESCRIPTION ----------
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -163,74 +162,45 @@ var priority = "Attention"
                         contentDescription = null,
                         modifier = Modifier.size(29.dp),
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "All blood markers within normal range. Excellent overall health indicators.",
+                        text = note,
                         fontSize = 12.sp,
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                        modifier = Modifier.weight(1f),
                         fontWeight = FontWeight.Normal
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-
                 }
 
+                // ---------- FILE COUNT ----------
                 Surface(
                     shape = RoundedCornerShape(30.dp),
-                    color = Color(0xFFCAC7F0),
-                    modifier = Modifier.padding(top = 10.dp)
+                    color = Color(0xFFE4E2F7),
+                    modifier = Modifier.padding(top = 10.dp),
+                    border = BorderStroke(1.dp, Color(0xFFD4D1F2))
                 ) {
                     Text(
-                        text = "2 Files",
+                        text = "$filesCount Files",
                         fontSize = 10.sp,
-                        color = Color(0xFF211C64),
+                        color = Color(0xFF4338CA),
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
                 }
-
-
-
-
             }
         }
     }
 }
 
 
-@Composable
-fun PriorityImageTag(label: String, color: Color,borderColor : Color,backgroundColor : Color) {
-    Box(
-        modifier = Modifier
-            .border(1.dp, borderColor, RoundedCornerShape(50.dp))
-            .background( backgroundColor, RoundedCornerShape(50.dp))
-            .padding(vertical = 3.dp, horizontal = 8.dp)
-    ) {
-
-        Row{
-
-            Image(painter = painterResource(id= R.drawable.ic_attention_icon_red),
-                contentDescription = null,
-                )
-            Spacer(Modifier.width(5.dp))
-
-            Text(
-                text = label,
-                color = color,
-                fontSize = 10.sp,
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium
-            )
-        }
 
 
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
 fun ReportCardPreview() {
     val navController = rememberNavController()
-    ReportCard()
+   // ReportCard()
 }

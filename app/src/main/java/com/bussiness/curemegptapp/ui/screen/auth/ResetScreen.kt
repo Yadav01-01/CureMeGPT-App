@@ -2,6 +2,7 @@ package com.bussiness.curemegptapp.ui.screen.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -81,7 +82,8 @@ fun ResetScreen(navController: NavHostController) {
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
-                modifier = Modifier.clickable { navController.navigate(AppDestination.Login)}
+                modifier = Modifier.clickable(  interactionSource = remember { MutableInteractionSource() },
+                    indication = null){ navController.navigate(AppDestination.Login)}
             )
         }
     }
