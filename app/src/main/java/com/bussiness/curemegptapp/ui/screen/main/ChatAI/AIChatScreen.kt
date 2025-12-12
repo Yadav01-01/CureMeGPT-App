@@ -14,13 +14,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.input.AIChatHeader
 import com.bussiness.curemegptapp.ui.component.input.NewCaseContent
+import com.bussiness.curemegptapp.ui.screen.main.chat.OpenChatScreen
 import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
 
 @Composable
@@ -75,4 +78,13 @@ fun AIChatScreen(navController: NavHostController) {
 //        )
     }
 
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun AIChatScreenPreview() {
+    val navController = rememberNavController()
+    AIChatScreen(navController = navController)
 }

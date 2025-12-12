@@ -81,7 +81,7 @@ fun MainScreen(authNavController: NavHostController) {
                         launchSingleTop = true
                     }
                 },
-                onClickAIIcon = { navController.navigate(AppDestination.AIChatScreen) }
+                onClickAIIcon = { navController.navigate(AppDestination.OpenChatScreen) }
             )
         }
     }

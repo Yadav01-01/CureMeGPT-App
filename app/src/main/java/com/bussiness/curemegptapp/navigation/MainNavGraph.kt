@@ -27,6 +27,8 @@ import com.bussiness.curemegptapp.ui.screen.auth.NewPasswordScreen
 import com.bussiness.curemegptapp.ui.screen.auth.ResetScreen
 import com.bussiness.curemegptapp.ui.screen.auth.VerifyOtpScreen
 import com.bussiness.curemegptapp.ui.screen.main.addFamilyMemberScreen.AddFamilyMemberScreen
+import com.bussiness.curemegptapp.ui.screen.main.chat.ChatDataScreen
+import com.bussiness.curemegptapp.ui.screen.main.chat.OpenChatScreen
 import com.bussiness.curemegptapp.ui.screen.main.editFamilyMemberDetails.EditFamilyMemberDetailsScreen
 import com.bussiness.curemegptapp.ui.screen.main.editProfile.EditProfileScreen
 import com.bussiness.curemegptapp.ui.screen.main.healthReports.HealthReportsScreen
@@ -144,6 +146,8 @@ fun MainNavGraph(
         composable<AppDestination.AddFamilyMemberScreen> { AddFamilyMemberScreen(navController) }
 
         composable<AppDestination.EditFamilyMemberDetailsScreen> { EditFamilyMemberDetailsScreen(navController) }
+        composable<AppDestination.OpenChatScreen> { OpenChatScreen(navController) }
+        composable<AppDestination.ChatDataScreen> { ChatDataScreen(navController) }
 
     }
 }

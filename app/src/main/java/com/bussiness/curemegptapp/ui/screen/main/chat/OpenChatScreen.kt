@@ -3,8 +3,8 @@ package com.bussiness.curemegptapp.ui.screen.main.chat
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,313 +16,413 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.IconButton
-
-//OpenChatScreen
+import com.bussiness.curemegptapp.navigation.AppDestination
+import com.bussiness.curemegptapp.ui.component.BottomMessageBar1
+import com.bussiness.curemegptapp.ui.component.GradientRedButton
+import com.bussiness.curemegptapp.ui.component.input.AIChatHeader
+import com.bussiness.curemegptapp.ui.component.input.RightSideDrawer
+import com.bussiness.curemegptapp.ui.dialog.CaseDialog
+import com.bussiness.curemegptapp.ui.theme.gradientBrush
+import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
 
 
 @Composable
-fun OpenChatScreen() {
+fun OpenChatScreen(navController: NavHostController) {
     var showMenu by remember { mutableStateOf(false) }
+   // val uiState by viewModel.uiState.collectAsState()
     var selectedUser by remember { mutableStateOf("James (Myself)") }
     var showUserDropdown by remember { mutableStateOf(false) }
     var showCaseDialog by remember { mutableStateOf(false) }
-
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     val users = listOf(
         "James (Myself)",
         "Rose Logan (Spouse)",
         "Peter Logan (Son)"
     )
+    val chatViewModel: ChatViewModel = hiltViewModel()
+    val chatInputState by chatViewModel.uiState.collectAsState()
+    val messages by chatViewModel.messages.collectAsState() // ये add करें
+    // Navigation trigger state
+    var shouldNavigate by remember { mutableStateOf(false) }
 
-    val suggestedQuestions = listOf(
-        "Why do my teeth hurt when I drink something cold?",
-        "What's the best way to treat bleeding gums at home?",
-        "Do I need to remove my wisdom tooth if it hurts?",
-        "Why do I keep getting frequent headaches?",
-        "How can I tell if my stomach pain is serious?",
-        "What should I do if I feel dizzy often?"
+
+    // Track when a new message is sent
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty() && shouldNavigate) {
+            // Navigate to chat detail screen
+            navController.navigate(AppDestination.ChatDataScreen) {
+                popUpTo("openChatScreen") { saveState = true }
+                launchSingleTop = true
+                restoreState = true
+            }
+            shouldNavigate = false
+        }
+    }
+
+
+
+    // Define questions for each user
+    val userQuestionsMap = mapOf(
+        "James (Myself)" to Pair(
+            // Suggested Questions for James
+            listOf(
+                "Why do my teeth hurt when I drink something cold?",
+                "What's the best way to treat bleeding gums at home?",
+                "Do I need to remove my wisdom tooth if it hurts?",
+                "Why do I keep getting frequent headaches?",
+                "How can I tell if my stomach pain is serious?",
+                "What should I do if I feel dizzy often?"
+            ),
+            // Fitness Questions for James
+            listOf(
+                "Get fit question 1?",
+                "Get fit question 2?",
+                "Get fit question 3?"
+            )
+        ),
+        "Rose Logan (Spouse)" to Pair(
+            // Suggested Questions for Rose
+            listOf(
+                "What are common symptoms of migraines in women?",
+                "How to manage back pain during pregnancy?",
+                "Best exercises for postpartum recovery?",
+                "Diet tips for improving skin health?",
+                "How to improve sleep quality naturally?",
+                "Managing stress and anxiety effectively?"
+            ),
+            // Fitness Questions for Rose
+            listOf(
+                "Postpartum fitness routine?",
+                "Yoga for stress relief?",
+                "Healthy meal planning?"
+            )
+        ),
+        "Peter Logan (Son)" to Pair(
+            // Suggested Questions for Peter
+            listOf(
+                "Common childhood allergies and symptoms?",
+                "Best nutrition for growing children?",
+                "How to boost immune system naturally?",
+                "Managing childhood asthma?",
+                "Healthy screen time limits for kids?",
+                "When to consult doctor for fever in children?"
+            ),
+            // Fitness Questions for Peter
+            listOf(
+                "Fun exercises for kids?",
+                "Building healthy habits early?",
+                "Outdoor activities for children?"
+            )
+        )
     )
 
-    val fitnessQuestions = listOf(
-        "Get fit question 1?",
-        "Get fit question 2?",
-        "Get fit question 3?"
+    // Get questions based on selected user
+    val (suggestedQuestions, fitnessQuestions) = userQuestionsMap[selectedUser] ?: Pair(
+        listOf("No questions available"),
+        listOf("No fitness questions available")
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            // Top Bar
-            TopBar(onMenuClick = { showMenu = true })
 
-            // Main Content
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(32.dp))
+    var showDrawer by remember { mutableStateOf(false) }
 
-                    // Logo
-                    Box(
+
+    RightSideDrawer(
+        drawerState = showDrawer,
+        onClose = { showDrawer = false },
+        drawerWidth = 320.dp,
+        drawerContent = {
+            MenuDrawer(
+                onDismiss = { showDrawer = false },
+                selectedUser = selectedUser,
+                onUserChange = {
+                    selectedUser = it
+                    showDrawer = false
+                },
+                onClickNewCaseChat = {
+                    showCaseDialog = true
+                }
+            )
+        }
+    ) {
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier.fillMaxSize().statusBarsPadding()
+                        .padding(horizontal = 20.dp)
+                ) {
+
+                    AIChatHeader(
+                        logoRes = R.drawable.ic_logo,
+                        sideArrow = R.drawable.left_ic,
+                        filterIcon = R.drawable.filter_ic,
+                        onLeftIconClick = { navController.popBackStack() },
+                        onFilterClick = { showDrawer = true },
+                    )
+
+                    // Main Content
+                    LazyColumn(
                         modifier = Modifier
-                            .size(120.dp)
-                            .border(4.dp, Color(0xFF5B47DB), RoundedCornerShape(24.dp)),
-                        contentAlignment = Alignment.Center
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = "*",
-                            color = Color(0xFF5B47DB),
-                            fontSize = 60.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                        item {
+                            Spacer(modifier = Modifier.height(32.dp))
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                            // Logo
+                            Image(
+                                painter = painterResource(R.drawable.main_ic),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .align(Alignment.CenterHorizontally)
+                            )
 
-                    // Greeting
-                    Row {
-                        Text(
-                            text = "Good afternoon, ",
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Text(
-                            text = "James",
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF5B47DB)
-                        )
-                    }
+                            Spacer(modifier = Modifier.height(24.dp))
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // User Selector
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { showUserDropdown = !showUserDropdown },
-                        shape = RoundedCornerShape(16.dp),
-                        color = Color(0xFFF0EDFF)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_person_complete_icon),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Text("Ask for:", fontWeight = FontWeight.Medium)
+                            // Greeting
+                            Row {
                                 Text(
-                                    selectedUser,
-                                    color = Color(0xFF5B47DB),
+                                    text = "Good afternoon, ",
+                                    fontSize = 24.sp,
                                     fontWeight = FontWeight.Medium
                                 )
+                                Text(
+                                    text = "James",
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF4338CA)
+                                )
                             }
-                            Image(
 
-                                painter =  painterResource(if (showUserDropdown) R.drawable.ic_show_drop_down_icon
-                                else R.drawable.ic_hide_drop_down_icon),
-                                contentDescription = null,
-                            )
-                        }
-                    }
+                            Spacer(modifier = Modifier.height(24.dp))
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                            // User Selector
+                            Surface(
+                                modifier = Modifier
+                                    .fillMaxWidth().padding(horizontal = 18.dp)
+                                    .clickable { showUserDropdown = !showUserDropdown },
+                                shape = RoundedCornerShape(30.dp),
+                                color = Color(0xFFF0EDFF),
 
-                    // User Dropdown
-                    if (showUserDropdown) {
-                        Surface(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
-                            border = BorderStroke(1.dp, Color.LightGray)
-                        ) {
-                            Column {
-                                users.forEachIndexed { index, user ->
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(6.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
                                     Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                if (user == "Rose Logan (Spouse)") {
-                                                    showCaseDialog = true
-                                                } else {
-                                                    selectedUser = user
-                                                }
-                                                showUserDropdown = false
-                                            }
-                                            .padding(16.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        Text(
-                                            user,
-                                            color = if (user == selectedUser) Color(0xFF5B47DB)
-                                            else Color.Black,
-                                            fontWeight = if (user == selectedUser) FontWeight.Medium
-                                            else FontWeight.Normal
+                                        Image(
+                                            painter = painterResource(R.drawable.ic_chat_circle_person_icon),
+                                            contentDescription = null,
+                                            modifier = Modifier.wrapContentSize()
                                         )
-                                        if (user == selectedUser) {
-                                            Text("✓", fontSize = 20.sp, color = Color(0xFF5B47DB))
-                                        }
+                                        Text("Ask for:", fontWeight = FontWeight.Medium, fontSize = 14.sp,)
+
                                     }
-                                    if (index < users.size - 1) {
-                                        HorizontalDivider()
+
+                                    Text(
+                                        selectedUser,
+                                        color = Color(0xFF5B47DB),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Spacer(Modifier.width(4.dp))
+                                    Image(
+
+                                        painter = painterResource(
+                                            if (showUserDropdown) R.drawable.ic_dropdown_show
+                                            else R.drawable.ic_dropdown_icon
+                                        ),
+                                        contentDescription = null,
+                                        modifier = Modifier.padding(end = 6.dp)
+                                    )
+                                }
+                            }
+
+
+                            if (showUserDropdown) {
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
+                                    shape = RoundedCornerShape(16.dp),
+                                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                                ) {
+                                    Column(
+                                        modifier = Modifier.padding(vertical = 8.dp)
+                                    ) {
+                                        users.forEachIndexed { index, user ->
+
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(44.dp)
+                                                    .clickable(
+                                                        interactionSource = remember { MutableInteractionSource() },
+                                                        indication = null
+                                                    ) {
+
+                                                        selectedUser = user
+                                                        showUserDropdown = false
+                                                    }
+                                                    .padding(horizontal = 16.dp)
+                                            ) {
+                                                Row(
+                                                    modifier = Modifier.fillMaxSize(),
+                                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    // User name with proper styling
+                                                    Text(
+                                                        text = user,
+                                                        fontSize = 16.sp,
+                                                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                                        fontWeight = if (user == selectedUser) FontWeight.Medium else FontWeight.Normal,
+                                                        color = if (user == selectedUser) Color(0xFF4338CA) else Color(0xFF374151)
+                                                    )
+
+                                                    // Tick icon only for selected user
+                                                    if (user == selectedUser) {
+                                                        Image(
+                                                            painter = painterResource(id = R.drawable.ic_tick_icon),
+                                                            contentDescription = "Selected",
+                                                            modifier = Modifier.size(20.dp)
+                                                        )
+                                                    }
+                                                }
+                                            }
+
+                                        }
                                     }
                                 }
                             }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                            GradientRedButton(
+                                text = "New Case Chat",
+                                icon = R.drawable.page_img,
+                                modifier = Modifier.fillMaxWidth(),
+                                height = 56.dp,
+                                fontSize = 14.sp,
+                                imageSize = 16.dp,
+                                gradientColors = listOf(
+                                    Color(0xFF4338CA),
+                                    Color(0xFF211C64)
+                                ),
+                                onClick = {  showCaseDialog = true }
+                            )
+
+                            Spacer(modifier = Modifier.height(24.dp))
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Suggested Questions
+                        items(suggestedQuestions) { question ->
+                            QuestionCard(question = question, isHealthQuestion = true)
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+
+                        // Fitness Questions
+                        items(fitnessQuestions) { question ->
+                            QuestionCard(question = question, isHealthQuestion = false)
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
 
-                    // New Case Chat Button
-                    Button(
-                        onClick = { },
+
+                    BottomMessageBar1(
                         modifier = Modifier
+
                             .fillMaxWidth()
-                            .height(56.dp),
-                        shape = RoundedCornerShape(28.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF5B47DB)
-                        )
-                    ) {
-                        Image(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("New Case Chat", fontSize = 16.sp)
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-
-                // Suggested Questions
-                items(suggestedQuestions) { question ->
-                    QuestionCard(question = question, isHealthQuestion = true)
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-
-                // Fitness Questions
-                items(fitnessQuestions) { question ->
-                    QuestionCard(question = question, isHealthQuestion = false)
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
-
-            // Bottom Input Bar
-            BottomInputBar()
-        }
-
-        // Menu Drawer
-        if (showMenu) {
-            MenuDrawer(
-                onDismiss = { showMenu = false },
-                selectedUser = selectedUser,
-                onUserChange = { selectedUser = it }
-            )
-        }
-
-        // Case Dialog
-        if (showCaseDialog) {
-            CaseDialog(
-                onDismiss = { showCaseDialog = false },
-                onConfirm = {
-                    selectedUser = "Rose Logan (Spouse)"
-                    showCaseDialog = false
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun TopBar(onMenuClick: () -> Unit) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = Color.White,
-        shadowElevation = 4.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(Color(0xFF5B47DB), RoundedCornerShape(10.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "*",
-                        color = Color.White,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+                            .padding(horizontal = 5.dp).padding(bottom = 10.dp),
+                        state = chatInputState,
+                        viewModel = chatViewModel,
+                        onSendClicked = {
+                            // When send button is clicked, trigger navigation
+                            shouldNavigate = true
+                        }
                     )
                 }
-                Text(
-                    text = "CureMeGPT",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                IconButton(onClick = { }) {
-                    Image(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = "Back")
-                }
-                IconButton(onClick = onMenuClick) {
-                    Image(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = "Menu")
+
+
+
+                // Case Dialog
+                if (showCaseDialog) {
+                    CaseDialog(
+                        onDismiss = { showCaseDialog = false },
+                        onConfirm = {
+                            selectedUser = "Rose Logan (Spouse)"
+                            showCaseDialog = false
+                        }
+                    )
                 }
             }
         }
-    }
+
 }
+
 
 @Composable
 fun QuestionCard(question: String, isHealthQuestion: Boolean) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(30.dp),
         color = Color(0xFFF5F5F5)
     ) {
         Row(
@@ -335,77 +435,27 @@ fun QuestionCard(question: String, isHealthQuestion: Boolean) {
         ) {
             if (isHealthQuestion) {
                 Image(
-                    painter = painterResource(R.drawable.ic_show_drop_down_icon),
+                    painter = painterResource(R.drawable.ic_circle_page_image),
                     contentDescription = null,
 
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(51.dp).align(alignment = Alignment.CenterVertically)
                 )
             } else {
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .background(Color(0xFF5B47DB), RoundedCornerShape(4.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("G", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                }
+                Image(
+                    painter = painterResource(R.drawable.ic_g_icon),
+                    contentDescription = null,
+
+                    modifier = Modifier.size(51.dp).align(alignment = Alignment.CenterVertically)
+                )
             }
-            Text(question, fontSize = 14.sp, modifier = Modifier.weight(1f))
+            Text(question, fontSize = 16.sp, modifier = Modifier.weight(1f).align(alignment = Alignment.CenterVertically), fontFamily = FontFamily(Font(R.font.urbanist_regular)))
         }
     }
 }
 
-@Composable
-fun BottomInputBar() {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = Color.White,
-        shadowElevation = 8.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Surface(
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(24.dp),
-                color = Color(0xFFF5F5F5)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = null, tint = Color.Gray)
-                    Text("Ask anything", color = Color.Gray, fontSize = 14.sp)
-                }
-            }
-            Surface(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clickable { },
-                shape = CircleShape,
-                color = Color(0xFF5B47DB)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_show_drop_down_icon),
-                        contentDescription = null,
-                        tint = Color.White
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Composable
-fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (String) -> Unit) {
+fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (String) -> Unit,onClickNewCaseChat:()-> Unit) {
     var showChatHistory by remember { mutableStateOf(false) }
     var showCaseHistory by remember { mutableStateOf(false) }
     var selectedChatIndex by remember { mutableStateOf<Int?>(null) }
@@ -419,23 +469,61 @@ fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (Strin
         "Medicine Advice + De..."
     )
 
-    val caseHistory = listOf(
-        "Case 1", "Case 2", "Case 3", "Case 4", "Case 5", "Medicine Advice + De..."
+//    val caseHistory = listOf(
+//        "Case 1", "Case 2", "Case 3", "Case 4", "Case 5", "Medicine Advice + De..."
+//    )
+    // Define case history for each user
+    val userCaseHistoryMap = mapOf(
+        "James (Myself)" to listOf(
+            "Toothache Treatment - Nov 2023",
+            "Annual Checkup - Aug 2023",
+            "Headache Consultation - Jun 2023",
+            "Stomach Issue - Mar 2023",
+            "Dental Cleaning - Jan 2023",
+            "General Health Review"
+        ),
+        "Rose Logan (Spouse)" to listOf(
+            "Pregnancy Checkup - Dec 2023",
+            "Migraine Treatment - Oct 2023",
+            "Postpartum Recovery - Sep 2023",
+            "Skin Consultation - Jul 2023",
+            "Sleep Disorder - May 2023",
+            "Stress Management"
+        ),
+        "Peter Logan (Son)" to listOf(
+            "Childhood Allergy Test - Nov 2023",
+            "Growth Monitoring - Sep 2023",
+            "Immunization Update - Aug 2023",
+            "Asthma Management - Jun 2023",
+            "Pediatric Checkup - Apr 2023",
+            "Nutrition Counseling"
+        )
     )
 
+    // Get case history based on selected user
+    val caseHistory = userCaseHistoryMap[selectedUser] ?: listOf("No case history available")
+
+    var searchQuery by remember { mutableStateOf("") }
+    var showUserDropdown1 by remember { mutableStateOf(false) }
+    val users = listOf(
+        "James (Myself)",
+        "Rose Logan (Spouse)",
+        "Peter Logan (Son)"
+    )
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
+            .fillMaxSize().clip(shape = RoundedCornerShape(topStart = 40.dp,bottomStart = 40.dp))
+            .background(Color.White)
             .clickable { onDismiss() }
     ) {
         Surface(
             modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxHeight().padding(vertical = 10.dp)
                 .width(340.dp)
                 .align(Alignment.CenterEnd)
                 .clickable(enabled = false) { },
-            color = Color.White
+            color = Color.White,
+            shape = RoundedCornerShape(topStart = 40.dp,bottomStart = 40.dp)
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
@@ -453,72 +541,94 @@ fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (Strin
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Box(
+
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_logo),
+                                contentDescription = "Logo",
+                                contentScale = ContentScale.Fit,
                                 modifier = Modifier
-                                    .size(32.dp)
-                                    .background(Color(0xFF5B47DB), RoundedCornerShape(8.dp)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("*", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                            }
-                            Text("CureMeGPT", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                                    .wrapContentWidth()
+                                    .height(30.dp) // Adjust size according to your logo
+                            )
                         }
-                        IconButton(onClick = onDismiss) {
-                            Icon(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = "Close")
-                        }
+
                     }
 
-                    // Search Bar
+
                     Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        color = Color(0xFFF5F5F5)
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        shape = RoundedCornerShape(40.dp),
+                        color = Color(0xFFF4F4F4),
                     ) {
-                        Row(
-                            modifier = Modifier.padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = null, tint = Color.Gray)
-                            Text("Search", color = Color.Gray, fontSize = 14.sp)
-                        }
+                        TextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            placeholder = {
+                                Text(
+                                    text = "Search",
+                                    color = Color(0xFFBCBCBC),
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular))
+                                )
+                            },
+                            leadingIcon = {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_search_icon),
+                                    contentDescription = "Search",
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            },
+
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color(0xFFF4F4F4),
+                                unfocusedContainerColor = Color(0xFFF4F4F4),
+                                disabledContainerColor = Color(0xFFF4F4F4),
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // New Chat Button
-                    Button(
-                        onClick = { },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B47DB))
-                    ) {
-                        Icon(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("New Chat")
-                    }
+
+
+                    GradientRedButton(
+                        text = "New Chat",
+                        icon = R.drawable.ic_add_chat_icon,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        height = 56.dp,
+                        fontSize = 16.sp,
+                        imageSize = 24.dp,
+                        gradientColors = listOf(
+                            Color(0xFF4338CA),
+                            Color(0xFF211C64)
+                        ),
+                        onClick = { /* Your action */ }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    GradientRedButton(
+                        text = "New Case Chat",
+                        icon = R.drawable.page_img,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        height = 56.dp,
+                        fontSize = 16.sp,
+                        imageSize = 24.dp,
+                        gradientColors = listOf(
+                            Color(0xFF4338CA),
+                            Color(0xFF211C64)
+                        ),
+                        onClick = { onClickNewCaseChat()  }
+                    )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // New Case Chat Button
-                    Button(
-                        onClick = { },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B47DB))
-                    ) {
-                        Icon(painter = painterResource(R.drawable.ic_show_drop_down_icon), contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("New Case Chat")
-                    }
+
 
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -528,154 +638,163 @@ fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (Strin
                             .fillMaxWidth()
                             .clickable { showChatHistory = !showChatHistory }
                             .padding(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("Chat History", fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                        Spacer(modifier = Modifier.width(10.dp))
                         Icon(
-                            if (showChatHistory) painter = painterResource(R.drawable.ic_show_drop_down_icon) else painter = painterResource(R.drawable.ic_show_drop_down_icon),
+                            painter = painterResource(if (showChatHistory) R.drawable.ic_dropdown_show else R.drawable.ic_dropdown_icon),
                             contentDescription = null
                         )
                     }
 
                     if (showChatHistory) {
                         // User Selector in Chat History
-                        Surface(
+
+                        Box(
+
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, Color.LightGray)
+                                .wrapContentHeight().fillMaxWidth()
+                                .padding(horizontal = 16.dp).clip(RoundedCornerShape(24.dp)).background(gradientBrush).clickable(){
+
+                                }.padding(start = 10.dp),
+
                         ) {
-                            Row(
-                                modifier = Modifier.padding(12.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                            Text("Case Chat History",color = Color.White, fontWeight = FontWeight.Medium)
+                        }
+
+                    }
+
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth().clickable(){
+                                showUserDropdown1 = true
+                            }
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        shape = RoundedCornerShape(30.dp),
+                        border = BorderStroke(1.dp, Color(0xFFE7E9EC)),
+                        color = Color.Unspecified
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(selectedUser, color = Color(0xFF4338CA), fontWeight = FontWeight.Medium)
+                            Image(painter = painterResource( if(showUserDropdown1) R.drawable.ic_dropdown_show else R.drawable.ic_dropdown_icon), contentDescription = null)
+                        }
+                    }
+
+                    if (showUserDropdown1) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth().padding(horizontal = 5.dp)
+                                .wrapContentHeight(),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(vertical = 8.dp)
                             ) {
-                                Text(selectedUser, color = Color(0xFF5B47DB), fontWeight = FontWeight.Medium)
-                                Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = Color.Gray)
+                                users.forEachIndexed { index, user ->
+
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(44.dp)
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = null
+                                            ) {
+
+                                                onUserChange(user)
+                                                showUserDropdown1 = false
+                                            }
+                                            .padding(horizontal = 16.dp)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxSize(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            // User name with proper styling
+                                            Text(
+                                                text = user,
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                                fontWeight = if (user == selectedUser) FontWeight.Medium else FontWeight.Normal,
+                                                color = if (user == selectedUser) Color(0xFF4338CA) else Color(0xFF374151)
+                                            )
+
+                                            // Tick icon only for selected user
+                                            if (user == selectedUser) {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.ic_tick_icon),
+                                                    contentDescription = "Selected",
+                                                    modifier = Modifier.size(20.dp)
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }
+
+
+
                 }
+
+
 
                 // Chat History Items
                 if (showChatHistory) {
-                    items(chatHistory.size) { index ->
-                        Box(modifier = Modifier.fillMaxWidth()) {
+                    item {
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Case Chat History Button
+
+
+                        if (showCaseHistory) {
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            // User Selector in Case History
                             Surface(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 4.dp),
+                                    .padding(horizontal = 16.dp),
                                 shape = RoundedCornerShape(12.dp),
-                                color = Color(0xFFF0EDFF)
+                                border = BorderStroke(1.dp, Color.LightGray)
                             ) {
                                 Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable { }
-                                        .padding(12.dp),
+                                    modifier = Modifier.padding(12.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Row(
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier.weight(1f)
-                                    ) {
-                                        Icon(
-                                            Icons.Default.AccessTime,
-                                            contentDescription = null,
-                                            tint = Color(0xFF5B47DB),
-                                            modifier = Modifier.size(20.dp)
-                                        )
-                                        Text(chatHistory[index], fontSize = 14.sp)
-                                    }
-                                    IconButton(
-                                        onClick = { selectedChatIndex = if (selectedChatIndex == index) null else index },
-                                        modifier = Modifier.size(24.dp)
-                                    ) {
-                                        Icon(
-                                            Icons.Default.MoreVert,
-                                            contentDescription = null,
-                                            tint = Color(0xFF5B47DB)
-                                        )
-                                    }
+                                    Text(selectedUser, color = Color(0xFF5B47DB), fontWeight = FontWeight.Medium)
+                                    Icon(painter = painterResource( R.drawable.ic_show_drop_down_icon), contentDescription = null, tint = Color.Gray)
                                 }
                             }
-
-                            // Options Menu
-                            if (selectedChatIndex == index) {
-                                Surface(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterEnd)
-                                        .padding(end = 60.dp)
-                                        .width(180.dp),
-                                    shape = RoundedCornerShape(12.dp),
-                                    shadowElevation = 8.dp
-                                ) {
-                                    Column {
-                                        OptionMenuItem(text = "Rename", icon = "✏️")
-                                        OptionMenuItem(text = "Share Chat", icon = "🔗")
-                                        OptionMenuItem(text = "Delete", icon = "🗑️", isDelete = true)
-                                    }
-                                }
-                            }
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
+
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-                    Spacer(modifier = Modifier.height(16.dp))
 
-                    // Case Chat History Button
-                    Button(
-                        onClick = { showCaseHistory = !showCaseHistory },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B47DB))
-                    ) {
-                        Text("Case Chat History")
-                    }
 
-                    if (showCaseHistory) {
-                        Spacer(modifier = Modifier.height(12.dp))
 
-                        // User Selector in Case History
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, Color.LightGray)
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(12.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(selectedUser, color = Color(0xFF5B47DB), fontWeight = FontWeight.Medium)
-                                Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = Color.Gray)
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-
-                // Case History Items
-                if (showCaseHistory) {
                     items(caseHistory.size) { index ->
                         Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp, vertical = 4.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            color = Color(0xFFF0EDFF)
+                            shape = RoundedCornerShape(30.dp),
+                            color = Color(0xFFF5F0FF)
                         ) {
                             Row(
                                 modifier = Modifier
@@ -690,28 +809,29 @@ fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (Strin
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.weight(1f)
                                 ) {
-                                    Icon(
-                                        Icons.Default.AccessTime,
+                                    Image(
+                                        painter = painterResource( R.drawable.ic_clock_new_icon),
                                         contentDescription = null,
-                                        tint = Color(0xFF5B47DB),
-                                        modifier = Modifier.size(20.dp)
+
+                                        modifier = Modifier.size(31.dp)
                                     )
                                     Text(caseHistory[index], fontSize = 14.sp)
                                 }
                                 IconButton(
                                     onClick = { },
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(26.dp)
                                 ) {
                                     Icon(
-                                        Icons.Default.MoreVert,
+                                        painter = painterResource( R.drawable.ic_horizontal_menu_icon),
                                         contentDescription = null,
-                                        tint = Color(0xFF5B47DB)
+                                        tint = Color.Unspecified,
+
                                     )
                                 }
                             }
                         }
                     }
-                }
+
 
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
@@ -721,108 +841,12 @@ fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (Strin
     }
 }
 
+
+
+@Preview(showBackground = true)
 @Composable
-fun OptionMenuItem(text: String, icon: String, isDelete: Boolean = false) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { }
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(icon, fontSize = 16.sp)
-        Text(
-            text,
-            fontSize = 14.sp,
-            color = if (isDelete) Color.Red else Color.Black
-        )
-    }
+fun OpenChatScreenPreview() {
+    val navController = rememberNavController()
+    OpenChatScreen(navController = navController)
 }
 
-@Composable
-fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(24.dp),
-            color = Color.White
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(Color(0xFF5B47DB), CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.Description,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
-                        Column {
-                            Text(
-                                "Start a New Case Chat?",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
-                    }
-                    IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.Gray)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    "This new case chat will be created only for Rose Logan (Spouse). Once created, you cannot switch members in the middle. The full case history will be saved in Rose Logan (Spouse)'s records.",
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    lineHeight = 20.sp
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    OutlinedButton(
-                        onClick = onDismiss,
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        border = BorderStroke(2.dp, Color.LightGray)
-                    ) {
-                        Text("Cancel", color = Color.Black)
-                    }
-                    Button(
-                        onClick = onConfirm,
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B47DB))
-                    ) {
-                        Text("Yes, Create Case Chat", fontSize = 13.sp)
-                    }
-                }
-            }
-        }
-    }
-}

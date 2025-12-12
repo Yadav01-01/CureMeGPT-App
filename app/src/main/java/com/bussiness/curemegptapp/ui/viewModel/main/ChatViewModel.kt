@@ -2,6 +2,7 @@ package com.bussiness.curemegptapp.ui.viewModel.main
 
 import android.app.Application
 import android.net.Uri
+
 import android.provider.OpenableColumns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +21,11 @@ data class ChatInputState(
     val message: String = "",
     val images: List<Uri> = emptyList(),
     val pdfs: List<PdfData> = emptyList(),
-    val isRecording: Boolean = false
+    val isRecording: Boolean = false,
+    val showVoicePreview: Boolean = false,   // NEW
+    val transcribedText: String = "",         // NEW
+    val selectedProfile: Profile? = null,
+    val showProfileDropdown: Boolean = false
 )
 
 @HiltViewModel
@@ -95,4 +100,31 @@ class ChatViewModel @Inject constructor(
             if (index >= 0) cursor.getString(index) else "document.pdf"
         } ?: "document.pdf"
     }
+    fun onVoiceRecorded(text: String) {
+        _uiState.value = _uiState.value.copy(
+            transcribedText = text,
+            showVoicePreview = true,
+            message = ""   // input box empty rahe
+        )
+    }
+    fun showTranscribedText() {
+        _uiState.value = _uiState.value.copy(
+            message = _uiState.value.transcribedText,
+            showVoicePreview = false
+        )
+    }
+
+    fun clearVoicePreview() {
+        _uiState.update { it.copy(showVoicePreview = false, transcribedText = "") }
+    }
+
 }
+
+// Create Profile.kt in your data/model folder
+data class Profile(
+    val id: String,
+    val name: String,
+    val iconResId: Int,
+    val description: String
+)
+

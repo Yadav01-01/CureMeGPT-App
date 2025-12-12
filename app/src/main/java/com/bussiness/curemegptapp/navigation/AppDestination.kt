@@ -110,7 +110,11 @@ sealed class AppDestination {
     @Serializable
     data object EditFamilyMemberDetailsScreen : AppDestination()
 
+    @Serializable
+    data object OpenChatScreen : AppDestination()
 
+    @Serializable
+    data object ChatDataScreen : AppDestination()
 
 
 }

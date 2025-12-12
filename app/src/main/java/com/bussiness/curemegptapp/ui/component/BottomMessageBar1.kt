@@ -1,9 +1,12 @@
 package com.bussiness.curemegptapp.ui.component
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -33,6 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.viewModel.main.ChatInputState
@@ -41,10 +47,11 @@ import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
-fun BottomMessageBar(
+fun BottomMessageBar1(
     modifier: Modifier = Modifier,
     state: ChatInputState= ChatInputState(),
-    viewModel: ChatViewModel = hiltViewModel()
+    viewModel: ChatViewModel = hiltViewModel(),
+    onSendClicked: () -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -68,6 +75,15 @@ fun BottomMessageBar(
     }
 
     // Speech recognizer manager (keeps simple lifecycle inside compose)
+//    var speechMgr by remember { mutableStateOf<SpeechRecognizerManager?>(null) }
+//
+//    DisposableEffect(key1 = context) {
+//        onDispose {
+//            speechMgr?.stopListening()
+//            speechMgr = null
+//        }
+//    }
+    // Speech recognizer manager (keeps simple lifecycle inside compose)
     var speechMgr by remember { mutableStateOf<SpeechRecognizerManager?>(null) }
 
     DisposableEffect(key1 = context) {
@@ -87,9 +103,9 @@ fun BottomMessageBar(
         Row(
             modifier = Modifier
                 .weight(1f)
-                .height(52.dp)
+                .wrapContentHeight()
                 .background(Color(0xFFF5F0FF), RoundedCornerShape(28.dp))
-                .padding(horizontal = 15.dp),
+                .padding(horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -115,19 +131,30 @@ fun BottomMessageBar(
                     Spacer(modifier = Modifier.height(6.dp))
                 }
 
-                TextField(
-                    value = state.message,
-                    onValueChange = { viewModel.onMessageChange(it) },
-                    modifier = Modifier.weight(1f),
-                    placeholder = { Text("Ask anything…") },
-                    maxLines = 4,
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent
+                if (state.showVoicePreview) {
+                    VoicePreviewCard(
+                        transcription = state.transcribedText,
+                        onSeeText = { viewModel.showTranscribedText() },
+                        onClose = { viewModel.clearVoicePreview() }
                     )
-                )
+                    Spacer(Modifier.height(8.dp))
+                }else {
+                    TextField(
+                        value = state.message,
+                        onValueChange = { viewModel.onMessageChange(it) },
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Ask anything…", fontSize = 10.sp) },
+                        maxLines = 4,
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent
+                        )
+                    )
+                }
+
+
 
             }
         }
@@ -139,12 +166,52 @@ fun BottomMessageBar(
 
         AnimatedContent(targetState = canSend) { sending ->
             if (sending) {
-                IconButton(onClick = { viewModel.sendMessageFromInput() }) {
+                IconButton(onClick = { viewModel.sendMessageFromInput()
+                    onSendClicked()}) {
                     Icon(painterResource(R.drawable.send_ic), contentDescription = "Send", tint = Color.Unspecified, modifier = Modifier.wrapContentSize())
                 }
             } else {
-                IconButton(onClick = { viewModel.sendMessageFromInput() }) {
-                    Icon(painterResource(R.drawable.voiceinc_ic), contentDescription = "Send", tint = Color.Unspecified, modifier = Modifier.wrapContentSize())
+                IconButton(
+                    onClick = {
+                        // request permission if needed then start
+                        val hasPermission = ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.RECORD_AUDIO
+                        ) == PackageManager.PERMISSION_GRANTED
+                        if (!hasPermission) {
+                            recordPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                            return@IconButton
+                        }
+
+                        if (!state.isRecording) {
+                            // create manager and start
+                            speechMgr = SpeechRecognizerManager(
+                                context = context,
+                                onPartialResult = { partial ->
+                                    // show partial transcription in input
+                                    viewModel.onMessageChange(partial)
+                                },
+                                onFinalResult = { final ->
+                                    viewModel.onVoiceRecorded(final)
+                                },
+                                onError = { error ->
+                                    // log or show snackbar
+                                }
+                            ).also { it.startListening() }
+                            viewModel.toggleRecording()
+                        } else {
+                            // stop
+                            speechMgr?.stopListening()
+                            viewModel.stopRecording()
+                        }
+                    }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.voiceinc_ic),
+                        contentDescription = "Voice Input",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.wrapContentSize()
+                    )
                 }
 //                IconButton(onClick = {
 //                    // request permission if needed then start
@@ -187,6 +254,55 @@ fun BottomMessageBar(
 //                }
 
             }
+        }
+    }
+}
+
+@Composable
+fun VoicePreviewCard(
+    transcription: String,
+    onSeeText: () -> Unit,
+    onClose: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFF4EFFF), RoundedCornerShape(20.dp))
+            .padding(16.dp)
+    ) {
+
+        // SEE TEXT
+        Text(
+            "See text",
+            fontSize = 10.sp,
+            color = Color(0xFF4338CA),
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+                .clickable { onSeeText() }
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            Icon(
+                painterResource(R.drawable.ic_close),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier.clickable { onClose() }
+            )
+
+            Spacer(Modifier.width(12.dp))
+
+            // Waveform image
+            Image(
+                painter = painterResource(R.drawable.voice_waveform),
+                contentDescription = null,
+                modifier = Modifier.weight(1f)
+            )
+
+            Spacer(Modifier.width(12.dp))
+
+
         }
     }
 }

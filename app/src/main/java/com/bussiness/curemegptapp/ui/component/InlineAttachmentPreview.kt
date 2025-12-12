@@ -19,7 +19,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import com.bussiness.curemegptapp.R
 
 @Composable
 fun InlineAttachmentPreview(
@@ -38,15 +40,26 @@ fun InlineAttachmentPreview(
     ) {
         images.forEach { uri ->
             Box(modifier = Modifier.size(64.dp)) {
-                AsyncImage(model = uri, contentDescription = null, modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)))
-                Surface(
-                    modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable(  interactionSource = remember { MutableInteractionSource() },
-                        indication = null ){ onRemoveImage(uri) },
-                    shape = CircleShape,
-                    color = Color.Black.copy(alpha = 0.6f)
-                ) {
-//                    Icon(Icons.Default.Close, contentDescription = null, tint = Color.White, modifier = Modifier.padding(2.dp))
-                }
+               // AsyncImage(model = uri, contentDescription = null, modifier = Modifier.height(108.dp).width(106.dp).clip(RoundedCornerShape(12.dp),))
+                AsyncImage(
+                    model = uri,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(108.dp)
+                        .width(106.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop      // ⭐ सबसे जरूरी लाइन
+                )
+
+                //                Surface(
+//                    modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable(  interactionSource = remember { MutableInteractionSource() },
+//                        indication = null ){ onRemoveImage(uri) },
+//                    shape = CircleShape,
+//                    color = Color.Black.copy(alpha = 0.6f)
+//                ) {
+                  Icon(painter = painterResource(id = R.drawable.ic_close), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.padding(2.dp).align(Alignment.TopEnd).size(20.dp).clickable(  interactionSource = remember { MutableInteractionSource() },
+                      indication = null ){ onRemoveImage(uri) })
+               // }
             }
         }
 

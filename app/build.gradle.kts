@@ -89,5 +89,9 @@ dependencies {
     implementation (libs.accompanist.permissions.v0360)
 
    // implementation ("com.github.skydoves:orchestra-colorpicker:1.2.7")
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
 
+    // OR latest version
+    implementation ("androidx.constraintlayout:constraintlayout-compose:1.1.0")
+    implementation ("com.jakewharton.timber:timber:5.0.1")
 }

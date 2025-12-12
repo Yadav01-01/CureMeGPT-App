@@ -1,6 +1,7 @@
 package com.bussiness.curemegptapp.ui.component.input
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,9 +12,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,34 +27,54 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import coil.compose.rememberAsyncImagePainter
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.data.model.ChatMessage
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors
+import com.bussiness.curemegptapp.ui.theme.gradientBrush
+import com.bussiness.curemegptapp.ui.viewModel.main.ChatDataViewModel
+import com.bussiness.curemegptapp.ui.viewModel.main.FakeChatDataViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -67,68 +91,72 @@ fun ChatHeader(
     onFilterClick: () -> Unit,
     onMenuClick: () -> Unit,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Color.White).padding(horizontal = 15.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        // Logo
-        Image(
-            painter = painterResource(id = logoRes),
-            contentDescription = "Logo",
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .wrapContentWidth()
-                .height(30.dp) // Adjust size according to your logo
-        )
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            // Notification Icon
-            IconButton(onClick = { onLeftIconClick() }) {
-                Icon(
-                    painter = painterResource(sideArrow),
-                    contentDescription = "Arrow",
-                    modifier = Modifier
-                        .width(12.dp)
-                        .height(24.dp),
-                    tint = Color.Unspecified
-                )
-            }
+    Column {
 
 
-            // Profile Image
-            Row(
-                modifier = modifier
-                    .width(74.dp)
-                    .height(52.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(Color.White).padding(horizontal = 15.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Logo
+            Image(
+                painter = painterResource(id = logoRes),
+                contentDescription = "Logo",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(30.dp) // Adjust size according to your logo
+            )
 
-                // ---- Profile Circular Image ----
-                IconButton(onClick = { onFilterClick() }) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // Notification Icon
+                IconButton(onClick = { onLeftIconClick() }) {
                     Icon(
-                        painter = painterResource(filterIcon),
-                        contentDescription = "filter",
-                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(sideArrow),
+                        contentDescription = "Arrow",
+                        modifier = Modifier.size(42.dp),
                         tint = Color.Unspecified
                     )
                 }
 
-                Spacer(modifier = Modifier.width(6.dp))
 
-                // ---- Arrow Icon ----
-                IconButton(onClick = { onMenuClick() }) {
-                    Icon(
-                        painter = painterResource(menuIcon),
-                        contentDescription = "menu",
-                        modifier = Modifier.wrapContentSize(),
-                        tint = Color.Unspecified
-                    )
+                // Profile Image
+                Row(
+                    modifier = modifier
+                        .width(92.dp)
+                        .height(52.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    // ---- Profile Circular Image ----
+                    IconButton(onClick = { onFilterClick() }) {
+                        Icon(
+                            painter = painterResource(filterIcon),
+                            contentDescription = "filter",
+                            modifier = Modifier.size(42.dp),
+                            tint = Color.Unspecified
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    // ---- Arrow Icon ----
+                    IconButton(onClick = { onMenuClick() }) {
+                        Icon(
+                            painter = painterResource(menuIcon),
+                            contentDescription = "menu",
+                            modifier = Modifier.size(42.dp),
+                            tint = Color.Unspecified
+                        )
+                    }
                 }
             }
         }
+        Spacer(Modifier.height(8.dp))
+        Divider(color = Color(0xFFEBE1FF), thickness = 1.dp)
     }
 }
 
@@ -373,7 +401,7 @@ fun ChatHeader(
 //}
 
 
-
+/*
 @Composable
 fun CommunityChatSection(
     messages: List<ChatMessage>,
@@ -402,7 +430,235 @@ fun CommunityChatSection(
     }
 }
 
+ */
 
+@Composable
+fun CommunityChatSection(
+    messages: List<ChatMessage>,
+    listState: LazyListState,
+    modifier: Modifier = Modifier,
+    viewModel: ChatDataViewModel = hiltViewModel()
+) {
+    LazyColumn(
+        state = listState,
+        modifier = modifier,
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(messages, key = { it.id }) { message ->
+            if (message.isUser) {
+                // User message (right-aligned)
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Column(
+                        modifier = Modifier.widthIn(max = 200.dp)
+                    ) {
+                        // Show images if any
+                        if (message.images.isNotEmpty()) {
+                            message.images.forEach { imageUri ->
+                                Image(
+                                    painter = rememberAsyncImagePainter(imageUri),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(max = 200.dp)
+                                        .clip(RoundedCornerShape(12.dp)),
+                                    contentScale = ContentScale.Crop
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        }
+
+                        // Show text if any
+                        if (!message.text.isNullOrBlank()) {
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        gradientBrush,
+                                        RoundedCornerShape(16.dp)
+                                    ).fillMaxWidth()
+                                    .padding(12.dp)
+                            ) {
+                                Text(
+                                    text = message.text,
+                                    color = Color.White,
+                                    fontSize = 14.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular))
+                                )
+                            }
+                        }
+
+                        // Action buttons
+                        UserMessageActions(
+                            onCopy = { message.text?.let { viewModel.copyMessage(it) } },
+                            onEdit = { viewModel.editMessage(message.id) },
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
+                }
+            } else {
+                // AI message (left-aligned)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Column(
+                        modifier = Modifier.widthIn(max = 300.dp)
+                    ) {
+                        if (message.isGenerating) {
+                            // Show typing indicator
+                            Row(
+                                modifier = Modifier
+
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Image(
+                                    painter = painterResource(id = R.drawable.ap_button),
+                                    contentDescription = "Profile Picture",
+                                    modifier = Modifier
+                                        .size(34.dp)
+                                        .clip(CircleShape)
+                                        .background(Color.Gray)
+                                        .align(Alignment.Bottom)
+                                )
+                                Spacer(modifier = Modifier.width(2.dp))
+                                Row(
+                                    modifier = Modifier
+//                                        .background(
+//                                            Color(0xFFF5F5F5),
+//                                            RoundedCornerShape(16.dp)
+//                                        )
+                                        .padding(8.dp),
+
+                                ) {
+//                                    CircularProgressIndicator(
+//                                        modifier = Modifier.size(16.dp),
+//                                        strokeWidth = 2.dp,
+//                                        color = Color(0xFF6B4EFF)
+//                                    )
+//                                    Text(
+//                                        text = "Typing...",
+//                                        color = Color.Gray,
+//                                        fontSize = 14.sp
+//                                    )
+                                    val composition by rememberLottieComposition(
+                                        LottieCompositionSpec.RawRes(R.raw.heartbeat)
+                                    )
+
+                                    LottieAnimation(
+                                        composition,
+                                        iterations = LottieConstants.IterateForever,
+                                        modifier = Modifier.size(40.dp)
+                                    )
+                                }
+                            }
+                        } else {
+                            Row(
+                                modifier = Modifier
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Image(
+                                    painter = painterResource(id = R.drawable.ap_button),
+                                    contentDescription = "Profile Picture",
+                                    modifier = Modifier
+                                        .size(34.dp)
+                                        .clip(CircleShape)
+                                        .align(Alignment.Bottom)
+                                )
+                                Column(
+                                    modifier = Modifier
+                                        .background(
+                                            Color(0xFFF8F8F8),
+                                            RoundedCornerShape(16.dp)
+                                        )
+                                        .padding(8.dp),
+
+                                )  {
+
+
+                                // Show images if any
+                                if (message.images.isNotEmpty()) {
+                                    message.images.forEach { imageUri ->
+                                        Image(
+                                            painter = rememberAsyncImagePainter(imageUri),
+                                            contentDescription = null,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .heightIn(max = 200.dp)
+                                                .clip(RoundedCornerShape(12.dp)),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                    }
+                                }
+
+                                // Show text if any
+                                if (!message.text.isNullOrBlank()) {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(12.dp)
+                                    ) {
+                                        Text(
+                                            text = message.text,
+                                            color = Color.Black,
+                                            fontSize = 14.sp
+                                        )
+                                    }
+                                }
+                                }
+                            }
+                            Row{
+                                Spacer(Modifier.width(45.dp))
+                                AiMessageActions(
+                                    message = message,
+                                    onCopy = { message.text?.let { viewModel.copyMessage(it) } },
+                                    onThumbsUp = { viewModel.rateMessage(message.id, true) },
+                                    onThumbsDown = { viewModel.rateMessage(message.id, false) },
+                                    onRegenerate = { viewModel.regenerateMessage(message.id) }
+                                )
+                            }
+                            // Action buttons
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//fun regenerateMessage(messageId: String) {
+//    viewModelScope.launch {
+//        val index = _messages.value.indexOfLast { it.id == messageId }
+//        if (index != -1) {
+//            // Show loading
+//            _messages.update {
+//                it.toMutableList().apply {
+//                    this[index] = this[index].copy(isGenerating = true)
+//                }
+//            }
+//            // Simulate API call
+//            delay(800)
+//            // Update with new response
+//            _messages.update {
+//                it.toMutableList().apply {
+//                    this[index] = this[index].copy(
+//                        text = "Regenerated response",
+//                        isGenerating = false
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun ChatBubble(message: ChatMessage) {
@@ -842,3 +1098,238 @@ fun QuestionItem(
         )
     }
 }
+
+@Composable
+fun UserMessageActions(
+    onCopy: () -> Unit,
+    onEdit: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.padding(top = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        ActionButton(
+            iconId = R.drawable.copy_ic, // You need to add these icons to your drawable folder
+            label = "Copy",
+            onClick = onCopy
+        )
+
+        ActionButton(
+            iconId = R.drawable.chat_edit_ic, // You need to add these icons to your drawable folder
+            label = "Edit",
+            onClick = onEdit
+        )
+    }
+}
+
+/*
+@Composable
+fun AiMessageActions(
+
+    onCopy: () -> Unit,
+    onThumbsUp: () -> Unit,
+    onThumbsDown: () -> Unit,
+    onRegenerate: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.padding(top = 1.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        ActionButton(
+            iconId = R.drawable.copy_ic,
+            label = "Copy",
+            onClick = onCopy,
+            imageSize = 14.dp
+        )
+
+        ActionButton(
+            iconId = R.drawable.like_ic,
+            label = "Good",
+            onClick = onThumbsUp,
+            imageSize = 14.dp
+        )
+
+        ActionButton(
+            iconId = R.drawable.dislike_ic,
+            label = "Bad",
+            onClick = onThumbsDown,
+            imageSize = 14.dp
+        )
+
+        ActionButton(
+            iconId = R.drawable.ic_regernate_icon2,
+            label = "Regenerate",
+            onClick = onRegenerate,
+            imageSize = 14.dp
+        )
+    }
+}
+ */
+@Composable
+fun AiMessageActions(
+    message: ChatMessage,
+    onCopy: () -> Unit,
+    onThumbsUp: () -> Unit,
+    onThumbsDown: () -> Unit,
+    onRegenerate: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.padding(top = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+
+        ActionButton(
+            iconId = R.drawable.copy_ic,
+            label = "Copy",
+            onClick = onCopy,
+            imageSize = 14.dp
+        )
+
+        // LIKE
+        ActionButton(
+            iconId = if (message.rating == 1) R.drawable.like_filled else R.drawable.like_ic,
+            label = "Good",
+            onClick = onThumbsUp,
+            imageSize = 14.dp
+        )
+
+        // DISLIKE
+        ActionButton(
+            iconId = if (message.rating == -1) R.drawable.dislike_filled else R.drawable.dislike_ic,
+            label = "Bad",
+            onClick = onThumbsDown,
+            imageSize = 14.dp
+        )
+
+        ActionButton(
+            iconId = R.drawable.ic_regernate_icon2,
+            label = "Regenerate",
+            onClick = onRegenerate,
+            imageSize = 14.dp
+        )
+    }
+}
+
+
+@Composable
+private fun ActionButton(
+    iconId: Int,
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    imageSize: Dp = 14.dp
+) {
+    Row(
+        modifier = modifier
+            .shadow(
+                elevation = 6.dp,           // shadow size
+                shape = CircleShape,        // same shape as clip
+                clip = false                // shadow visible rahega
+            )
+            .clip(CircleShape)               // content ko round banata hai
+            .background(Color.White)         // bg required for shadow visibility
+            .clickable(onClick = onClick)
+            .padding(horizontal = 5.dp, vertical = 5.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = iconId),
+            contentDescription = label,
+            modifier = Modifier.size(imageSize),
+            tint = Color.Unspecified
+        )
+//        Text(
+//            text = label,
+//            color = Color.Gray,
+//            fontSize = 12.sp
+//        )
+    }
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun CommunityChatSectionPreview() {
+
+    val sampleMessages = listOf(
+        ChatMessage(
+            id = "1",
+            text = "Hello! How can I help you today?",
+            images = emptyList(),
+            isUser = false,
+            isGenerating = false
+        ),
+        ChatMessage(
+            id = "2",
+            text = "Mujhe project ka UI improve karna hai.",
+            images = emptyList(),
+            isUser = true,
+            isGenerating = false
+        ),
+        ChatMessage(
+            id = "3",
+            text = "",
+            images = emptyList(),
+            isUser = false,
+            isGenerating = true
+        )
+    )
+
+    val listState = rememberLazyListState()
+
+    CommunityChatSection(
+        messages = sampleMessages,
+        listState = listState,
+
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
+
+@Composable
+fun RightSideDrawer(
+    drawerWidth: Dp = 300.dp,
+    drawerState: Boolean,
+    onClose: () -> Unit,
+    drawerContent: @Composable () -> Unit,
+    content: @Composable () -> Unit
+) {
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val offsetX by animateDpAsState(
+        targetValue = if (drawerState) screenWidth - drawerWidth else screenWidth,
+        label = "drawerAnimation"
+    )
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Main Screen
+        content()
+
+        // Overlay
+        if (drawerState) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.4f))
+                    .clickable { onClose() }
+            )
+        }
+
+        // Drawer
+        Box(
+            modifier = Modifier
+                .offset(x = offsetX)
+                .width(drawerWidth)
+                .fillMaxHeight()
+                .background(Color.Unspecified)
+        ) {
+            drawerContent()
+        }
+    }
+}
+
+
