@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.ui.component.CancelButton
+import com.bussiness.curemegptapp.ui.component.GradientButton1
 
 
 @Composable
@@ -53,18 +55,20 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.Top
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(Color(0xFF5B47DB), CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
+//                        Box(
+//                            modifier = Modifier
+//                                .size(48.dp)
+//                                .background(Color(0xFF5B47DB), CircleShape),
+//                            contentAlignment = Alignment.Center
+//                        ) {
                             Icon(
-                                painter = painterResource( R.drawable.ic_show_drop_down_icon),
+                                painter = painterResource( R.drawable.ic_new_case_icon),
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = Color.White,
+                                modifier = Modifier
+                               .size(48.dp)
                             )
-                        }
+                       // }
                         Column {
                             Text(
                                 "Start a New Case Chat?",
@@ -74,7 +78,7 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                         }
                     }
                     IconButton(onClick = onDismiss) {
-                        Icon(painter = painterResource( R.drawable.ic_show_drop_down_icon), contentDescription = "Close", tint = Color.Gray)
+                        Icon(painter = painterResource( R.drawable.ic_close), contentDescription = "Close", tint = Color.Gray)
                     }
                 }
 
@@ -93,26 +97,44 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    OutlinedButton(
-                        onClick = onDismiss,
+//                    OutlinedButton(
+//                        onClick = onDismiss,
+//                        modifier = Modifier
+//                            .weight(1f)
+//                            .height(48.dp),
+//                        shape = RoundedCornerShape(24.dp),
+//                        border = BorderStroke(2.dp, Color.LightGray)
+//                    ) {
+//                        Text("Cancel", color = Color.Black)
+//                    }
+                    CancelButton(
+                        cancelText = "Cancel",
+                        fontSize = 14.sp,
+                        paddingHorizontal = 2.dp,
                         modifier = Modifier
-                            .weight(1f)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        border = BorderStroke(2.dp, Color.LightGray)
-                    ) {
-                        Text("Cancel", color = Color.Black)
-                    }
-                    Button(
-                        onClick = onConfirm,
+                            .weight(0.7f)
+                            .height(52.dp),
+                        onClick = { onDismiss() }
+                    )
+//                    Button(
+//                        onClick = onConfirm,
+//                        modifier = Modifier
+//                            .weight(1f)
+//                            .height(48.dp),
+//                        shape = RoundedCornerShape(24.dp),
+//                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B47DB))
+//                    ) {
+//                        Text("Yes, Create Case Chat", fontSize = 13.sp)
+//                    }
+
+                    GradientButton1(
+                        text = "Yes, Create Case Chat",
+                        fontSize = 13.sp,
+                        onClick = { onConfirm() },
                         modifier = Modifier
-                            .weight(1f)
-                            .height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5B47DB))
-                    ) {
-                        Text("Yes, Create Case Chat", fontSize = 13.sp)
-                    }
+                            .weight(1.3f)
+                            .height(52.dp)
+                    )
                 }
             }
         }

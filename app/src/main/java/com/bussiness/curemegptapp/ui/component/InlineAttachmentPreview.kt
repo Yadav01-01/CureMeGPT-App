@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 
 @Composable
@@ -57,7 +58,10 @@ fun InlineAttachmentPreview(
 //                    shape = CircleShape,
 //                    color = Color.Black.copy(alpha = 0.6f)
 //                ) {
-                  Icon(painter = painterResource(id = R.drawable.ic_close), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.padding(2.dp).align(Alignment.TopEnd).size(20.dp).clickable(  interactionSource = remember { MutableInteractionSource() },
+                  Icon(painter = painterResource(id = R.drawable.ic_close),
+                      contentDescription = null,
+                      tint = Color.Unspecified,
+                      modifier = Modifier.padding(2.dp).align(Alignment.TopEnd).size(20.dp).clickable(  interactionSource = remember { MutableInteractionSource() },
                       indication = null ){ onRemoveImage(uri) })
                // }
             }
@@ -67,13 +71,18 @@ fun InlineAttachmentPreview(
             Surface(modifier = Modifier.size(64.dp), shape = RoundedCornerShape(12.dp), color = Color(0xFFEDEDED)) {
                 Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 //                    Icon(painter = painterResource(R.drawable.), contentDescription = null)
-                    Text(text = pdf.name, maxLines = 1)
+                    Text(text = pdf.name, maxLines = 1, fontSize = 5.sp)
                 }
                 Box(modifier = Modifier.fillMaxSize()) {
-                    Surface(modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){ onRemovePdf(pdf) }, shape = CircleShape, color = Color.Black.copy(alpha = 0.6f)) {
-//                        Icon(Icons.Default.Close, contentDescription = null, tint = Color.White, modifier = Modifier.padding(2.dp))
-                    }
+//                    Surface(modifier = Modifier.align(Alignment.TopEnd).size(20.dp).clickable( interactionSource = remember { MutableInteractionSource() },
+//                        indication = null){ onRemovePdf(pdf) }, shape = CircleShape, color = Color.Black.copy(alpha = 0.6f)) {
+////                        Icon(Icons.Default.Close, contentDescription = null, tint = Color.White, modifier = Modifier.padding(2.dp))
+//                    }
+                    Icon(painter = painterResource(id = R.drawable.ic_close),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier.padding(2.dp).align(Alignment.TopEnd).size(20.dp).clickable(  interactionSource = remember { MutableInteractionSource() },
+                            indication = null ){ onRemovePdf(pdf)})
                 }
             }
         }
