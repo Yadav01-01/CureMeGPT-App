@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +46,7 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .padding(18.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -52,8 +54,8 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                     verticalAlignment = Alignment.Top
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.Top
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
 //                        Box(
 //                            modifier = Modifier
@@ -64,21 +66,24 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
                             Icon(
                                 painter = painterResource( R.drawable.ic_new_case_icon),
                                 contentDescription = null,
-                                tint = Color.White,
+                                tint = Color.Unspecified,
                                 modifier = Modifier
-                               .size(48.dp)
+                               .size(40.dp)
                             )
                        // }
                         Column {
                             Text(
                                 "Start a New Case Chat?",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.SemiBold
+                                fontSize = 15.sp,
+                                color = Color(),
+                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                fontWeight = FontWeight.Normal
                             )
                         }
                     }
                     IconButton(onClick = onDismiss) {
-                        Icon(painter = painterResource( R.drawable.ic_close), contentDescription = "Close", tint = Color.Gray)
+                        Icon(painter = painterResource( R.drawable.ic_close), contentDescription = "Close", tint = Color.Unspecified,modifier = Modifier
+                            .size(40.dp))
                     }
                 }
 
@@ -86,7 +91,7 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
 
                 Text(
                     "This new case chat will be created only for Rose Logan (Spouse). Once created, you cannot switch members in the middle. The full case history will be saved in Rose Logan (Spouse)'s records.",
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     color = Color.Gray,
                     lineHeight = 20.sp
                 )
@@ -126,6 +131,7 @@ fun CaseDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
 //                    ) {
 //                        Text("Yes, Create Case Chat", fontSize = 13.sp)
 //                    }
+
 
                     GradientButton1(
                         text = "Yes, Create Case Chat",
