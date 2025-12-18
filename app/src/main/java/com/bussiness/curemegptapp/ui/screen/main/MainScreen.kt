@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -25,13 +26,17 @@ import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.navigation.MainNavGraph
 import com.bussiness.curemegptapp.ui.component.input.CustomBottomBar
 import com.bussiness.curemegptapp.util.AppConstant
+import androidx.compose.runtime.getValue
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(authNavController: NavHostController) {
 
     val navController = rememberNavController()
-    val currentRoute = getCurrentRoute(navController)
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    //val currentRoute = getCurrentRoute(navController)
 
     // Bottom nav sirf in routes par dikhana hai
     val bottomNavRoutes = listOf(
@@ -65,21 +70,31 @@ fun MainScreen(authNavController: NavHostController) {
         )
 
         /** Bottom nav only on selected screens */
-        AnimatedVisibility(
-            visible = currentRoute in bottomNavRoutes,
-            enter = fadeIn(),
-            exit = fadeOut(),
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
+//        AnimatedVisibility(
+//            visible = currentRoute in bottomNavRoutes,
+//            enter = fadeIn(),
+//            exit = fadeOut(),
+//            modifier = Modifier.align(Alignment.BottomCenter)
+//        ) {
+        if (currentRoute in bottomNavRoutes) {
             CustomBottomBar(
+                modifier = Modifier.align(Alignment.BottomCenter),
                 selectedIndex = selectedIndex,
                 onItemSelected = { index ->
                     val item = bottomBarItems[index]
 
+//                    navController.navigate(item.route) {
+//                        popUpTo(navController.graph.startDestinationId) { inclusive = false }
+//                        launchSingleTop = true
+//                    }
                     navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true       // 👈 state save
+                        }
                         launchSingleTop = true
+                        restoreState = true       // 👈 state restore
                     }
+
                 },
                 onClickAIIcon = { navController.navigate(AppDestination.OpenChatScreen) }
             )

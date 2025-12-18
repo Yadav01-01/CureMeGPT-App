@@ -15,9 +15,12 @@ val GradientEnd = Color(0xFF211C64)
 val GradientRedStart = Color(0xFFF31D1D)
 val GradientRedEnd = Color(0xFF8D1111)
 val Grey = Color(0xFFC3C6CB)
+val GradientLiteBlueStart = Color(0xFF463CC5)
+val GradientLiteBlueEnd = Color(0xFF4D42D4)
 
 val AppGradientColors = listOf(GradientStart, GradientEnd)
 val AppGradientColors2 = listOf(GradientRedStart, GradientRedEnd)
+val AppGradientBlueColors3 = listOf(GradientLiteBlueStart, GradientLiteBlueEnd)
 
 val gradientBrush = Brush.horizontalGradient(
     colors = listOf(

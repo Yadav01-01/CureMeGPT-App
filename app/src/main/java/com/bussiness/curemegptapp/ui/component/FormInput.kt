@@ -1,5 +1,6 @@
 package com.bussiness.curemegptapp.ui.component
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,12 +8,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,7 +23,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -32,9 +34,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -46,10 +51,97 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.ui.theme.AppGradientBlueColors3
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors2
 import com.bussiness.curemegptapp.ui.theme.Grey
+
+//curved_shadow_button_bg
+@Composable
+fun GradientShadowButton(
+    text: String,
+    fontSize: TextUnit = 16.sp,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    fontFamily: FontFamily = FontFamily(Font(R.font.urbanist_semibold)),
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .height(52.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                enabled = enabled,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+
+        // 🔥 PNG background with shadow
+        Image(
+            painter = painterResource(id = R.drawable.curved_shadow_button_bg),
+            contentDescription = null,
+            modifier = Modifier
+                .matchParentSize(),
+            contentScale = ContentScale.FillBounds
+        )
+
+        // Button Text
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = fontSize,
+            fontFamily = fontFamily
+        )
+    }
+}
+
+
+@Composable
+fun GradientShadowRedButton(
+    text: String,
+    fontSize: TextUnit = 16.sp,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    fontFamily: FontFamily = FontFamily(Font(R.font.urbanist_semibold)),
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .height(52.dp).clip(RoundedCornerShape(45.dp))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                enabled = enabled,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+
+        // 🔥 PNG background with shadow
+        Image(
+            painter = painterResource(id = R.drawable.rounded_button_bg),
+            contentDescription = null,
+            modifier = Modifier
+                .matchParentSize(),
+            contentScale = ContentScale.FillBounds
+        )
+
+        // Button Text
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = fontSize,
+            fontFamily = fontFamily
+        )
+    }
+}
+
+
+
 
 @Composable
 fun GradientHeader(heading: String, description: String) {
@@ -73,17 +165,17 @@ fun GradientHeader(heading: String, description: String) {
 
             Text(
                 text = heading,
-                fontSize = 24.sp,
+                fontSize = 23.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_bold)),
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(11.dp))
 
             Text(
                 text = description,
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
                 color = Color.White,
@@ -159,26 +251,41 @@ fun GradientIconInputField(
                     shape = shape
                 ),
             colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.White,
+                //
+                // 🔴 Text color
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                disabledTextColor = Color.Black,
+
+                // 🔴 Placeholder color
+                focusedPlaceholderColor = Color(0xFFC3C6CB),
+                unfocusedPlaceholderColor = Color(0xFFC3C6CB),
+                disabledPlaceholderColor = Color(0xFFC3C6CB),
+
+                // Container
                 focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
                 disabledContainerColor = Color.White,
+
+                // Remove default underline
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = Color(0xFFC3C6CB),
+
             ),
 
             keyboardOptions = KeyboardOptions(
                 keyboardType = if (isPassword) KeyboardType.Password else keyboardType
             ),
 
-            // 👁 Visual Transformation
             visualTransformation = if (isPassword && !passwordVisible)
                 PasswordVisualTransformation()
             else
                 VisualTransformation.None,
 
-            // 👁 Trailing Icon (ONLY for password field)
-            trailingIcon = {
-                if (isPassword) {
+            trailingIcon = if (isPassword)
+            {
+                 {
 
                     val interactionSource = remember { MutableInteractionSource() }
 
@@ -194,7 +301,7 @@ fun GradientIconInputField(
                     ) {
                         Icon(
                             painter = painterResource(
-                                if (passwordVisible) R.drawable.eyeclose
+                                if (passwordVisible) R.drawable.eyeopen
                                 else R.drawable.eyeclose
                             ),
                             contentDescription = if (passwordVisible) "Hide Password" else "Show Password",
@@ -205,6 +312,8 @@ fun GradientIconInputField(
                         )
                     }
                 }
+            }else {
+                null // 🔥 KEY POINT
             }
 
         )
@@ -276,6 +385,126 @@ fun GradientButton1(
         )
     }
 }
+
+
+@Composable
+fun LayerShadowButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    content: @Composable BoxScope.() -> Unit
+) {
+    Box(
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
+    ) {
+
+        /** 🔹 Bottom Shadow Layer */
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .offset(y = 2.dp) // same as android:top="8dp"
+                .clip(RoundedCornerShape(45.dp))
+                .background(Color(0xFFD60E0E))
+        )
+
+        /** 🔹 Main Button Layer */
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .offset(y = (-2).dp) // same as android:bottom="8dp"
+                .clip(RoundedCornerShape(55.dp))
+                //.background( brush = Brush.linearGradient(AppGradientColors2)),
+                .background( Color(0xFFF31D1D)),
+            contentAlignment = Alignment.Center,
+            content = content
+        )
+    }
+}
+
+
+@Composable
+fun LayerShadowBlueButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    content: @Composable BoxScope.() -> Unit
+) {
+    Box(
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
+    ) {
+
+        /** 🔹 Bottom Shadow Layer */
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .offset(y = 2.dp) // same as android:top="8dp"
+                .clip(RoundedCornerShape(45.dp))
+                //.background(Color(0xFFD60E0E))
+                .background( brush = Brush.linearGradient(AppGradientBlueColors3)),
+        )
+//AppGradientBlueColors3
+        /** 🔹 Main Button Layer */
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .offset(y = (-2).dp) // same as android:bottom="8dp"
+                .clip(RoundedCornerShape(55.dp))
+                .background( brush = Brush.linearGradient(AppGradientColors)),
+               // .background( Color(0xFFF31D1D)),
+            contentAlignment = Alignment.Center,
+            content = content
+        )
+    }
+}
+
+
+@Composable
+fun CurvedTopShadowButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    content: @Composable BoxScope.() -> Unit
+) {
+
+
+    Box(
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
+    ) {
+
+        // 🔹 Shadow layer
+        Box(
+            modifier = Modifier
+                .width(160.dp)
+                .offset(y = 10.dp)
+                .clip(RoundedCornerShape(15.dp))
+                .background(Color.White)
+        )
+
+        // 🔹 Main button
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(40.dp))
+                .background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            content()
+        }
+    }
+}
+
 
 
 
@@ -453,3 +682,6 @@ fun GradientButton3(
         )
     }
 }
+
+
+

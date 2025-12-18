@@ -40,20 +40,24 @@ import com.bussiness.curemegptapp.util.AppConstant
 
 @Composable
 fun CustomBottomBar(
+    modifier : Modifier = Modifier,
     selectedIndex: Int,
     onItemSelected: (Int) -> Unit,
     onClickAIIcon : () -> Unit
 ) {
 
-    val items = listOf(
+    val items =
+       remember {
+        listOf(
         BottomItem(AppConstant.BOTTOM_NAV_HOME, R.drawable.ic_home_icon, AppDestination.Home::class.qualifiedName!!),
         BottomItem(AppConstant.BOTTOM_NAV_SCHEDULE, R.drawable.ic_schedule_icon, AppDestination.Schedule::class.qualifiedName!!),
         BottomItem(AppConstant.BOTTOM_NAV_FAMILY, R.drawable.ic_family_icon, AppDestination.Family::class.qualifiedName!!),
         BottomItem(AppConstant.BOTTOM_NAV_REPORTS, R.drawable.ic_report_icon, AppDestination.Reports::class.qualifiedName!!)
     )
+        }
 
     Box(
-        Modifier
+        modifier
             .fillMaxWidth().background(Color.Transparent)
 
     ) {

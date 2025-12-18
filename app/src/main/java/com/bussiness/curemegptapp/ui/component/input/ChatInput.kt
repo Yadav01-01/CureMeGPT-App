@@ -89,7 +89,8 @@ fun ChatHeader(
     modifier: Modifier = Modifier,
     onLeftIconClick: () -> Unit,
     onFilterClick: () -> Unit,
-    onMenuClick: () -> Unit,
+   // onMenuClick: () -> Unit,
+    menuContent: @Composable () -> Unit   // 👈 ADD THIS
 ) {
     Column {
 
@@ -144,14 +145,15 @@ fun ChatHeader(
                     Spacer(modifier = Modifier.width(6.dp))
 
                     // ---- Arrow Icon ----
-                    IconButton(onClick = { onMenuClick() }) {
-                        Icon(
-                            painter = painterResource(menuIcon),
-                            contentDescription = "menu",
-                            modifier = Modifier.size(42.dp),
-                            tint = Color.Unspecified
-                        )
-                    }
+//                    IconButton(onClick = { onMenuClick() }) {
+//                        Icon(
+//                            painter = painterResource(menuIcon),
+//                            contentDescription = "menu",
+//                            modifier = Modifier.size(42.dp),
+//                            tint = Color.Unspecified
+//                        )
+//                    }
+                    menuContent()
                 }
             }
         }

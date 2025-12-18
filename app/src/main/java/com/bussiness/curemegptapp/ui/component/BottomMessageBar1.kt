@@ -302,8 +302,9 @@ fun BottomMessageBar1(
         }
 
 
-        Spacer(Modifier.height(20.dp))
+       // Spacer(Modifier.height(20.dp))
         }
+        Spacer(Modifier.height(20.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically

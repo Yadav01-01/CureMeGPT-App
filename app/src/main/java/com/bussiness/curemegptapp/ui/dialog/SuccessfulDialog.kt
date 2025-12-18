@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.GradientButton
@@ -42,25 +43,30 @@ fun SuccessfulDialog(
     onOkClick: () -> Unit
 ) {
 
-    Dialog(onDismissRequest = { onDismiss() }) {
+    Dialog(onDismissRequest = { onDismiss() },   properties = DialogProperties(
+        dismissOnClickOutside = false, // 🔴 IMPORTANT
+        dismissOnBackPress = false       // back press se band chahiye to true
+    )) {
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 20.dp , horizontal = 10.dp)
+               // .padding(vertical = 20.dp , horizontal = 0.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Color.White)
         ) {
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth().padding(vertical = 10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
+                horizontalAlignment = Alignment.Start
             ) {
 
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth().padding(horizontal = 18.dp),
+                        .fillMaxWidth()
+                        .padding(horizontal = 18.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Top Row (Title + Close Button)
@@ -108,7 +114,8 @@ fun SuccessfulDialog(
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                    color = Color(0xFF050505)
+                    color = Color(0xFF050505),
+                    modifier = Modifier.padding(horizontal = 18.dp)
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))

@@ -1,6 +1,5 @@
 package com.bussiness.curemegptapp.ui.screen.auth
 
-//CreateAccountScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,20 +39,20 @@ import com.bussiness.curemegptapp.ui.component.GradientIconInputField
 
 @Composable
 fun CreateAccountScreen(navController: NavHostController) {
+    // FORM
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Top Gradient Header
+
         GradientHeader(heading = "Create Your Account", description = "Join and let AI guide your dental & family health.")
 
         Spacer(modifier = Modifier.height(32.dp))
-
-        // FORM
-        var name by remember { mutableStateOf("") }
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
 
         GradientIconInputField(icon = R.drawable.profile_ic,placeholder = "Full Name", value = name, onValueChange = { name = it })
 
@@ -64,6 +63,10 @@ fun CreateAccountScreen(navController: NavHostController) {
         Spacer(Modifier.height(18.dp))
 
         GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Password", value = password, onValueChange = { password = it }, isPassword = true)
+
+        Spacer(Modifier.height(28.dp))
+
+        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Confirm Password", value = confirmPassword, onValueChange = { confirmPassword = it }, isPassword = true)
 
         Spacer(Modifier.height(28.dp))
 

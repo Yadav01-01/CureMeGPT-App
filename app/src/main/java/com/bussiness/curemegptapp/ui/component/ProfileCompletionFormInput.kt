@@ -86,7 +86,7 @@ fun ProfileInputField(
                     text = "*",
                     fontSize = 15.sp,
                     color = Color.Red,
-                    modifier = Modifier.padding( bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
 
@@ -154,7 +154,7 @@ fun ProfileInputMultipleLineField(
                     text = "*",
                     fontSize = 15.sp,
                     color = Color.Red,
-                    modifier = Modifier.padding( bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
 
@@ -198,8 +198,8 @@ fun ProfileInputMultipleLineField2(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    heightOfEditText : Dp = 90.dp,
-    paddingHorizontal: Dp  = 90.dp,
+    heightOfEditText: Dp = 90.dp,
+    paddingHorizontal: Dp = 90.dp,
     keyboardType: KeyboardType = KeyboardType.Text,
     borderColor: Color = Color(0xFFC3C6CB),
     textColor: Color = Color(0xFFB8B9BD),
@@ -225,7 +225,7 @@ fun ProfileInputMultipleLineField2(
                     text = "*",
                     fontSize = 15.sp,
                     color = Color.Red,
-                    modifier = Modifier.padding( bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
 
@@ -307,8 +307,6 @@ fun ProfileInputWithoutLabelField(
 }
 
 
-
-
 @Composable
 fun GenderDropdown(
     selected: String,
@@ -323,13 +321,13 @@ fun GenderDropdown(
         Row {
 
 
-        Text(
-            text = "Gender",
-            color = Color.Black,
-            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-            fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(bottom = 6.dp)
-        )
+            Text(
+                text = "Gender",
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
             Text(
                 text = " *",
                 color = Color.Red,
@@ -348,8 +346,10 @@ fun GenderDropdown(
                     color = Color(0xFF697383),
                     shape = RoundedCornerShape(50.dp)
                 )
-                .clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null) { expanded = true }
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { expanded = true }
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             Row(
@@ -357,7 +357,8 @@ fun GenderDropdown(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                Text(
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     fontWeight = FontWeight.Normal,
                     text = if (selected.isEmpty()) "Select" else selected,
                     color = if (selected.isEmpty()) Color(0xFF697383) else Color(0xFF697383),
@@ -405,7 +406,6 @@ fun GenderDropdown(
 }
 
 
-
 @Composable
 fun Dropdown1(
     label: String,
@@ -442,7 +442,7 @@ fun Dropdown1(
                     text = "*",
                     fontSize = 15.sp,
                     color = Color.Red,
-                    modifier = Modifier.padding( bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
         }
@@ -495,7 +495,7 @@ fun Dropdown1(
 //                        RoundedCornerShape(30.dp)
 //                    )
 //                    .clickable( interactionSource = remember { MutableInteractionSource() },
-   //                     indication = null){ expanded = true }
+            //                     indication = null){ expanded = true }
 //                    .padding(horizontal = 16.dp),
 //                contentAlignment = Alignment.CenterStart
 //            ) {
@@ -522,7 +522,8 @@ fun Dropdown1(
 //            }
 
             CustomPowerSpinner(
-                modifier = Modifier.width(90.dp)
+                modifier = Modifier
+                    .width(90.dp)
                     .height(56.dp),
                 modifierDropDown = Modifier.width(140.dp),
                 selectedText = selectedUnit,
@@ -572,8 +573,10 @@ fun StepTabs(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null) { onStepClick(index) }
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { onStepClick(index) }
             ) {
 
                 // Circle with icon
@@ -582,14 +585,16 @@ fun StepTabs(
                         .size(42.dp)
                         .clip(CircleShape)
                         .background(
-                            if (isSelected) Color(0xFF3D35EC) else if (isSelectedPrevious) Color(0xFF2D2587)
+                            if (isSelected) Color(0xFF3D35EC) else if (isSelectedPrevious) Color(
+                                0xFF2D2587
+                            )
                             else Color(0xFFF2F2F2)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
                         painter = painterResource(
-                            id = if (isSelected) step.selectedIcon else  step.icon
+                            id = if (isSelected) step.selectedIcon else step.icon
                         ),
                         contentDescription = step.title,
                         //  tint = if (isSelected) Color.White else Color(0xFFD0D0D0),
@@ -605,7 +610,9 @@ fun StepTabs(
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     fontWeight = FontWeight.Normal,
-                    color = if (isSelected) Color(0xFF4338CA) else if (isSelectedPrevious) Color(0xFF4338CA)  else Color(0xFFCED4DA)
+                    color = if (isSelected) Color(0xFF4338CA) else if (isSelectedPrevious) Color(
+                        0xFF4338CA
+                    ) else Color(0xFFCED4DA)
                 )
             }
         }
@@ -614,7 +621,12 @@ fun StepTabs(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit,title: String = "Complete Your Profile",skipDisplay : Boolean = true) {
+fun TopBarHeader(
+    currentStep: Int,
+    onBackClick: () -> Unit,
+    title: String = "Complete Your Profile",
+    skipDisplay: Boolean = true
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -622,7 +634,9 @@ fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit,title: String = "Comp
             .padding(16.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -630,8 +644,12 @@ fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit,title: String = "Comp
             Image(
                 painter = painterResource(id = R.drawable.ic_cross_icon),
                 contentDescription = "Back Icon",
-                modifier = Modifier.size(42.dp).clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null){onBackClick()}
+                modifier = Modifier
+                    .size(42.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { onBackClick() }
             )
             Spacer(Modifier.width(19.dp))
 
@@ -643,16 +661,18 @@ fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit,title: String = "Comp
                 modifier = Modifier.weight(1f)
             )
 
-            if (skipDisplay){
-                if (currentStep >3){
+            if (skipDisplay) {
+                if (currentStep > 3) {
                     Text(
                         text = "Skip for Now",
                         color = Color(0xFF211C64),
                         fontSize = 14.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                         fontWeight = FontWeight.Medium,
-                        modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
-                            indication = null) { }
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { }
                     )
                 }
             }
@@ -681,7 +701,7 @@ fun TopBarHeader(currentStep: Int, onBackClick: () -> Unit,title: String = "Comp
 
 @Composable
 fun ProfilePhotoPicker(
-    label: String ,
+    label: String,
     fileName: String = "No file chosen",
     onChooseClick: () -> Unit
 ) {
@@ -764,8 +784,10 @@ fun BloodGroupDropdown(
                     color = Color(0xFFBFC5D2),
                     shape = RoundedCornerShape(50.dp)
                 )
-                .clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null) { expanded = true }
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { expanded = true }
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
 
@@ -809,7 +831,6 @@ fun BloodGroupDropdown(
 }
 
 
-
 @Composable
 fun FileAttachment(
     fileName: String,
@@ -849,8 +870,12 @@ fun FileAttachment(
         Image(
             painter = painterResource(id = R.drawable.ic_delete_icon),
             contentDescription = "Delete",
-            modifier = Modifier.size(48.dp).clickable( interactionSource = remember { MutableInteractionSource() },
-                indication = null){onDeleteClick()}
+            modifier = Modifier
+                .size(48.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { onDeleteClick() }
         )
 
     }
@@ -863,7 +888,7 @@ fun UniversalInputField(
     placeholder: String,
     value: String,
     rightIcon: Int? = null,
-    modifier: Modifier= Modifier,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
 
@@ -880,7 +905,7 @@ fun UniversalInputField(
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(start = 12.dp,bottom = 8.dp)
+                modifier = Modifier.padding(start = 12.dp, bottom = 8.dp)
             )
 
             if (isImportant)
@@ -906,8 +931,10 @@ fun UniversalInputField(
                     color = Color(0xFF697383),
                     shape = RoundedCornerShape(56.dp)
                 )
-                .clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null) { onClick() },
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { onClick() },
             contentAlignment = Alignment.CenterStart
         ) {
 
@@ -930,8 +957,10 @@ fun UniversalInputField(
                         .align(Alignment.CenterEnd)
                         .padding(end = 16.dp)
                         .size(20.dp)
-                        .clickable ( interactionSource = remember { MutableInteractionSource() },
-                            indication = null){ onClick() }
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onClick() }
                 )
             }
         }
@@ -940,11 +969,11 @@ fun UniversalInputField(
 
 @Composable
 fun CancelButton(
-    cancelText : String = "Cancel" ,
+    cancelText: String = "Cancel",
     modifier: Modifier = Modifier,
-    paddingHorizontal : Dp = 18.dp,
+    paddingHorizontal: Dp = 18.dp,
     fontSize: TextUnit = 14.sp,
-    fontFamily : FontFamily = FontFamily(Font(R.font.onest_medium)),
+    fontFamily: FontFamily = FontFamily(Font(R.font.onest_medium)),
     onClick: () -> Unit
 ) {
 
@@ -958,8 +987,10 @@ fun CancelButton(
                 Color(0xFF181B1A),
                 RoundedCornerShape(28.dp)
             )
-            .clickable( interactionSource = remember { MutableInteractionSource() },
-                indication = null) { onClick() }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick() }
             .padding(horizontal = paddingHorizontal),
         contentAlignment = Alignment.Center
     ) {
@@ -983,7 +1014,9 @@ fun TopBarHeader1(title: String, onBackClick: () -> Unit) {
 
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth() .padding( horizontal = 20.dp, vertical = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -991,10 +1024,14 @@ fun TopBarHeader1(title: String, onBackClick: () -> Unit) {
             Image(
                 painter = painterResource(id = R.drawable.ic_cross_icon),
                 contentDescription = "Back Icon",
-                modifier = Modifier.size(42.dp).clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null){onBackClick()}
+                modifier = Modifier
+                    .size(42.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { onBackClick() }
             )
-Spacer(Modifier.width(19.dp))
+            Spacer(Modifier.width(19.dp))
             Text(
                 text = title,
                 fontSize = 20.sp,
@@ -1005,7 +1042,7 @@ Spacer(Modifier.width(19.dp))
         }
 
 
-       // HorizontalDivider(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFEBE1FF)))
+        // HorizontalDivider(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFEBE1FF)))
         Divider(color = Color(0xFFEBE1FF), thickness = 1.dp)
     }
 }
@@ -1019,7 +1056,9 @@ fun TopBarHeader2(title: String, onBackClick: () -> Unit) {
 
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth() .padding( horizontal = 20.dp, vertical = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -1027,8 +1066,12 @@ fun TopBarHeader2(title: String, onBackClick: () -> Unit) {
             Image(
                 painter = painterResource(id = R.drawable.ic_cross_icon),
                 contentDescription = "Back Icon",
-                modifier = Modifier.size(42.dp).clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null){onBackClick()}
+                modifier = Modifier
+                    .size(42.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { onBackClick() }
             )
             Spacer(Modifier.width(19.dp))
             Text(
@@ -1068,14 +1111,14 @@ fun ProfileInputSmallField(
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
                 color = Color.Black,
-                modifier = Modifier.padding( bottom = 6.dp)
+                modifier = Modifier.padding(bottom = 6.dp)
             )
             if (isImportant) {
                 Text(
                     text = "*",
                     fontSize = 15.sp,
                     color = Color.Red,
-                    modifier = Modifier.padding( bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
 

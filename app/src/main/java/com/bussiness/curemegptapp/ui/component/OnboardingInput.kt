@@ -29,19 +29,20 @@ fun SkipButton(title : String = "Skip",onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
         modifier = Modifier
-            .height(46.dp),
+            .height(55.dp),
         shape = RoundedCornerShape(55),
         border = BorderStroke(1.dp, Color(0xFF697383)),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White,
             contentColor = Color(0xFF697383)
         ),
-        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 10.dp)
+        contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp)
     ) {
         Text(
             text = title,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
+            color = Color(0xFF697383),
+            fontWeight = FontWeight.SemiBold,
             fontFamily = FontFamily(Font(R.font.urbanist_semibold))
         )
     }

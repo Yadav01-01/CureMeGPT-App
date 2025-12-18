@@ -25,6 +25,7 @@ import com.bussiness.curemegptapp.ui.component.BottomMessageBar
 import com.bussiness.curemegptapp.ui.component.input.ChatHeader
 import com.bussiness.curemegptapp.ui.component.input.CommunityChatSection
 import com.bussiness.curemegptapp.ui.screen.main.chat.OpenChatScreen
+import com.bussiness.curemegptapp.ui.screen.main.chat.SwitchShareDeletePopUpMenu
 import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
 
 
@@ -52,7 +53,20 @@ fun ChatScreen(navController: NavHostController) {
             menuIcon = R.drawable.menu_ic,
             onLeftIconClick = { navController.popBackStack() },
             onFilterClick = {},
-            onMenuClick = {}
+          //  onMenuClick = {}
+            menuContent = {
+                SwitchShareDeletePopUpMenu(
+                    switchText = "Switch to Case",
+                    onSwitchClick = {
+                        // Share logic
+                    },  onShareClick = {
+                        // Share logic
+                    },
+                    onDeleteClick = {
+                        // Delete logic
+                    }
+                )
+            }
         )
 
         /** CHAT BODY + MESSAGE BAR */

@@ -93,7 +93,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
             description = "We’ve sent a 5-digit code to your $email."
         )
 
-        Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(55.dp))
 
         // OTP INPUT
         OtpInputField(
@@ -110,7 +110,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
 
 
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(20.dp))
 
         GradientButton(
             text = "Verify & Continue",
@@ -137,11 +137,12 @@ fun VerifyOtpScreen(  navController: NavHostController,
 
                     }
                 }
-            }
+            },
+            modifier = Modifier.height(54.dp)
         )
 
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(21.dp))
 
         // RESEND TEXT
         Row(
@@ -151,7 +152,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
             Text(
                 text = "Didn’t receive code? ",
                 color = Color.Black,
-                fontSize = 14.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium))
             )
@@ -160,7 +161,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
                 Text(
                     text = "Resend OTP in ",
                     color = Color.Black,
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium))
                 )
@@ -168,7 +169,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
                 Text(
                     text = "${timeLeft}s",
                     color = Color(0xFF1E3A8A),
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium))
                 )
@@ -176,7 +177,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
                 Text(
                     text = "Resend Now",
                     color = Color(0xFF4338CA),
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_bold)),
                     modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
                         indication = null
@@ -200,7 +201,7 @@ fun VerifyOtpScreen(  navController: NavHostController,
                 Text(
                     text = "Back",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                    fontSize = 18.sp,
+                    fontSize = 17.sp,
                     modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
                         indication = null){
                         navController.navigate(AppDestination.CreateAccount)
@@ -218,14 +219,14 @@ fun VerifyOtpScreen(  navController: NavHostController,
                 Text(
                     text = "Back to",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                    fontSize = 18.sp,
+                    fontSize = 17.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(Modifier.width(4.dp))
                 Text(
                     text = "Login",
                     color = Color(0xFF4338CA),
-                    fontSize = 18.sp,
+                    fontSize = 17.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
@@ -277,7 +278,7 @@ fun OtpInputField(
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             repeat(5) { index ->
                 Box(
-                    modifier = Modifier.width(60.dp).height(55.dp)
+                    modifier = Modifier.width(58.dp).height(55.dp)
                        // .size(48.dp)
                         .border(
                             1.dp,

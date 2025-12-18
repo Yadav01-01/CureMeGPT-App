@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.GradientButton2
@@ -66,7 +67,10 @@ fun CalendarDialog(
     }
 
 
-    Dialog(onDismissRequest = { onDismiss() }) {
+    Dialog(onDismissRequest = { onDismiss() },   properties = DialogProperties(
+        dismissOnClickOutside = false, // 🔴 IMPORTANT
+        dismissOnBackPress = false       // back press se band chahiye to true
+    )) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(26.dp))

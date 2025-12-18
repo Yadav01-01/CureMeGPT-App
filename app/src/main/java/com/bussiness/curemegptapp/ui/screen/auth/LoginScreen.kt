@@ -46,7 +46,7 @@ fun LoginScreen(navController: NavHostController) {
         // Top Gradient Header
         GradientHeader(heading = "Welcome Back!", description = "Sign in to continue your dental health journey.")
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(55.dp))
 
         // FORM
         var email by remember { mutableStateOf("") }
@@ -55,11 +55,11 @@ fun LoginScreen(navController: NavHostController) {
         // Email Field
         GradientIconInputField(icon = R.drawable.mail_ic,placeholder = "Email / Phone Number", value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
 
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(20.dp))
 
         GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Password", value = password, onValueChange = { password = it }, isPassword = true)
 
-        Spacer(Modifier.height(15.dp))
+        Spacer(Modifier.height(20.dp))
 
         // Forgot Password
         Text(
@@ -69,13 +69,13 @@ fun LoginScreen(navController: NavHostController) {
                 .align(Alignment.End)
                 .clickable( interactionSource = remember { MutableInteractionSource() },
                     indication = null){navController.navigate(AppDestination.Reset) },
-            fontSize = 18.sp,
+            fontSize = 17.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             color = Color.Black,
             fontWeight = FontWeight.Medium
         )
 
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
         GradientButton(text = "Login", onClick = { navController.navigate(AppDestination.MainScreen) })
@@ -91,9 +91,10 @@ fun LoginScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "New here?" ,
+                color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                fontSize = 18.sp
+                fontSize = 17.sp
             )
             Spacer(Modifier.width(4.dp))
             Text(
@@ -101,7 +102,7 @@ fun LoginScreen(navController: NavHostController) {
                 color = Color(0xFF4338CA),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                fontSize = 18.sp,
+                fontSize = 17.sp,
                 modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
                     indication = null) { navController.navigate(AppDestination.CreateAccount) }
             )

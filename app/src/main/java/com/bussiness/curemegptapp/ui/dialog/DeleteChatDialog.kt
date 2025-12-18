@@ -1,8 +1,6 @@
 package com.bussiness.curemegptapp.ui.dialog
 
-//MemberAddedSuccessfullyDialog
-
-
+//DeleteChatDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +31,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
@@ -43,13 +42,16 @@ import com.bussiness.curemegptapp.ui.component.GradientButton2
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bussiness.curemegptapp.ui.component.GradientButton1
-import com.bussiness.curemegptapp.ui.component.GradientRedButton
-import com.bussiness.curemegptapp.ui.component.GradientRedButton1
+import com.bussiness.curemegptapp.ui.component.GradientShadowButton
+import com.bussiness.curemegptapp.ui.component.GradientShadowRedButton
+import com.bussiness.curemegptapp.ui.component.LayerShadowButton
 
 @Composable
-fun MemberAddedSuccessfullyDialog(
+fun DeleteChatDialog(
     title: String,
     message: String,
+    warningText: String? = null,
+    bottomText: String,
     cancelText: String = "Cancel",
     confirmText: String = "OK",
     onDismiss: () -> Unit,
@@ -82,7 +84,7 @@ fun MemberAddedSuccessfullyDialog(
 
 
                         Image(
-                            painter = painterResource(id = R.drawable.ic_check),
+                            painter = painterResource(id = R.drawable.ic_account_setting_icon),
                             contentDescription = "Success",
                             modifier = Modifier.size(38.dp)
                         )
@@ -91,10 +93,10 @@ fun MemberAddedSuccessfullyDialog(
 
                         Text(
                             text = title,
-                            fontSize = 17.sp,
+                            fontSize = 16.sp,
                             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                             color = Color.Black,
-                            lineHeight = 23.sp,
+                            lineHeight = 26.sp,
                             modifier = Modifier
                                 .width(190.dp)
                                 .wrapContentHeight()
@@ -105,27 +107,51 @@ fun MemberAddedSuccessfullyDialog(
                         painter = painterResource(id = R.drawable.ic_close),
                         contentDescription = "Close",
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(41.dp)
                             .clickable( interactionSource = remember { MutableInteractionSource() },
-                                indication = null){ onDismiss() }
+                                indication = null) { onDismiss() }
                     )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-
+                // 🔹 Message
+//                val formattedMessage = buildAnnotatedString {
+//                    append(message)
+//                    highlightText?.let {
+//                        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+//                            append(" $it")
+//                        }
+//                    }
+//                }
 
                 Text(
                     text = message,
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     color = Color.Black,
-                    lineHeight = 17.sp,
+                    lineHeight = 20.sp,
                 )
 
-
-
-
+                // 🔹 Optional warning text (red)
+                warningText?.let {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row(verticalAlignment = Alignment.Top) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_warning_red),
+                            contentDescription = null,
+                            modifier = Modifier.padding(top =5.dp).size(14.dp),
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = it,
+                            fontSize = 12.sp,
+                            fontFamily = FontFamily(Font(R.font.urbanist_italic)),
+                            color = Color.Red,
+                                    lineHeight = 19.sp,
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -134,26 +160,58 @@ fun MemberAddedSuccessfullyDialog(
 
                     CancelButton(
                         cancelText = cancelText,
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         paddingHorizontal = 2.dp,
                         modifier = Modifier
-                            .weight(1.25f)
-                            .height(52.dp),
+                            .weight(0.9f)
+                            .height(51.dp),
                         onClick = { onDismiss() }
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    GradientButton1(
-                        text = confirmText,
-                        fontSize = 14.sp,
-                        onClick = { onConfirm() },
+                    LayerShadowButton(
                         modifier = Modifier
-                            .weight(0.75f)
-                            .height(52.dp)
-                    )
+                            .weight(1.1f)
+                            .height(51.dp).clip(RoundedCornerShape(45.dp)),
+                        onClick = { onConfirm()  }
+                    ) {
+                        Text(
+                            text = confirmText,
+                            color = Color.White,
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily(Font(R.font.urbanist_semibold))
+                        )
+                    }
+
                 }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
+                    text = bottomText,
+                    fontSize = 11.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    color = Color.Black,
+                    lineHeight = 18.sp,
+                )
             }
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun DeleteChatDialogPreview() {
+    DeleteChatDialog(
+        title = "Delete Chat?",
+        message = "Are you sure you want to delete this chat?",
+        warningText = "Chat will be permanently removed",
+        bottomText = "You’re always in control — deleted chats cannot be restored.",
+        cancelText = "Cancel",
+        confirmText = "Delete",
+        onDismiss = {},
+        onConfirm = {}
+    )
+}
+

@@ -58,8 +58,8 @@ fun LogOutDialog(
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
         )
     ) {
         Box(

@@ -41,7 +41,7 @@ fun NewPasswordScreen(navController: NavHostController) {
         // Top Gradient Header
         GradientHeader(heading = "New Password", description = "Please enter your new password.")
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(55.dp))
 
         // FORM
         var password by remember { mutableStateOf("") }
@@ -49,11 +49,11 @@ fun NewPasswordScreen(navController: NavHostController) {
 
         GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Password", value = password, onValueChange = { password = it }, isPassword = true)
 
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(20.dp))
 
         GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Confirm Password", value = confirmPassword, onValueChange = { confirmPassword = it }, isPassword = true)
 
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.height(20.dp))
 
         // Gradient Submit Button
         GradientButton(text = "Submit", onClick = { showDialog = true})

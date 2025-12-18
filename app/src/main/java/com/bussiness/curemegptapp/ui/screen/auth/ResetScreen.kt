@@ -38,6 +38,10 @@ import com.bussiness.curemegptapp.ui.component.GradientIconInputField
 
 @Composable
 fun ResetScreen(navController: NavHostController) {
+
+    // FORM
+    var email by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,19 +50,16 @@ fun ResetScreen(navController: NavHostController) {
         // Top Gradient Header
         GradientHeader(heading = "Reset Your Password", description = "Enter your registered email or phone number to reset your password.")
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // FORM
-        var email by remember { mutableStateOf("") }
+        Spacer(modifier = Modifier.height(55.dp))
 
         // Email Field
         GradientIconInputField(icon = R.drawable.mail_ic,placeholder = "Email / Phone Number", value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
 
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
         GradientButton(text = "Send Code", onClick = { navController.navigate("verifyOtp?from=reset&email=$email")
-        })
+        },modifier = Modifier.height(54.dp).padding(horizontal = 7.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -71,9 +72,10 @@ fun ResetScreen(navController: NavHostController) {
         ) {
             Text(
                 text = "Back to" ,
+                color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                fontSize = 18.sp
+                fontSize = 17.sp
             )
             Spacer(Modifier.width(4.dp))
             Text(
@@ -81,7 +83,7 @@ fun ResetScreen(navController: NavHostController) {
                 color = Color(0xFF4338CA),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                fontSize = 18.sp,
+                fontSize = 17.sp,
                 modifier = Modifier.clickable(  interactionSource = remember { MutableInteractionSource() },
                     indication = null){ navController.navigate(AppDestination.Login)}
             )

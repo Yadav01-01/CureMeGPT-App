@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.GradientButton
@@ -43,7 +44,10 @@ fun MemberProfileUpdatedDialog(
     onOkClick: () -> Unit
 ) {
 
-    Dialog(onDismissRequest = { onDismiss() }) {
+    Dialog(onDismissRequest = { onDismiss() },   properties = DialogProperties(
+        dismissOnClickOutside = false, // 🔴 IMPORTANT
+        dismissOnBackPress = false       // back press se band chahiye to true
+    )) {
 
         Box(
             modifier = Modifier
