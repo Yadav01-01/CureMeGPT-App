@@ -310,7 +310,7 @@ fun PersonalInfoStep(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row {
+        Row(modifier = Modifier.padding(horizontal = 9.dp)) {
 
             Text(
                 text = "Gender",
@@ -328,33 +328,33 @@ fun PersonalInfoStep(
             )
         }
 
-
+        Row(modifier = Modifier.padding(horizontal = 7.dp)) {
         CustomPowerSpinner(
             selectedText = gender,
             onSelectionChanged = { reason ->
                 gender = reason
             },
-            menuPadding = 24.dp,
+            horizontalPadding = 24.dp,
             reasons = genderOptions // Pass the list of options here
-        )
+        )}
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Dropdown1(
-            label = "Height (Cm/Ft)",
-            isImportant = true,
-            placeholder = "e.g., 172 Cm",
-            value = heightValue,
-            onValueChange = { heightValue = it },
-            dropdownItems = listOf("Cm", "Ft"),
-            selectedUnit = heightUnit,
-            onUnitSelected = { newUnit ->
-                heightUnit = newUnit
-            }
-        )
-
+        Row(modifier = Modifier.padding(horizontal = 7.dp)) {
+            Dropdown1(
+                label = "Height (Cm/Ft)",
+                isImportant = true,
+                placeholder = "e.g., 172 Cm",
+                value = heightValue,
+                onValueChange = { heightValue = it },
+                dropdownItems = listOf("Cm", "Ft"),
+                selectedUnit = heightUnit,
+                onUnitSelected = { newUnit ->
+                    heightUnit = newUnit
+                }
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
-
+        Row(modifier = Modifier.padding(horizontal = 7.dp)) {
         Dropdown1(
             label = "Weight (Kg/Lb)",
             isImportant = true,
@@ -366,19 +366,20 @@ fun PersonalInfoStep(
             onUnitSelected = { newUnit ->
                 weightUnit = newUnit
             }
-        )
+        )}
 
         Spacer(modifier = Modifier.height(16.dp))
-
+        Row(modifier = Modifier.padding(horizontal = 9.dp)) {
         ProfilePhotoPicker(
             label = "Profile Photo (Optional)",
             fileName = selectedProfilePhotoName,
             onChooseClick = { openProfilePhotoPicker() }
-        )
+        )}
 
         Spacer(modifier = Modifier.height(24.dp))
 
         GradientButton(
+            horizontalPadding = 2.dp,
             text = "Save & Continue",
             onClick = {
                 val height = if (heightValue.isNotBlank()) "$heightValue $heightUnit" else ""
@@ -430,129 +431,132 @@ fun GeneralInfoStep(
             .padding(16.dp)
     ) {
 
+        Column(modifier = Modifier.padding(horizontal = 9.dp)) {
+            Row {
 
-        Row {
+                Text(
+                    text = "Blood Group",
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+                Text(
+                    text = " *",
+                    color = Color.Red,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
 
-            Text(
-                text = "Blood Group",
-                color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(bottom = 6.dp)
+
+            CustomPowerSpinner(
+                selectedText = bloodGroup,
+                onSelectionChanged = { reason ->
+                    bloodGroup = reason
+                },
+                horizontalPadding = 24.dp,
+                reasons = bloodOptions // Pass the list of options here
             )
-            Text(
-                text = " *",
-                color = Color.Red,
-                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-        }
 
 
-        CustomPowerSpinner(
-            selectedText = bloodGroup,
-            onSelectionChanged = { reason ->
-                bloodGroup = reason
-            },
-            menuPadding = 24.dp,
-            reasons = bloodOptions // Pass the list of options here
-        )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row {
 
 
-        Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Known Allergies",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = "*",
+                    color = Color.Red,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
 
-        Row{
+            Spacer(modifier = Modifier.height(8.dp))
 
-
-            Text(
-                text = "Known Allergies",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = "*",
-                color = Color.Red,
-                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(bottom = 6.dp)
-            ) }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 600.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            userScrollEnabled = false
-        ) {
-            items(allergyOptions) { item ->
-                val isSelected = item in selectedAllergies
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(40.dp))
-                        .border(
-                            1.dp,
-                            if (isSelected) Color(0xFF5B4FFF) else Color(0xFFE0E0E0),
-                            RoundedCornerShape(40.dp)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 600.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                userScrollEnabled = false
+            ) {
+                items(allergyOptions) { item ->
+                    val isSelected = item in selectedAllergies
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(40.dp))
+                            .border(
+                                1.dp,
+                                if (isSelected) Color(0xFF5B4FFF) else Color(0xFFE0E0E0),
+                                RoundedCornerShape(40.dp)
+                            )
+                            .background(
+                                if (isSelected) Color(0x205B4FFF) else Color.Transparent
+                            )
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                selectedAllergies = if (isSelected)
+                                    selectedAllergies - item
+                                else
+                                    selectedAllergies + item
+                            }
+                            .padding(vertical = 5.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = item,
+                            fontSize = 13.sp,
+                            color = if (isSelected) Color(0xFF5B4FFF) else Color.Black
                         )
-                        .background(
-                            if (isSelected) Color(0x205B4FFF) else Color.Transparent
-                        )
-                        .clickable( interactionSource = remember { MutableInteractionSource() },
-                            indication = null){
-                            selectedAllergies = if (isSelected)
-                                selectedAllergies - item
-                            else
-                                selectedAllergies + item
-                        }
-                        .padding(vertical = 5.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = item,
-                        fontSize = 13.sp,
-                        color = if (isSelected) Color(0xFF5B4FFF) else Color.Black
-                    )
+                    }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if ("Others" in selectedAllergies) {
-            ProfileInputWithoutLabelField(
-                placeholder = "Write allergy",
-                value = customAllergy,
-                onValueChange = { customAllergy = it }
-            )
             Spacer(modifier = Modifier.height(16.dp))
+
+            if ("Others" in selectedAllergies) {
+                ProfileInputWithoutLabelField(
+                    placeholder = "Write allergy",
+                    value = customAllergy,
+                    onValueChange = { customAllergy = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            ProfileInputField(
+                label = "Emergency Contact Name (Optional)",
+                isImportant = false,
+                placeholder = "e.g. Bob Dsouza",
+                value = emergencyName,
+                onValueChange = { emergencyName = it }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ProfileInputField(
+                label = "Emergency Phone Number (Optional)",
+                isImportant = false,
+                placeholder = "e.g. 555 945 325",
+                value = emergencyPhone,
+                onValueChange = { emergencyPhone = it }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
-
-        ProfileInputField(
-            label = "Emergency Contact Name (Optional)",
-            isImportant = false,
-            placeholder = "e.g. Bob Dsouza",
-            value = emergencyName,
-            onValueChange = { emergencyName = it }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ProfileInputField(
-            label = "Emergency Phone Number (Optional)",
-            isImportant = false,
-            placeholder = "e.g. 555 945 325",
-            value = emergencyPhone,
-            onValueChange = { emergencyPhone = it }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
         GradientButton(
             text = "Save & Continue",
             onClick = {
@@ -595,286 +599,297 @@ fun HistoryStep(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
+        Column(modifier = Modifier.padding(horizontal = 9.dp)) {
+            Row {
+                Text(
+                    text = "Chronic Conditions",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = "*",
+                    color = Color.Red,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
 
-        Row {
-            Text(
-                text = "Chronic Conditions",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = "*",
-                color = Color.Red,
-                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(bottom = 6.dp)
-            ) }
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.height(8.dp))
+            // ⭐ Same UI as allergies → 3-column Grid chips
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 600.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                userScrollEnabled = false
+            ) {
 
-        // ⭐ Same UI as allergies → 3-column Grid chips
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 600.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            userScrollEnabled = false
-        ) {
+                items(conditions) { condition ->
 
-            items(conditions) { condition ->
+                    val isSelected = condition in selectedConditions
 
-                val isSelected = condition in selectedConditions
-
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(40.dp))
-                        .border(
-                            1.dp,
-                            if (isSelected) Color(0xFF5B4FFF) else Color(0xFFE0E0E0),
-                            RoundedCornerShape(40.dp)
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(40.dp))
+                            .border(
+                                1.dp,
+                                if (isSelected) Color(0xFF5B4FFF) else Color(0xFFE0E0E0),
+                                RoundedCornerShape(40.dp)
+                            )
+                            .background(
+                                if (isSelected) Color(0x205B4FFF) else Color.Transparent
+                            )
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                selectedConditions =
+                                    if (isSelected) selectedConditions - condition
+                                    else selectedConditions + condition
+                            }
+                            .padding(vertical = 6.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = condition,
+                            fontSize = 13.sp,
+                            color = if (isSelected) Color(0xFF5B4FFF) else Color.Black
                         )
-                        .background(
-                            if (isSelected) Color(0x205B4FFF) else Color.Transparent
-                        )
-                        .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
-                            selectedConditions =
-                                if (isSelected) selectedConditions - condition
-                                else selectedConditions + condition
-                        }
-                        .padding(vertical = 6.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = condition,
-                        fontSize = 13.sp,
-                        color = if (isSelected) Color(0xFF5B4FFF) else Color.Black
-                    )
+                    }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-        // ⭐ Custom allergy field — only if Others selected
-        if ("Others" in selectedConditions) {
+            Spacer(modifier = Modifier.height(16.dp))
+            // ⭐ Custom allergy field — only if Others selected
+            if ("Others" in selectedConditions) {
 
-            ProfileInputWithoutLabelField(
-                placeholder = "Write Condition",
-                value = customCondition,
-                onValueChange = { customCondition = it }
+                ProfileInputWithoutLabelField(
+                    placeholder = "Write Condition",
+                    value = customCondition,
+                    onValueChange = { customCondition = it }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ProfileInputMultipleLineField(
+                label = "Surgical History (Optional)",
+                isImportant = false,
+                placeholder = "Any previous surgeries or major medical procedures...",
+                value = surgicalHistory,
+                onValueChange = { surgicalHistory = it }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ProfileInputMultipleLineField(
-            label = "Surgical History (Optional)",
-            isImportant = false,
-            placeholder = "Any previous surgeries or major medical procedures...",
-            value = surgicalHistory,
-            onValueChange = { surgicalHistory = it }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
 
-        Text(
-            text = "Current Medications (Optional)",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Current Medications (Optional)",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
 
-        currentMedications.forEachIndexed { index, medication ->
+            currentMedications.forEachIndexed { index, medication ->
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                OutlinedTextField(
-                    value = medication,
-                    onValueChange = { newValue ->
-                        // ⭐ Sirf first item editable hona chahiye
-                        if (index == 0) {
-                            val updated = currentMedications.toMutableList()
-                            updated[index] = newValue
-                            currentMedications = updated
-                        }
-                    },
-                    placeholder = {
-                        if (index == 0)
-                            Text("Any medications you're currently taking...")
-                        else
-                            Text("Added item")  // non editable item placeholder
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(30.dp))
-                        .border(1.dp, Color(0xFFC3C6CB), RoundedCornerShape(30.dp)),
-                    enabled = index == 0,    // ⭐ only first row editable
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        disabledContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
-                    )
-                )
-
-                if (index == 0) {
-                    // ⭐ ADD ICON only for the FIRST item
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_add_icon),
-                        contentDescription = "Add",
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
-
-                                // ⭐ Add tabhi hoga jab first field empty na ho
-                                if (currentMedications[0].isNotBlank()) {
-                                    //   currentMedications = currentMedications + medication
-                                    val updated = currentMedications.toMutableList()
-
-                                    // ⭐ 1. Add a new empty item at bottom
-                                    updated.add(currentMedications[0])
-
-                                    // ⭐ 2. Clear first input field
-                                    updated[0] = ""
-
-                                    currentMedications = updated
-                                }
-                            }
-                    )
-                } else {
-                    // ⭐ Other items → REMOVE icon
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_remove_icon),
-                        contentDescription = "Remove",
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
+                    OutlinedTextField(
+                        value = medication,
+                        onValueChange = { newValue ->
+                            // ⭐ Sirf first item editable hona chahiye
+                            if (index == 0) {
                                 val updated = currentMedications.toMutableList()
-                                updated.removeAt(index)
+                                updated[index] = newValue
                                 currentMedications = updated
                             }
+                        },
+                        placeholder = {
+                            if (index == 0)
+                                Text("Any medications you're currently taking...")
+                            else
+                                Text("Added item")  // non editable item placeholder
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(30.dp))
+                            .border(1.dp, Color(0xFFC3C6CB), RoundedCornerShape(30.dp)),
+                        enabled = index == 0,    // ⭐ only first row editable
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            disabledContainerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        )
                     )
+
+                    if (index == 0) {
+                        // ⭐ ADD ICON only for the FIRST item
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_add_icon),
+                            contentDescription = "Add",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+
+                                    // ⭐ Add tabhi hoga jab first field empty na ho
+                                    if (currentMedications[0].isNotBlank()) {
+                                        //   currentMedications = currentMedications + medication
+                                        val updated = currentMedications.toMutableList()
+
+                                        // ⭐ 1. Add a new empty item at bottom
+                                        updated.add(currentMedications[0])
+
+                                        // ⭐ 2. Clear first input field
+                                        updated[0] = ""
+
+                                        currentMedications = updated
+                                    }
+                                }
+                        )
+                    } else {
+                        // ⭐ Other items → REMOVE icon
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_remove_icon),
+                            contentDescription = "Remove",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    val updated = currentMedications.toMutableList()
+                                    updated.removeAt(index)
+                                    currentMedications = updated
+                                }
+                        )
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+
+            // ⭐ Current Supplements
+            Text(
+                text = "Current Supplements (Optional)",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
+            )
             Spacer(modifier = Modifier.height(8.dp))
-        }
 
+            currentSupplements.forEachIndexed { index, supplement ->
 
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        // ⭐ Current Supplements
-        Text(
-            text = "Current Supplements (Optional)",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        currentSupplements.forEachIndexed { index, supplement ->
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                OutlinedTextField(
-                    value = supplement,
-                    onValueChange = { newValue ->
-                        // ⭐ Sirf first item editable hona chahiye
-                        if (index == 0) {
-                            val updated = currentSupplements.toMutableList()
-                            updated[index] = newValue
-                            currentSupplements = updated
-                        }
-                    },
-                    placeholder = {
-                        if (index == 0)
-                            Text("Any supplements you're currently taking...")
-                        else
-                            Text("Added item")
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(30.dp))
-                        .border(
-                            1.dp,
-                            Color(0xFFC3C6CB),
-                            RoundedCornerShape(30.dp)
-                        ),
-                    enabled = index == 0,   // ⭐ only first item editable
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        disabledContainerColor = Color.White, // ⭐ FIX
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
-                    )
-                )
-
-                if (index == 0) {
-                    // ⭐ ADD icon - first item only
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_add_icon),
-                        contentDescription = "Add",
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
-
-                                if (currentSupplements[0].isNotBlank()) {
-
-                                    val updated = currentSupplements.toMutableList()
-
-                                    // ⭐ Add new item in list
-                                    updated.add(currentSupplements[0])
-
-                                    // ⭐ Clear first input
-                                    updated[0] = ""
-
-                                    currentSupplements = updated
-                                }
-                            }
-                    )
-                } else {
-                    // ⭐ REMOVE icon - for added items
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_remove_icon),
-                        contentDescription = "Remove",
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
+                    OutlinedTextField(
+                        value = supplement,
+                        onValueChange = { newValue ->
+                            // ⭐ Sirf first item editable hona chahiye
+                            if (index == 0) {
                                 val updated = currentSupplements.toMutableList()
-                                updated.removeAt(index)
+                                updated[index] = newValue
                                 currentSupplements = updated
                             }
+                        },
+                        placeholder = {
+                            if (index == 0)
+                                Text("Any supplements you're currently taking...")
+                            else
+                                Text("Added item")
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(30.dp))
+                            .border(
+                                1.dp,
+                                Color(0xFFC3C6CB),
+                                RoundedCornerShape(30.dp)
+                            ),
+                        enabled = index == 0,   // ⭐ only first item editable
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            disabledContainerColor = Color.White, // ⭐ FIX
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        )
                     )
+
+                    if (index == 0) {
+                        // ⭐ ADD icon - first item only
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_add_icon),
+                            contentDescription = "Add",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+
+                                    if (currentSupplements[0].isNotBlank()) {
+
+                                        val updated = currentSupplements.toMutableList()
+
+                                        // ⭐ Add new item in list
+                                        updated.add(currentSupplements[0])
+
+                                        // ⭐ Clear first input
+                                        updated[0] = ""
+
+                                        currentSupplements = updated
+                                    }
+                                }
+                        )
+                    } else {
+                        // ⭐ REMOVE icon - for added items
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_remove_icon),
+                            contentDescription = "Remove",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    val updated = currentSupplements.toMutableList()
+                                    updated.removeAt(index)
+                                    currentSupplements = updated
+                                }
+                        )
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
-
-
-        Spacer(modifier = Modifier.height(24.dp))
-
         GradientButton(
             text = "Save & Continue",
             onClick = {
@@ -919,78 +934,93 @@ fun DocumentsStep(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        ProfilePhotoPicker(
-            label = "Upload Files (X-Rays, Dental Scans, Prescriptions, Lab Reports)",
-            fileName = if (profileData.uploadedFiles.isEmpty()) "No file chosen"
-            else "${profileData.uploadedFiles.size} files selected",
-            onChooseClick = {
-                filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
-            }
-        )
-
-        Text(
-            "PDF, JPG, PNG, DICOM Supported",
-            fontSize = 12.sp,
-            color = Color.Gray,
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
-                    filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
+        Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+            ProfilePhotoPicker(
+                label = "Upload Files (X-Rays, Dental Scans, Prescriptions, Lab Reports)",
+                fileName = if (profileData.uploadedFiles.isEmpty()) "No file chosen"
+                else "${profileData.uploadedFiles.size} files selected",
+                onChooseClick = {
+                    filePickerLauncher.launch(
+                        arrayOf(
+                            "image/*",
+                            "application/pdf",
+                            "application/dicom"
+                        )
+                    )
                 }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Column(
-            modifier = Modifier
-                .border(
-                    width = 1.dp,
-                    color = Color(0xFFE7E6F8),
-                    shape = RoundedCornerShape(30.dp)
-                )
-                .background(
-                    color = Color(0xFFF9F9FD),
-                    shape = RoundedCornerShape(30.dp)
-                )
-                .padding(20.dp)
-        ) {
-            Text(
-                text = "Attached Files",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                "PDF, JPG, PNG, DICOM Supported",
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        filePickerLauncher.launch(
+                            arrayOf(
+                                "image/*",
+                                "application/pdf",
+                                "application/dicom"
+                            )
+                        )
+                    }
+            )
 
-            if (profileData.uploadedFiles.isEmpty()) {
-                Text(
-                    text = "No files uploaded",
-                    color = Color.Gray,
-                    fontSize = 13.sp
-                )
-            } else {
-                profileData.uploadedFiles.forEach { fileUri ->
-                    FileAttachment(
-                        fileName = fileUri.lastPathSegment ?: "file",
-                        onDeleteClick = { viewModel.removeUploadedFile(fileUri) }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = Color(0xFFE7E6F8),
+                        shape = RoundedCornerShape(30.dp)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    .background(
+                        color = Color(0xFFF9F9FD),
+                        shape = RoundedCornerShape(30.dp)
+                    )
+                    .padding(20.dp)
+            ) {
+                Text(
+                    text = "Attached Files",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (profileData.uploadedFiles.isEmpty()) {
+                    Text(
+                        text = "No files uploaded",
+                        color = Color.Gray,
+                        fontSize = 13.sp
+                    )
+                } else {
+                    profileData.uploadedFiles.forEach { fileUri ->
+                        FileAttachment(
+                            fileName = fileUri.lastPathSegment ?: "file",
+                            onDeleteClick = { viewModel.removeUploadedFile(fileUri) }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            DisclaimerBox(
+                title = "You're almost ready!",
+                description = "You can always add more details, upload documents, or update your profile later from the settings menu.",
+                titleColor = Color(0xFF4338CA),
+                backColor = Color(0x084338CA)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        DisclaimerBox(
-            title = "You're almost ready!",
-            description = "You can always add more details, upload documents, or update your profile later from the settings menu.",
-            titleColor = Color(0xFF4338CA),
-            backColor = Color(0x084338CA)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
         GradientButton(
             text = "Get Started",
             onClick = {

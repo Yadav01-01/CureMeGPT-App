@@ -1,5 +1,6 @@
 package com.bussiness.curemegptapp.ui.screen.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -54,10 +56,20 @@ import com.bussiness.curemegptapp.ui.component.RoundedCustomCheckbox
 
 @Composable
 fun PrivacyConsentScreen(navController: NavHostController) {
+
+    // Consent Checkboxes
+    var checkbox1 by remember { mutableStateOf(false) }
+    var checkbox2 by remember { mutableStateOf(false) }
+    var checkbox3 by remember { mutableStateOf(false) }
+    var checkbox4 by remember { mutableStateOf(false) }
+    val allChecked = checkbox1 && checkbox2 && checkbox3 && checkbox4
+    var showError by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) .statusBarsPadding()
+            .background(Color.White)
             .verticalScroll(rememberScrollState())
     ) {
         // Top Gradient Header
@@ -117,15 +129,11 @@ fun PrivacyConsentScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Consent Checkboxes
-        var checkbox1 by remember { mutableStateOf(false) }
-        var checkbox2 by remember { mutableStateOf(false) }
-        var checkbox3 by remember { mutableStateOf(false) }
-        var checkbox4 by remember { mutableStateOf(false) }
+
 
         Column(
             modifier = Modifier
-                .fillMaxWidth().padding(16.dp)
+                .fillMaxWidth().padding(22.dp)
                 .border(width = 1.dp, color = Color(0xFF697383),
                     shape = RoundedCornerShape(30.dp))
 
@@ -133,7 +141,7 @@ fun PrivacyConsentScreen(navController: NavHostController) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .padding(vertical = 26.dp).padding(start = 20.dp, end = 15.dp)
             ) {
                 ConsentCheckbox(
                     checked = checkbox1,
@@ -196,16 +204,23 @@ fun PrivacyConsentScreen(navController: NavHostController) {
         // I Agree - Continue Button
         GradientButton(
             text = "I Agree - Continue",
-            onClick = { navController.navigate(AppDestination.ProfileCompletion) }
+            onClick = {   if (allChecked) {
+                navController.navigate(AppDestination.ProfileCompletion)
+            } else {
+                Toast.makeText(
+                    context,
+                    "Please accept all terms to continue",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
 
         // Exit Instead
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 28.dp,bottom = 16.dp),
+                .padding(top = 26.dp,bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -226,7 +241,6 @@ fun PrivacyConsentScreen(navController: NavHostController) {
             )
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -248,6 +262,7 @@ fun ConsentCheckbox(
  
 
         RoundedCustomCheckbox(
+            checkboxSize = 21.dp,
             checked = checked,
             onCheckedChange = { onCheckedChange(it) }
         )
@@ -262,7 +277,6 @@ fun ConsentCheckbox(
             fontSize = 14.sp,
             color = Color(0xFF697383),
             lineHeight = 20.sp,
-            modifier = Modifier.padding(top = 2.dp)
         )
     }
 }

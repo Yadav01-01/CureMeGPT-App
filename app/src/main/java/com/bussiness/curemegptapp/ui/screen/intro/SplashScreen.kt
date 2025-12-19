@@ -33,7 +33,7 @@ fun SplashScreen(navController: NavHostController) {
             .background(Color.White),
     ) {
 
-        Image(painter = painterResource(R.drawable.splash),
+        Image(painter = painterResource(R.drawable.splash1),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop)

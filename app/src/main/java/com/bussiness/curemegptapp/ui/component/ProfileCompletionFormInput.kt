@@ -530,7 +530,7 @@ fun Dropdown1(
                 onSelectionChanged = { reason ->
                     onUnitSelected(reason)
                 },
-                menuPadding = 24.dp,
+                horizontalPadding = 24.dp,
                 reasons = dropdownItems // Pass the list of options here
             )
         }
@@ -895,7 +895,7 @@ fun UniversalInputField(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .wrapContentHeight().padding(5.dp)
     ) {
         // ----- Title -----
         Row {
@@ -905,7 +905,7 @@ fun UniversalInputField(
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(start = 12.dp, bottom = 8.dp)
+                modifier = Modifier.padding(start = 5.dp, bottom = 8.dp)
             )
 
             if (isImportant)
@@ -923,7 +923,7 @@ fun UniversalInputField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp)
+                .height(56.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Color.Transparent)
                 .border(

@@ -48,14 +48,14 @@ fun AccountCreatedDialog(
 
     Dialog(onDismissRequest = { onDismiss() },
             properties = DialogProperties(
-            dismissOnClickOutside = false, // 🔴 IMPORTANT
-        dismissOnBackPress = false       // back press se band chahiye to true
+            dismissOnClickOutside = false,
+        dismissOnBackPress = false
     )) {
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 10.dp)
+                .padding(vertical = 10.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Color.White)
         ) {
@@ -63,7 +63,7 @@ fun AccountCreatedDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
+                    .padding(18.dp),
                 horizontalAlignment = Alignment.Start
             ) {
 
@@ -97,13 +97,13 @@ fun AccountCreatedDialog(
                         painter = painterResource(id = R.drawable.ic_close),
                         contentDescription = "Close",
                         modifier = Modifier
-                            .size(45.dp)
+                            .size(43.dp)
                             .clickable( interactionSource = remember { MutableInteractionSource() },
                                 indication = null) { onDismiss() }
                     )
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
 
                 Text(
@@ -113,7 +113,7 @@ fun AccountCreatedDialog(
                     color = Color.Black
                 )
 
-                Spacer(modifier = Modifier.height(26.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -138,7 +138,7 @@ fun AccountCreatedDialog(
                     ) {
                         Text(
                             text = "Set Up Profile",
-                            fontSize = 16.sp,
+                            fontSize = 15.sp,
                             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                             color = Color.Black
                         )
@@ -148,6 +148,7 @@ fun AccountCreatedDialog(
 
                     GradientButton1(
                         text = "Go to Ask AI",
+                        fontSize = 15.sp,
                         modifier = Modifier.weight(1f),
                         onClick = { onGoToAskAI() }
                     )

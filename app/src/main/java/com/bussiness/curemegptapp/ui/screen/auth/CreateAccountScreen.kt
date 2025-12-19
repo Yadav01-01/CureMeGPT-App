@@ -8,11 +8,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,29 +55,29 @@ fun CreateAccountScreen(navController: NavHostController) {
     var confirmPassword by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
+            .fillMaxSize().imePadding()
+            .background(Color.White).verticalScroll(rememberScrollState())
     ) {
 
         GradientHeader(heading = "Create Your Account", description = "Join and let AI guide your dental & family health.")
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(55.dp))
 
         GradientIconInputField(icon = R.drawable.profile_ic,placeholder = "Full Name", value = name, onValueChange = { name = it })
 
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(20.dp))
         // Email Field
         GradientIconInputField(icon = R.drawable.mail_ic,placeholder = "Email / Phone Number", value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
 
-        Spacer(Modifier.height(18.dp))
+        Spacer(Modifier.height(20.dp))
 
         GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Password", value = password, onValueChange = { password = it }, isPassword = true)
 
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.height(20.dp))
 
         GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Confirm Password", value = confirmPassword, onValueChange = { confirmPassword = it }, isPassword = true)
 
-        Spacer(Modifier.height(28.dp))
+        Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
         GradientButton(text = "Sign Up", onClick = { navController.navigate("verifyOtp?from=create&email=$email") })
@@ -79,14 +88,14 @@ fun CreateAccountScreen(navController: NavHostController) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 42.dp),
+                .padding(bottom = 30.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Already have an account?" ,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                fontSize = 18.sp
+                fontSize = 17.sp
             )
             Spacer(Modifier.width(4.dp))
             Text(
@@ -94,7 +103,7 @@ fun CreateAccountScreen(navController: NavHostController) {
                 color = Color(0xFF4338CA),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                fontSize = 18.sp,
+                fontSize = 17.sp,
                 modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
                     indication = null) { navController.navigate(AppDestination.Login) }
             )

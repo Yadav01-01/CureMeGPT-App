@@ -175,7 +175,8 @@ fun FamilyMembersScreen(navController: NavHostController) {
                 contentDescription = "Add member",
                 modifier = Modifier.size(67.dp).clickable( interactionSource = remember { MutableInteractionSource() },
                     indication = null){
-                    navController.navigate(AppDestination.AddFamilyMemberScreen)
+                   // navController.navigate(AppDestination.AddFamilyMemberScreen)
+                    navController.navigate("addFamilyMember?from=main")
                 }
             )
         }

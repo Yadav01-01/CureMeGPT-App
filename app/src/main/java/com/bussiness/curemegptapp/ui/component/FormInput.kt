@@ -325,14 +325,15 @@ fun GradientButton(
     text: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    horizontalPadding : Dp = 18.dp
 ) {
 
     Box(
         modifier = modifier
             .height(55.dp)
             .fillMaxWidth()
-            .padding(horizontal = 18.dp)
+            .padding(horizontal = horizontalPadding)
             .clip(RoundedCornerShape(45.dp))
             .background(
                 brush = Brush.linearGradient(AppGradientColors)
@@ -546,15 +547,16 @@ fun GradientButton2(
 
 @Composable
 fun RoundedCustomCheckbox(
+    checkboxSize : Dp = 28.dp,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    val cornerRadius = 10.dp  // iOS style rounded square
+    val cornerRadius = 8.dp
     val darkBlue = Color(0xFF1E3A8A) // Dark blue (you can change)
 
     Box(
         modifier = Modifier
-            .size(28.dp)
+            .size(checkboxSize)
             .clip(RoundedCornerShape(cornerRadius))
             .background(
                 if (checked) darkBlue else Color.Unspecified
@@ -603,7 +605,7 @@ fun DisclaimerBox(
             fontSize = 14.sp,
             color = titleColor
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(7.dp))
         Text(
             text = description,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),

@@ -45,7 +45,7 @@ fun CustomPowerSpinner(
     modifierDropDown: Modifier = Modifier,
     selectedText: String = "Select",
     onSelectionChanged: (String) -> Unit = {},
-    menuPadding: Dp = 24.dp,
+    horizontalPadding: Dp = 24.dp,
     reasons: List<String> = listOf()
 ) {
     var expanded by remember { mutableStateOf(false) }

@@ -160,7 +160,7 @@ fun AddMedicationScreen(
                 onSelectionChanged = { reason ->
                     selectedMyself = reason
                 },
-                menuPadding = 24.dp,
+                horizontalPadding = 24.dp,
                 reasons = myselfOptions // Pass the list of options here
             )
 
@@ -178,7 +178,7 @@ fun AddMedicationScreen(
                 onSelectionChanged = { reason ->
                     selectedMedicationType = reason
                 },
-                menuPadding = 24.dp,
+                horizontalPadding = 24.dp,
                 reasons = selectedMedicationTypeOptions // Pass the list of options here
             )
 
@@ -224,7 +224,7 @@ fun AddMedicationScreen(
                 onSelectionChanged = { reason ->
                     selectFrequency = reason
                 },
-                menuPadding = 24.dp,
+                horizontalPadding = 24.dp,
                 reasons = selectFrequencyOptions // Pass the list of options here
             )
 
@@ -245,7 +245,7 @@ fun AddMedicationScreen(
                     onSelectionChanged = { reason ->
                         selectDayName = reason
                     },
-                    menuPadding = 24.dp,
+                    horizontalPadding = 24.dp,
                     reasons = selectDayNameOptions // Pass the list of options here
                 )
             }

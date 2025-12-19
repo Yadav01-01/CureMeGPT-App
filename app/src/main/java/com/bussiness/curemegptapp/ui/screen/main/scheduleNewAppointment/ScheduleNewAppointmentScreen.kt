@@ -35,7 +35,6 @@ import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.ProfileInputField
-import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField
 import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField2
 import com.bussiness.curemegptapp.ui.component.TopBarHeader1
 import com.bussiness.curemegptapp.ui.component.UniversalInputField
@@ -43,7 +42,6 @@ import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
 import com.bussiness.curemegptapp.ui.dialog.SuccessfulDialog
 import com.bussiness.curemegptapp.ui.dialog.TimePickerDialog
-import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
 
 //ScheduleNewAppointmentScreen
 
@@ -115,7 +113,7 @@ fun ScheduleNewAppointmentScreen(
                 onSelectionChanged = { reason ->
                     selectedMember = reason
                 },
-                menuPadding = 24.dp,
+                horizontalPadding = 24.dp,
                 reasons = memberOptions // Pass the list of options here
             )
 
@@ -133,7 +131,7 @@ fun ScheduleNewAppointmentScreen(
                 onSelectionChanged = { reason ->
                     selectedAppointment = reason
                 },
-                menuPadding = 24.dp,
+                horizontalPadding = 24.dp,
                 reasons = appointmentOptions // Pass the list of options here
             )
 
@@ -213,7 +211,7 @@ fun ScheduleNewAppointmentScreen(
                 onSelectionChanged = { reason ->
                     selectedAppointmentReminder = reason
                 },
-                menuPadding = 24.dp,
+                horizontalPadding = 24.dp,
                 reasons = selectedAppointmentReminderOptions // Pass the list of options here
             )
 

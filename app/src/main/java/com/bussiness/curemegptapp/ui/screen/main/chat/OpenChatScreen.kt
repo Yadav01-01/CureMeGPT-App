@@ -71,10 +71,11 @@ import com.bussiness.curemegptapp.ui.component.input.RightSideDrawer
 import com.bussiness.curemegptapp.ui.dialog.CaseDialog
 import com.bussiness.curemegptapp.ui.theme.gradientBrush
 import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
+import androidx.activity.compose.BackHandler
 
 
 @Composable
-fun OpenChatScreen(navController: NavHostController) {
+fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
     var showMenu by remember { mutableStateOf(false) }
    // val uiState by viewModel.uiState.collectAsState()
     var selectedUser by remember { mutableStateOf("James (Myself)") }
@@ -93,6 +94,20 @@ fun OpenChatScreen(navController: NavHostController) {
     // Navigation trigger state
     var shouldNavigate by remember { mutableStateOf(false) }
 
+    BackHandler {
+        if (from=="auth") {
+            navController.navigate(AppDestination.MainScreen) {
+                popUpTo(0)
+                launchSingleTop = true
+            }
+        }else{
+            navController.navigate(AppDestination.Home) {
+                popUpTo(0)
+                launchSingleTop = true
+            }
+        }
+
+    }
 
     // Track when a new message is sent
     LaunchedEffect(messages.size) {
@@ -203,7 +218,18 @@ fun OpenChatScreen(navController: NavHostController) {
                         logoRes = R.drawable.ic_logo,
                         sideArrow = R.drawable.left_ic,
                         filterIcon = R.drawable.filter_ic,
-                        onLeftIconClick = { navController.popBackStack() },
+                        onLeftIconClick = {      if (from=="auth") {
+                            navController.navigate(AppDestination.MainScreen) {
+                                popUpTo(0)
+                                launchSingleTop = true
+                            }
+                        }else{
+                            navController.navigate(AppDestination.Home) {
+                                popUpTo(0)
+                                launchSingleTop = true
+                            }
+                        }
+                        },
                         onFilterClick = { showDrawer = true },
                     )
 

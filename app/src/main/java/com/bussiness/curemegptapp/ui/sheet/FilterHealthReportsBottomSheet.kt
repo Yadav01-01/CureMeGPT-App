@@ -100,7 +100,7 @@ fun FilterHealthReportsBottomSheet(
             onSelectionChanged = { reason ->
                 selectedMember = reason
             },
-            menuPadding = 24.dp,
+            horizontalPadding = 24.dp,
             reasons = memberOptions // Pass the list of options here
         )
 

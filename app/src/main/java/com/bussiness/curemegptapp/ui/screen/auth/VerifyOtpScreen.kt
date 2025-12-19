@@ -56,9 +56,11 @@ import com.bussiness.curemegptapp.ui.dialog.AccountCreatedDialog
 import kotlinx.coroutines.delay
 
 @Composable
-fun VerifyOtpScreen(  navController: NavHostController,
-                      fromScreen: String ?= "",
-                      email: String?= "") {
+fun VerifyOtpScreen(
+    navController: NavHostController,
+    fromScreen: String? = "",
+    email: String? = ""
+) {
     val context = LocalContext.current
     var otp by remember { mutableStateOf("") }
     var timeLeft by remember { mutableStateOf(30) }
@@ -66,11 +68,19 @@ fun VerifyOtpScreen(  navController: NavHostController,
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
-        AccountCreatedDialog(title = "Account Created\nSuccessfully!", description = "Your account is ready. Start exploring now!",
+        AccountCreatedDialog(
+            title = "Account Created\nSuccessfully!",
+            description = "Your account is ready. Start exploring now!",
             onDismiss = { showDialog = false },
-            onSetupProfile = { showDialog = false
-                navController.navigate(AppDestination.PrivacyConsent) },
-                    onGoToAskAI = { showDialog = false }
+            onSetupProfile = {
+                showDialog = false
+                navController.navigate(AppDestination.PrivacyConsent)
+            },
+            onGoToAskAI = {
+                showDialog = false
+             //   navController.navigate(AppDestination.OpenChatScreen)
+                navController.navigate("openChat?from=auth")
+            }
         )
     }
 
@@ -121,7 +131,8 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     }
 
                     otp.length < 5 -> {
-                        Toast.makeText(context, "Enter complete 5-digit OTP", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Enter complete 5-digit OTP", Toast.LENGTH_SHORT)
+                            .show()
                     }
 
                     otp != "12345" -> {
@@ -129,9 +140,9 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     }
 
                     else -> {
-                        if (fromScreen== "create"){
+                        if (fromScreen == "create") {
                             showDialog = true
-                        }else{
+                        } else {
                             navController.navigate(AppDestination.NewPassword)
                         }
 
@@ -179,7 +190,8 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     color = Color(0xFF4338CA),
                     fontSize = 15.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_bold)),
-                    modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
                         timeLeft = 30
@@ -202,14 +214,16 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     text = "Back",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontSize = 17.sp,
-                    modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         navController.navigate(AppDestination.CreateAccount)
                     }
                 )
 
             }
-        }else{
+        } else {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -229,8 +243,10 @@ fun VerifyOtpScreen(  navController: NavHostController,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                    modifier = Modifier.clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         navController.navigate(AppDestination.Login)
                     }
                 )
@@ -278,15 +294,19 @@ fun OtpInputField(
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             repeat(5) { index ->
                 Box(
-                    modifier = Modifier.width(58.dp).height(55.dp)
-                       // .size(48.dp)
+                    modifier = Modifier
+                        .width(58.dp)
+                        .height(55.dp)
+                        // .size(48.dp)
                         .border(
                             1.dp,
                             if (index < otp.length) Color(0xFF4338CA) else Color(0xFFE5E7EB),
                             RoundedCornerShape(46.dp)
                         )
-                        .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
                             focusRequester.requestFocus()
                             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE)
                                     as InputMethodManager
@@ -316,10 +336,9 @@ fun OtpInputField(
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun VerifyOtpScreenPreview() {
     val navController = rememberNavController()
-    VerifyOtpScreen(navController = navController,)
+    VerifyOtpScreen(navController = navController)
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,20 +18,24 @@ import com.bussiness.curemegptapp.ui.screen.auth.CreateAccountScreen
 import com.bussiness.curemegptapp.ui.screen.auth.LoginScreen
 import com.bussiness.curemegptapp.ui.screen.auth.NewPasswordScreen
 import com.bussiness.curemegptapp.ui.screen.auth.PrivacyConsentScreen
-import com.bussiness.curemegptapp.ui.screen.auth.ProfileCompletionScreen
+import com.bussiness.curemegptapp.ui.screen.auth.profileCompletion.ProfileCompletionScreen
 import com.bussiness.curemegptapp.ui.screen.auth.ResetScreen
 import com.bussiness.curemegptapp.ui.screen.auth.VerifyOtpScreen
 import com.bussiness.curemegptapp.ui.screen.intro.OnboardingScreen
 import com.bussiness.curemegptapp.ui.screen.intro.SplashScreen
 import com.bussiness.curemegptapp.ui.screen.main.MainScreen
 
+
+import com.bussiness.curemegptapp.ui.screen.main.addFamilyMemberScreen.AddFamilyMemberScreen
+import com.bussiness.curemegptapp.ui.screen.main.chat.ChatDataScreen
+import com.bussiness.curemegptapp.ui.screen.main.chat.OpenChatScreen
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavGraph(navController: NavHostController,modifier : Modifier = Modifier) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White).navigationBarsPadding()
+        modifier = modifier.fillMaxSize().background(Color.White).statusBarsPadding().navigationBarsPadding()
+
     ) {
         NavHost(
             navController = navController,
@@ -57,7 +62,32 @@ fun AppNavGraph(navController: NavHostController,modifier : Modifier = Modifier)
             composable<AppDestination.CreateAccount> { CreateAccountScreen(navController) }
             composable<AppDestination.PrivacyConsent> { PrivacyConsentScreen(navController) }
             composable<AppDestination.ProfileCompletion> { ProfileCompletionScreen(navController) }
-            composable<AppDestination.MainScreen> { MainScreen(navController) }
+           composable<AppDestination.MainScreen> { MainScreen(navController) }
+
+
+            composable(
+                route = "openChat?from={from}",
+                arguments = listOf(
+                    navArgument("from") { defaultValue = "" },
+                )
+            ) { backStackEntry ->
+                val from = backStackEntry.arguments?.getString("from") ?: ""
+                OpenChatScreen(navController, from)
+            }
+
+            composable<AppDestination.ChatDataScreen> { ChatDataScreen(navController) }
+
+            composable(
+                route = "addFamilyMember?from={from}",
+                arguments = listOf(
+                    navArgument("from") { defaultValue = "" },
+                )
+            ) { backStackEntry ->
+                val from = backStackEntry.arguments?.getString("from") ?: ""
+                AddFamilyMemberScreen(navController, from)
+            }
+
+
         }
     }
 }

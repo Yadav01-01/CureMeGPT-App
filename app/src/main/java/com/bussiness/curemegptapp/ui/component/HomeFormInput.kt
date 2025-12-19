@@ -176,7 +176,7 @@ fun AppointmentBox(
                 indication = null) { onClick() }
             .padding(horizontal = 10.dp, vertical = 6.dp)
     ) {
-        Row(
+        Row( modifier = Modifier.padding(top = 2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -280,126 +280,6 @@ fun MoodOptionSelectable(
     }
 }
 
-@Composable
-fun GradientProgressBar(
-    progress: Float,
-    modifier: Modifier = Modifier
-) {
-    val gradientColors = listOf(
-        Color(0xFF5B4FE9),
-        Color(0xFF4338CA)
-    )
 
-    Box(
-        modifier = modifier
-            .height(10.dp)
-            .clip(RoundedCornerShape(50))
-            .background(Color(0xFFD9D9D9))   // Track color
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(progress)
-                .clip(RoundedCornerShape(50))
-                .background(brush = Brush.horizontalGradient(gradientColors))
-        )
-    }
-}
-
-
-@Composable
-fun AlertItem(alertText: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFFDFD5FC), RoundedCornerShape(50.dp))
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_alert_notification),
-            contentDescription = null,
-            modifier = Modifier.size(29.dp)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            text = alertText,
-            fontSize = 13.sp,
-            color = Color(0xFF181818),
-            modifier = Modifier.weight(1f),
-            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-            fontWeight = FontWeight.Medium
-
-        )
-    }
-}
-
-@Composable
-fun MedicationChip(text: String, backgroundColor: Color) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = backgroundColor
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            fontSize = 12.sp,
-            color = if (backgroundColor == Color(0xFFD5D2F3)) Color(0xFF211C64) else Color(
-                0xFFF31D1D
-            )
-        )
-    }
-}
-
-@Composable
-fun RecommendedStepItem(text: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_recommended_icon),
-            contentDescription = null,
-            modifier = Modifier.size(25.dp)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            text = text,
-            fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-            fontWeight = FontWeight.Medium,
-            color = Color(0xFF181818)
-        )
-    }
-}
-
-@Composable
-fun ProfileTab(
-    name: String,
-    isSelected: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(50.dp),
-        color = if (isSelected) Color.Black else Color.White,
-        border = if (!isSelected) BorderStroke(1.dp, Color(0xFF697383)) else null,
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 5.dp, vertical = 3.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = name,
-                fontSize = 12.sp,
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium,
-                color = if (isSelected) Color.White else Color(0xFF697383)
-            )
-        }
-    }
-
-}
 
 

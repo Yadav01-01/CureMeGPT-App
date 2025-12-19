@@ -112,9 +112,11 @@ sealed class AppDestination {
 
     @Serializable
     data object OpenChatScreen : AppDestination()
+    @Serializable
+
+    data object OpenChatScreen1 : AppDestination()
 
     @Serializable
     data object ChatDataScreen : AppDestination()
-
 
 }

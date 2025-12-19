@@ -2,6 +2,13 @@
 <resources>
 
     <style name="Theme.CureMeGPTApp" parent="android:Theme.Material.Light.NoActionBar" />
+<!--    <style name="Theme.CureMeGPTApp" parent="android:Theme.Material.Light.NoActionBar">-->
+<!--        &lt;!&ndash; For API level 23 (Marshmallow) and above &ndash;&gt;-->
+<!--        <item name="android:windowLightStatusBar">true</item>-->
+<!--        &lt;!&ndash; For API level 30 (Android 11) and above &ndash;&gt;-->
+<!--        &lt;!&ndash;    <item name="android:windowDecorFitsSystemWindows">false</item>&ndash;&gt;-->
+
+<!--    </style>-->
 
     <style name="TransparentEdgeToEdgeEnabledBottomSheetTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="bottomSheetDialogTheme">@style/TransparentEdgeToEdgeEnabledBottomSheetDialog</item>

@@ -143,10 +143,27 @@ fun MainNavGraph(
         composable<AppDestination.HelpSupportScreen> { HelpSupportScreen(navController) }
         composable<AppDestination.EditProfileScreen> { EditProfileScreen(navController) }
 
-        composable<AppDestination.AddFamilyMemberScreen> { AddFamilyMemberScreen(navController) }
+       // composable<AppDestination.AddFamilyMemberScreen> { AddFamilyMemberScreen(navController) }
+        composable(
+            route = "addFamilyMember?from={from}",
+            arguments = listOf(
+                navArgument("from") { defaultValue = "" },
+            )
+        ) { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from") ?: ""
+            AddFamilyMemberScreen(navController, from)
+        }
 
         composable<AppDestination.EditFamilyMemberDetailsScreen> { EditFamilyMemberDetailsScreen(navController) }
-        composable<AppDestination.OpenChatScreen> { OpenChatScreen(navController) }
+        composable(
+            route = "openChat?from={from}",
+            arguments = listOf(
+                navArgument("from") { defaultValue = "" },
+            )
+        ) { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from") ?: ""
+            OpenChatScreen(navController, from)
+        }
         composable<AppDestination.ChatDataScreen> { ChatDataScreen(navController) }
 
     }

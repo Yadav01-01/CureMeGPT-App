@@ -1,0 +1,251 @@
+package com.bussiness.curemegptapp.ui.screen.auth.profileCompletion
+
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.data.model.ProfileData
+import com.bussiness.curemegptapp.ui.component.Dropdown1
+import com.bussiness.curemegptapp.ui.component.GradientButton
+import com.bussiness.curemegptapp.ui.component.ProfileInputField
+import com.bussiness.curemegptapp.ui.component.ProfilePhotoPicker
+import com.bussiness.curemegptapp.ui.component.UniversalInputField
+import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
+import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
+import com.bussiness.curemegptapp.ui.viewModel.auth.ProfileCompletionViewModel
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun PersonalInfoStep(
+    viewModel: ProfileCompletionViewModel,
+    profileData: ProfileData,
+    onNext: () -> Unit
+) {
+    var fullName by remember { mutableStateOf(profileData.fullName) }
+    var contactNumber by remember { mutableStateOf(profileData.contactNumber) }
+    var email by remember { mutableStateOf(profileData.email) }
+    var dateOfBirth by remember { mutableStateOf(profileData.dateOfBirth) }
+    var gender by remember { mutableStateOf(profileData.gender) }
+    var showDialog by remember { mutableStateOf(false) }
+    val genderOptions =
+        listOf("Male", "Female", "Other") // Added example options
+
+    if (showDialog) {
+        CalendarDialog(
+            onDismiss = { showDialog = false },
+            onDateApplied = {
+                // SELECTED DATE HERE
+                showDialog = false
+                dateOfBirth = it.toString()
+            }
+        )
+    }
+
+
+    // Height and weight with units
+    var heightValue by remember {
+        mutableStateOf(profileData.height.split(" ").getOrNull(0) ?: "")
+    }
+    var heightUnit by remember {
+        mutableStateOf(profileData.height.split(" ").getOrNull(1) ?: "Cm")
+    }
+
+    var weightValue by remember {
+        mutableStateOf(profileData.weight.split(" ").getOrNull(0) ?: "")
+    }
+    var weightUnit by remember {
+        mutableStateOf(profileData.weight.split(" ").getOrNull(1) ?: "Kg")
+    }
+
+    var selectedProfilePhotoUri by remember { mutableStateOf(profileData.profilePhotoUri) }
+    var selectedProfilePhotoName by remember {
+        mutableStateOf(profileData.profilePhotoUri?.lastPathSegment ?: "No file chosen")
+    }
+
+    val profilePhotoPickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                selectedProfilePhotoUri = it
+                selectedProfilePhotoName = it.lastPathSegment ?: "selected_file"
+            }
+        }
+
+    fun openProfilePhotoPicker() {
+        profilePhotoPickerLauncher.launch(arrayOf("image/*"))
+    }
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+    ) {
+        ProfileInputField(
+            label = "Full Name",
+            isImportant = true,
+            placeholder = "e.g., James Carter",
+            value = fullName,
+            onValueChange = { fullName = it }
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        ProfileInputField(
+            label = "Contact Number",
+            placeholder = "555 123 456",
+            value = contactNumber,
+            onValueChange = { contactNumber = it },
+            keyboardType = KeyboardType.Phone
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        ProfileInputField(
+            label = "Email Address",
+            placeholder = "james@gmail.com",
+            value = email,
+            onValueChange = { email = it },
+            keyboardType = KeyboardType.Email
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        UniversalInputField(
+            title = "Date of Birth",
+            isImportant = true,
+            placeholder = "MM-DD-YYYY",
+            value = dateOfBirth,
+            rightIcon = R.drawable.ic_calender_icon
+        ) {
+            showDialog = true
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        Row(modifier = Modifier.padding(horizontal = 9.dp)) {
+
+            Text(
+                text = "Gender",
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(start = 3.dp, bottom = 6.dp)
+            )
+            Text(
+                text = " *",
+                color = Color.Red,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+        }
+
+        Row(modifier = Modifier.padding(horizontal = 7.dp)) {
+            CustomPowerSpinner(
+                selectedText = gender,
+                onSelectionChanged = { reason ->
+                    gender = reason
+                },
+                horizontalPadding = 14.dp,
+                reasons = genderOptions // Pass the list of options here
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(modifier = Modifier.padding(horizontal = 7.dp)) {
+            Dropdown1(
+                label = "Height (Cm/Ft)",
+                isImportant = true,
+                placeholder = "e.g., 172 Cm",
+                value = heightValue,
+                onValueChange = { heightValue = it },
+                dropdownItems = listOf("Cm", "Ft"),
+                selectedUnit = heightUnit,
+                onUnitSelected = { newUnit ->
+                    heightUnit = newUnit
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(modifier = Modifier.padding(horizontal = 7.dp)) {
+            Dropdown1(
+                label = "Weight (Kg/Lb)",
+                isImportant = true,
+                placeholder = "e.g., 78 Kg",
+                value = weightValue,
+                onValueChange = { weightValue = it },
+                dropdownItems = listOf("Kg", "Lb"),
+                selectedUnit = weightUnit,
+                onUnitSelected = { newUnit ->
+                    weightUnit = newUnit
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(modifier = Modifier.padding(horizontal = 9.dp)) {
+            ProfilePhotoPicker(
+                label = "Profile Photo (Optional)",
+                fileName = selectedProfilePhotoName,
+                onChooseClick = { openProfilePhotoPicker() }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        GradientButton(
+            horizontalPadding = 2.dp,
+            text = "Save & Continue",
+            onClick = {
+                val height = if (heightValue.isNotBlank()) "$heightValue $heightUnit" else ""
+                val weight = if (weightValue.isNotBlank()) "$weightValue $weightUnit" else ""
+
+                viewModel.updatePersonalInfo(
+                    fullName = fullName,
+                    contactNumber = contactNumber,
+                    email = email,
+                    dateOfBirth = dateOfBirth,
+                    gender = gender,
+                    height = height,
+                    weight = weight,
+                    profilePhotoUri = selectedProfilePhotoUri
+                )
+                onNext()
+            }
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+
+
+
+}
