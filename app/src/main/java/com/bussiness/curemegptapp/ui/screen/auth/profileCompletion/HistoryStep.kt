@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -72,7 +73,7 @@ fun HistoryStep(
 
             Row {
                 Text(
-                    text = "Chronic Conditions",
+                    text = stringResource(R.string.chronic_conditions_label),//"Chronic Conditions",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -139,7 +140,7 @@ fun HistoryStep(
             if ("Others" in selectedConditions) {
 
                 ProfileInputWithoutLabelField(
-                    placeholder = "Write Condition",
+                    placeholder = stringResource(R.string.write_condition_placeholder),//"Write Condition",
                     value = customCondition,
                     onValueChange = { customCondition = it }
                 )
@@ -150,9 +151,9 @@ fun HistoryStep(
             Spacer(modifier = Modifier.height(16.dp))
 
             ProfileInputMultipleLineField(
-                label = "Surgical History (Optional)",
+                label = stringResource(R.string.surgical_history_label),//"Surgical History (Optional)",
                 isImportant = false,
-                placeholder = "Any previous surgeries or major medical procedures...",
+                placeholder = stringResource(R.string.surgical_history_placeholder),//"Any previous surgeries or major medical procedures...",
                 value = surgicalHistory,
                 onValueChange = { surgicalHistory = it }
             )
@@ -161,7 +162,7 @@ fun HistoryStep(
 
 
             Text(
-                text = "Current Medications (Optional)",
+                text = stringResource(R.string.current_medications_label),//"Current Medications (Optional)",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -186,9 +187,9 @@ fun HistoryStep(
                         },
                         placeholder = {
                             if (index == 0)
-                                Text("Any medications you're currently taking...")
+                                Text(stringResource(R.string.medications_placeholder),/*"Any medications you're currently taking..."*/)
                             else
-                                Text("Added item")  // non editable item placeholder
+                                Text(stringResource(R.string.added_item_placeholder),/*"Added item"*/)  // non editable item placeholder
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -261,7 +262,7 @@ fun HistoryStep(
 
             // ⭐ Current Supplements
             Text(
-                text = "Current Supplements (Optional)",
+                text = stringResource(R.string.current_supplements_label)/*"Current Supplements (Optional)"*/,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -286,9 +287,9 @@ fun HistoryStep(
                         },
                         placeholder = {
                             if (index == 0)
-                                Text("Any supplements you're currently taking...")
+                                Text(stringResource(R.string.supplements_placeholder)/*"Any supplements you're currently taking..."*/)
                             else
-                                Text("Added item")
+                                Text(stringResource(R.string.added_item_placeholder)/*"Added item"*/)
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -361,7 +362,7 @@ fun HistoryStep(
             Spacer(modifier = Modifier.height(24.dp))
         }
         GradientButton(
-            text = "Save & Continue",
+            text = stringResource(R.string.save_and_continue),//"Save & Continue",
             onClick = {
                 val conditionsList = selectedConditions.toMutableList()
                 if ("Others" in selectedConditions && customCondition.isNotEmpty()) {

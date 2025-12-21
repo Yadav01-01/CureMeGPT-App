@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
@@ -74,8 +75,10 @@ fun PrivacyConsentScreen(navController: NavHostController) {
     ) {
         // Top Gradient Header
         GradientHeader(
-            heading = "Privacy & Consent",
-            description = "Please review and agree to continue"
+            heading = stringResource(R.string.privacy_consent_title),
+            description = stringResource(R.string.privacy_consent_description)
+//            heading = "Privacy & Consent",
+//            description = "Please review and agree to continue"
         )
 
         Spacer(modifier = Modifier.height(26.dp))
@@ -100,7 +103,7 @@ fun PrivacyConsentScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "Important Disclaimers",
+                    text = stringResource(R.string.important_disclaimers_title),
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
@@ -110,8 +113,8 @@ fun PrivacyConsentScreen(navController: NavHostController) {
 
             // Medical Disclaimer Box
             DisclaimerBox(
-                title = "Medical Disclaimer",
-                description = "This app provides AI-powered health insights for informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment.",
+                title = stringResource(R.string.medical_disclaimer_title),//"Medical Disclaimer",
+                description = stringResource(R.string.medical_disclaimer_description),//"This app provides AI-powered health insights for informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment.",
                 titleColor = Color(0xFF4338CA),
                 backColor = Color(0x084338CA)
             )
@@ -120,8 +123,8 @@ fun PrivacyConsentScreen(navController: NavHostController) {
 
             // Data Privacy Box
             DisclaimerBox(
-                title = "Data Privacy",
-                description = "Your health data is encrypted and stored securely. We comply with HIPAA and other privacy regulations.",
+                title = stringResource(R.string.data_privacy_title),//"Data Privacy",
+                description = stringResource(R.string.data_privacy_description),//"Your health data is encrypted and stored securely. We comply with HIPAA and other privacy regulations.",
                 titleColor = Color(0xFFDC2626),
                 backColor = Color(0x08F31D1D)
             )
@@ -147,14 +150,14 @@ fun PrivacyConsentScreen(navController: NavHostController) {
                     checked = checkbox1,
                     onCheckedChange = { checkbox1 = it },
                     text = buildAnnotatedString {
-                        append("I Have Read And Agree To The ")
+                        append(stringResource(R.string.consent_checkbox_1_part1)/*"I Have Read And Agree To The "*/)
                         withStyle(
                             style = SpanStyle(
                                 color = Color(0xFF4338CA),
                                 fontWeight = FontWeight.Normal
                             )
                         ) {
-                            append("Privacy Policy")
+                            append(stringResource(R.string.privacy_policy_link)/*"Privacy Policy"*/)
                         }
                     }
                 )
@@ -165,14 +168,14 @@ fun PrivacyConsentScreen(navController: NavHostController) {
                     checked = checkbox2,
                     onCheckedChange = { checkbox2 = it },
                     text = buildAnnotatedString {
-                        append("I Agree To The ")
+                        append(stringResource(R.string.consent_checkbox_2_part1)/*"I Agree To The "*/)
                         withStyle(
                             style = SpanStyle(
                                 color = Color(0xFF4338CA),
                                 fontWeight = FontWeight.Normal
                             )
                         ) {
-                            append("Terms Of Service")
+                            append(stringResource(R.string.terms_of_service_link)/*"Terms Of Service"*/)
                         }
                     }
                 )
@@ -183,7 +186,7 @@ fun PrivacyConsentScreen(navController: NavHostController) {
                     checked = checkbox3,
                     onCheckedChange = { checkbox3 = it },
                     text = buildAnnotatedString {
-                        append("I Understand This App Does Not Replace Professional Medical Advice")
+                        append(stringResource(R.string.consent_checkbox_3)/*"I Understand This App Does Not Replace Professional Medical Advice"*/)
                     }
                 )
 
@@ -193,7 +196,7 @@ fun PrivacyConsentScreen(navController: NavHostController) {
                     checked = checkbox4,
                     onCheckedChange = { checkbox4 = it },
                     text = buildAnnotatedString {
-                        append("I Consent to the processing of my health data for AI analysis")
+                        append(stringResource(R.string.consent_checkbox_4)/*"I Consent to the processing of my health data for AI analysis"*/)
                     }
                 )
             }
@@ -202,14 +205,15 @@ fun PrivacyConsentScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         // I Agree - Continue Button
+        var allterm = stringResource(R.string.accept_all_terms_error)
         GradientButton(
-            text = "I Agree - Continue",
+            text =  stringResource(R.string.i_agree_continue_button)/*"I Agree - Continue"*/,
             onClick = {   if (allChecked) {
                 navController.navigate(AppDestination.ProfileCompletion)
             } else {
                 Toast.makeText(
                     context,
-                    "Please accept all terms to continue",
+                    allterm/*"Please accept all terms to continue"*/,
                     Toast.LENGTH_SHORT
                 ).show()
             } }
@@ -233,7 +237,7 @@ fun PrivacyConsentScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = "Encrypted",
+                text = stringResource(R.string.encrypted_text)/*"Encrypted"*/,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,

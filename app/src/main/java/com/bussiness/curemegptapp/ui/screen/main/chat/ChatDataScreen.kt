@@ -3,11 +3,13 @@ package com.bussiness.curemegptapp.ui.screen.main.chat
 //ChatDataScreen
 
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -23,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -74,36 +78,48 @@ fun ChatDataScreen(navController: NavHostController) {
         }
     ) {
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+
+        ) {
+
+            // Background Image
+            Image(
+                painter = painterResource(id = R.drawable.chat_background),
+                contentDescription = null,
+                modifier = Modifier.matchParentSize(),
+                contentScale = ContentScale.FillBounds
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFFFFFFF))
-            .statusBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+                ChatHeader(
+                    logoRes = R.drawable.ic_logo,
+                    sideArrow = R.drawable.ic_cross_icon,
+                    filterIcon = R.drawable.ic_filter_menu_icon3,
+                    menuIcon = R.drawable.ic_menu_icon3,
+                    onLeftIconClick = { navController.popBackStack() },
+                    onFilterClick = {
 
-        ChatHeader(
-            logoRes = R.drawable.ic_logo,
-            sideArrow = R.drawable.ic_cross_icon,
-            filterIcon = R.drawable.ic_filter_menu_icon3,
-            menuIcon = R.drawable.ic_menu_icon3,
-            onLeftIconClick = { navController.popBackStack() },
-            onFilterClick = {
-
-                showDrawer = true
-            },
-            //onMenuClick = {}
-            menuContent = {
-                SwitchShareDeletePopUpMenu(
-                    switchText = "Switch to Case",
-                    onSwitchClick = {
-                        showSwitchDialog = true
+                        showDrawer = true
                     },
-                    onShareClick = {
-                        // Share logic
-                        val shareText = """
+                    //onMenuClick = {}
+                    menuContent = {
+                        SwitchShareDeletePopUpMenu(
+                            switchText = "Switch to Case",
+                            onSwitchClick = {
+                                showSwitchDialog = true
+                            },
+                            onShareClick = {
+                                // Share logic
+                                val shareText = """
             Hey 👋
             
             This is a dummy chat message.
@@ -112,62 +128,63 @@ fun ChatDataScreen(navController: NavHostController) {
             Shared from CureMeGPT App 🚀
         """.trimIndent()
 
-                        val intent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, shareText)
-                        }
+                                val intent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, shareText)
+                                }
 
-                        context.startActivity(
-                            Intent.createChooser(intent, "Share chat via")
+                                context.startActivity(
+                                    Intent.createChooser(intent, "Share chat via")
+                                )
+                            },
+                            onDeleteClick = {
+                                showDeleteDialog = true
+                            }
                         )
-                    },
-                    onDeleteClick = {
-                        showDeleteDialog = true
                     }
                 )
+
+                /** CHAT BODY + MESSAGE BAR */
+                ConstraintLayout(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    // Create references
+                    val (chatSection, messageBar) = createRefs()
+
+
+                    CommunityChatSection(
+                        messages = messages,
+                        listState = listState,
+                        viewModel = viewModel,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .navigationBarsPadding()
+                            .constrainAs(chatSection) {
+                                top.linkTo(parent.top)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                                bottom.linkTo(messageBar.top)
+                                height = Dimension.fillToConstraints
+                            }
+                    )
+
+                    BottomMessageBar2(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .constrainAs(messageBar) {
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                            .padding(bottom = 10.dp),
+                        state = uiState,
+                        viewModel = viewModel
+                    )
+                }
             }
-                )
-
-        /** CHAT BODY + MESSAGE BAR */
-        ConstraintLayout(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            // Create references
-            val (chatSection, messageBar) = createRefs()
-
-
-            CommunityChatSection(
-                messages = messages,
-                listState = listState,
-                viewModel = viewModel,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding()
-                    .constrainAs(chatSection) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(messageBar.top)
-                        height = Dimension.fillToConstraints
-                    }
-            )
-
-            BottomMessageBar2(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(messageBar) {
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                    .padding(horizontal = 5.dp).padding(bottom = 10.dp),
-                state = uiState,
-                viewModel = viewModel
-            )
         }
-    }
     }
 
     if (showSwitchDialog) {

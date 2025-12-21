@@ -1,6 +1,7 @@
 package com.bussiness.curemegptapp.ui.screen.auth
 
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,6 +32,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -45,42 +48,84 @@ import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
+import com.bussiness.curemegptapp.util.ValidationUtils
 
 @Composable
 fun CreateAccountScreen(navController: NavHostController) {
+    val context = LocalContext.current
     // FORM
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var accountCreatedSuccessfully = stringResource(R.string.account_created_success)
     Column(
         modifier = Modifier
             .fillMaxSize().imePadding()
             .background(Color.White).verticalScroll(rememberScrollState())
     ) {
 
-        GradientHeader(heading = "Create Your Account", description = "Join and let AI guide your dental & family health.")
+        GradientHeader( heading = stringResource(R.string.create_account_title),
+            description = stringResource(R.string.create_account_description))
 
         Spacer(modifier = Modifier.height(55.dp))
 
-        GradientIconInputField(icon = R.drawable.profile_ic,placeholder = "Full Name", value = name, onValueChange = { name = it })
+        GradientIconInputField(icon = R.drawable.profile_ic, placeholder = stringResource(R.string.full_name_placeholder), value = name, onValueChange = { name = it })
 
         Spacer(Modifier.height(20.dp))
         // Email Field
-        GradientIconInputField(icon = R.drawable.mail_ic,placeholder = "Email / Phone Number", value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
+        GradientIconInputField(icon = R.drawable.mail_ic,placeholder = stringResource(R.string.email_phone_placeholder), value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
 
         Spacer(Modifier.height(20.dp))
 
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Password", value = password, onValueChange = { password = it }, isPassword = true)
+        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = stringResource(R.string.password_placeholder),/*"Password",*/ value = password, onValueChange = { password = it }, isPassword = true)
 
         Spacer(Modifier.height(20.dp))
 
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = "Confirm Password", value = confirmPassword, onValueChange = { confirmPassword = it }, isPassword = true)
+        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = stringResource(R.string.confirm_password_placeholder), /*"Confirm Password",*/ value = confirmPassword, onValueChange = { confirmPassword = it }, isPassword = true)
 
         Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
-        GradientButton(text = "Sign Up", onClick = { navController.navigate("verifyOtp?from=create&email=$email") })
+     //   GradientButton(text = "Sign Up", onClick = { navController.navigate("verifyOtp?from=create&email=$email") })
+
+// Gradient Sign Up Button
+        GradientButton( text = stringResource(R.string.sign_up_button),
+           // text = "Sign Up",
+            onClick = {
+                // Validate all inputs in sequence
+                val nameValidation = ValidationUtils.validateName(name)
+                if (!nameValidation.isValid) {
+                    Toast.makeText(context, nameValidation.errorMessage, Toast.LENGTH_LONG).show()
+                    return@GradientButton
+                }
+
+                val emailOrPhoneValidation = ValidationUtils.validateEmailOrPhone(email)
+                if (!emailOrPhoneValidation.isValid) {
+                    Toast.makeText(context, emailOrPhoneValidation.errorMessage, Toast.LENGTH_LONG).show()
+                    return@GradientButton
+                }
+
+                val passwordValidation = ValidationUtils.validatePassword(password)
+                if (!passwordValidation.isValid) {
+                    Toast.makeText(context, passwordValidation.errorMessage, Toast.LENGTH_LONG).show()
+                    return@GradientButton
+                }
+
+                val confirmPasswordValidation = ValidationUtils.validateConfirmPassword(password, confirmPassword)
+                if (!confirmPasswordValidation.isValid) {
+                    Toast.makeText(context, confirmPasswordValidation.errorMessage, Toast.LENGTH_LONG).show()
+                    return@GradientButton
+                }
+
+                // All validations passed
+                // TODO: Call sign up API here
+
+                Toast.makeText(context,accountCreatedSuccessfully, /*"Account created successfully!",*/ Toast.LENGTH_SHORT).show()
+                navController.navigate("verifyOtp?from=create&email=$email")
+            }
+        )
+
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -92,14 +137,14 @@ fun CreateAccountScreen(navController: NavHostController) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Already have an account?" ,
+                text = stringResource(R.string.already_have_account),//"Already have an account?" ,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 17.sp
             )
             Spacer(Modifier.width(4.dp))
             Text(
-                text = " Login",
+                text = stringResource(R.string.login_link), //" Login",
                 color = Color(0xFF4338CA),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,

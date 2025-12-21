@@ -47,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -55,6 +56,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -174,321 +177,729 @@ fun BottomMessageBar2(
     }
     var showUserDropdown by remember { mutableStateOf(false) }
 
+
+
+/*
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+
+               // .padding(horizontal = 5.dp).padding(bottom = 8.dp)
+        ) {
+
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth().wrapContentHeight()
+
+            ) {
+
+                if (showUserDropdown) {
+                    Image(
+                        painter = painterResource(id = R.drawable.white_curved_image2),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth().height(400.dp).align(Alignment.BottomCenter),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth().align(Alignment.BottomCenter)
+
+                     //   .padding(horizontal = 5.dp).padding(bottom = 8.dp)
+                ) {
+                    Surface(
+                        modifier = Modifier
+                            .wrapContentWidth()
+
+                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 18.dp),
+                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+                        color = Color.White,
+                        //shadowElevation = if (showUserDropdown) 2.dp else 0.dp
+                    ) {
+
+                        Surface(
+                            modifier = Modifier
+                                .wrapContentWidth().padding(horizontal = 10.dp).padding(top = 6.dp)
+                                .clickable { showUserDropdown = !showUserDropdown },
+                            shape = RoundedCornerShape(30.dp),
+                            color = Color(0xFFF0EDFF),
+
+                            ) {
+                            Row(
+                                modifier = Modifier.padding(6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+
+                                Image(
+                                    painter = painterResource(R.drawable.ic_chat_circle_person_icon),
+                                    contentDescription = null,
+                                    modifier = Modifier.wrapContentSize()
+                                )
+
+                                Spacer(Modifier.width(4.dp))
+
+                                Text(
+                                    selectedUser,
+                                    color = Color(0xFF5B47DB),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Spacer(Modifier.width(4.dp))
+                                Image(
+
+                                    painter = painterResource(
+                                        if (showUserDropdown) R.drawable.ic_dropdown_show
+                                        else R.drawable.ic_dropdown_icon
+                                    ),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(end = 6.dp)
+                                )
+                            }
+                        }
+                    }
+
+
+
+                    if (showUserDropdown) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            ) {
+                                users.forEachIndexed { index, user ->
+
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(44.dp)
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = null
+                                            ) {
+
+                                                selectedUser = user
+                                                showUserDropdown = false
+                                            }
+                                            .padding(horizontal = 16.dp)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxSize(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            // User name with proper styling
+                                            Text(
+                                                text = user,
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                                fontWeight = if (user == selectedUser) FontWeight.Medium else FontWeight.Normal,
+                                                color = if (user == selectedUser) Color(0xFF4338CA) else Color(
+                                                    0xFF374151
+                                                )
+                                            )
+
+                                            // Tick icon only for selected user
+                                            if (user == selectedUser) {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.ic_tick_icon),
+                                                    contentDescription = "Selected",
+                                                    modifier = Modifier.size(20.dp)
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Spacer(Modifier.height(20.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp).padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.width(5.dp))
+                // Rounded text box
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentHeight()
+                        .background(Color(0xFFF5F0FF), RoundedCornerShape(28.dp))
+                        .padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.attach_ic),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .wrapContentSize().align(alignment = Alignment.Bottom)
+                            .padding(start = 13.dp, bottom = 13.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                // imageLauncher.launch("image/*")
+                                fileLauncher.launch(
+                                    arrayOf(
+                                        "image/*",
+                                        "application/pdf"
+                                    )
+                                )
+                            }
+                    )
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    Column {
+                        if (state.images.isNotEmpty() || state.pdfs.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            InlineAttachmentPreview(
+                                images = state.images,
+                                pdfs = state.pdfs,
+                                onRemoveImage = viewModel::removeImage,
+                                onRemovePdf = viewModel::removePdf
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                        }
+                        if (!showText) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(0xFFF4EFFF), RoundedCornerShape(20.dp))
+                                    .padding(10.dp)
+                            ) {
+                                Text(
+                                    text = "See text",
+                                    color = Color(0xFF374151),
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                        .clickable {
+                                            showText = true
+                                        }
+                                )
+
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                                    Icon(
+                                        painterResource(R.drawable.ic_close),
+                                        contentDescription = null,
+                                        tint = Color.Unspecified,
+                                        modifier = Modifier.size(23.dp).clickable {
+                                            speechRecognizer.cancel()
+                                            recognizedText = ""
+                                            viewModel.onMessageChange("")
+                                            rmsValue = 0f
+                                            isRecording = false
+                                            showText = true
+
+                                        }
+                                    )
+
+                                    Spacer(Modifier.width(12.dp))
+
+
+                                    if (isRecording) {
+                                        val composition by rememberLottieComposition(
+                                            LottieCompositionSpec.RawRes(R.raw.ic_voice_wave_json)
+                                        )
+
+                                        LottieAnimation(
+                                            composition,
+                                            iterations = LottieConstants.IterateForever,
+                                            modifier = Modifier.weight(1f)
+                                        )
+
+                                    } else {
+                                        Image(
+                                            painter = painterResource(R.drawable.voice_waveform),
+                                            contentDescription = null,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+
+                                    Spacer(Modifier.width(12.dp))
+
+
+                                }
+                            }
+                        } else {
+                            if (showText) {
+                                voiceText = recognizedText
+                            }
+
+
+                            TextField(
+                                // value = textInput + voiceText,
+                                value = state.message,
+                                onValueChange = {
+                                    viewModel.onMessageChange(it)
+                                    // textInput = it
+                                    recognizedText = ""
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                textStyle = TextStyle(
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                    fontSize = 13.sp,
+                                    color = Color.Black
+                                ),
+                                placeholder = {
+                                    Text(
+                                        "Ask anything…",
+                                        fontSize = 12.sp,
+                                        color = Color(0xFF949494),
+                                        fontFamily = FontFamily(Font(R.font.urbanist_regular))
+                                    )
+                                },
+                                maxLines = 4,
+                                colors = TextFieldDefaults.colors(
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    focusedContainerColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
+                                    focusedTextColor = Color.Black,
+                                    unfocusedTextColor = Color.Black,
+                                    cursorColor = Color.Black
+                                )
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                val isMessageEmpty =
+                    state.message.isBlank() && recognizedText.isBlank()
+
+
+                if (isMessageEmpty) {
+                    IconButton(
+                        onClick = {
+                            if (!isRecording) {
+                                recognizedText = ""
+                                showText = false
+                                speechRecognizer.startListening(intent)
+                            } else {
+                                speechRecognizer.stopListening()
+                            }
+                        },
+
+                        ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.voiceinc_ic),
+                            // painter = painterResource(id = R.drawable.ic_mic_icon),
+                            contentDescription = "Voice Input",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.wrapContentSize()
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = {
+                            viewModel.sendMessageFromInput()
+                            onSendClicked()
+                        }
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.send_ic),
+                            contentDescription = "Send",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.wrapContentSize()
+                        )
+                    }
+
+            }
+        }
+    }
+
+ */
+ */*/
     Column(
         modifier = modifier
             .fillMaxWidth()
 
-            .padding(horizontal = 5.dp).padding(bottom = 8.dp)
+        // .padding(horizontal = 5.dp).padding(bottom = 8.dp)
     ) {
-
-        Surface(
+        ConstraintLayout(
             modifier = Modifier
-                .wrapContentWidth()
-
-                .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 18.dp),
-            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            color = Color.White,
-            shadowElevation = if (showUserDropdown) 2.dp else 0.dp
+                .height(290.dp)
+                .fillMaxWidth()
         ) {
+            val (chatSection, messageBar, image) = createRefs()
 
-            Surface(
-                modifier = Modifier
-                    .wrapContentWidth().padding(horizontal = 10.dp).padding(top = 6.dp)
-                    .clickable { showUserDropdown = !showUserDropdown },
-                shape = RoundedCornerShape(30.dp),
-                color = Color(0xFFF0EDFF),
-
-                ) {
-                Row(
-                    modifier = Modifier.padding(6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Image(
-                        painter = painterResource(R.drawable.ic_chat_circle_person_icon),
-                        contentDescription = null,
-                        modifier = Modifier.wrapContentSize()
-                    )
-
-                    Spacer(Modifier.width(4.dp))
-
-                    Text(
-                        selectedUser,
-                        color = Color(0xFF5B47DB),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Spacer(Modifier.width(4.dp))
-                    Image(
-
-                        painter = painterResource(
-                            if (showUserDropdown) R.drawable.ic_dropdown_show
-                            else R.drawable.ic_dropdown_icon
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 6.dp)
-                    )
-                }
+            if (showUserDropdown) {
+                Image(
+                    painter = painterResource(id = R.drawable.white_curved_image2),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth().wrapContentHeight().constrainAs(image) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                            bottom.linkTo(parent.bottom)
+                            height = Dimension.fillToConstraints
+                        },
+                    contentScale = ContentScale.FillBounds
+                )
             }
-        }
 
-
-        if (showUserDropdown) {
-            Card(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                    .fillMaxWidth().wrapContentHeight()
+                    .constrainAs(chatSection) {
+                        // top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(messageBar.top)
+                        height = Dimension.fillToConstraints
+                    }
             ) {
+
+
                 Column(
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = modifier
+                        .fillMaxWidth().align(Alignment.BottomCenter)
+
+                    //   .padding(horizontal = 5.dp).padding(bottom = 8.dp)
                 ) {
-                    users.forEachIndexed { index, user ->
+                    Surface(
+                        modifier = Modifier
+                            .wrapContentWidth()
 
-                        Box(
+                            .align(Alignment.CenterHorizontally)
+                            .padding(horizontal = 18.dp),
+                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+                        color = Color.Transparent,
+                        //shadowElevation = if (showUserDropdown) 2.dp else 0.dp
+                    ) {
+
+                        Surface(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(44.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) {
-
-                                    selectedUser = user
-                                    showUserDropdown = false
-                                }
-                                .padding(horizontal = 16.dp)
+                                .wrapContentWidth().padding(horizontal = 10.dp).padding(top = 3.dp)
+                                .clickable { showUserDropdown = !showUserDropdown },
+                            shape = RoundedCornerShape(30.dp),
+                            color = Color(0xFFF0EDFF),
                         ) {
                             Row(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier.padding(6.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                // User name with proper styling
-                                Text(
-                                    text = user,
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                                    fontWeight = if (user == selectedUser) FontWeight.Medium else FontWeight.Normal,
-                                    color = if (user == selectedUser) Color(0xFF4338CA) else Color(0xFF374151)
+
+                                Image(
+                                    painter = painterResource(R.drawable.ic_chat_circle_person_icon),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(13.dp)
                                 )
 
-                                // Tick icon only for selected user
-                                if (user == selectedUser) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_tick_icon),
-                                        contentDescription = "Selected",
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                }
+                                Spacer(Modifier.width(2.dp))
+
+                                Text(
+                                    selectedUser,
+                                    color = Color(0xFF5B47DB),
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Spacer(Modifier.width(2.dp))
+                                Image(
+
+                                    painter = painterResource(
+                                        if (showUserDropdown) R.drawable.ic_dropdown_show
+                                        else R.drawable.ic_dropdown_icon
+                                    ),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(10.dp).padding(end = 4.dp)
+                                )
                             }
                         }
-
                     }
-                }
-            }
-        }
 
 
-        Spacer(Modifier.height(20.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Spacer(modifier = Modifier.width(5.dp))
-            // Rounded text box
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentHeight()
-                    .background(Color(0xFFF5F0FF), RoundedCornerShape(28.dp))
-                    .padding(horizontal = 10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.attach_ic),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .wrapContentSize().align(alignment = Alignment.Bottom).padding(start = 13.dp, bottom = 13.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            // imageLauncher.launch("image/*")
-                            fileLauncher.launch(
-                                arrayOf(
-                                    "image/*",
-                                    "application/pdf"
-                                )
-                            )
-                        }
-                )
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column {
-                    if (state.images.isNotEmpty() || state.pdfs.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        InlineAttachmentPreview(
-                            images = state.images,
-                            pdfs = state.pdfs,
-                            onRemoveImage = viewModel::removeImage,
-                            onRemovePdf = viewModel::removePdf
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
-                    }
-                    if (!showText) {
-                        Column(
+                    if (showUserDropdown) {
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color(0xFFF4EFFF), RoundedCornerShape(20.dp))
-                                .padding(10.dp)
+                                .wrapContentHeight(),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
-                            Text(
-                                text = "See text",
-                                color = Color(0xFF374151),
-                                modifier = Modifier.align(Alignment.CenterHorizontally).clickable {
-                                    showText = true
-                                }
-                            )
+                            Column(
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            ) {
+                                users.forEachIndexed { index, user ->
 
-                            Spacer(modifier = Modifier.height(12.dp))
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(44.dp)
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = null
+                                            ) {
 
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                                selectedUser = user
+                                                showUserDropdown = false
+                                            }
+                                            .padding(horizontal = 16.dp)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxSize(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            // User name with proper styling
+                                            Text(
+                                                text = user,
+                                                fontSize = 16.sp,
+                                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                                fontWeight = if (user == selectedUser) FontWeight.Medium else FontWeight.Normal,
+                                                color = if (user == selectedUser) Color(0xFF4338CA) else Color(
+                                                    0xFF374151
+                                                )
+                                            )
 
-                                Icon(
-                                    painterResource(R.drawable.ic_close),
-                                    contentDescription = null,
-                                    tint = Color.Unspecified,
-                                    modifier = Modifier.size(23.dp).clickable {
-                                        speechRecognizer.cancel()
-                                        recognizedText = ""
-                                        viewModel.onMessageChange("")
-                                        rmsValue = 0f
-                                        isRecording = false
-                                        showText = true
-
+                                            // Tick icon only for selected user
+                                            if (user == selectedUser) {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.ic_tick_icon),
+                                                    contentDescription = "Selected",
+                                                    modifier = Modifier.size(20.dp)
+                                                )
+                                            }
+                                        }
                                     }
-                                )
 
-                                Spacer(Modifier.width(12.dp))
-
-
-                                if (isRecording) {
-                                    val composition by rememberLottieComposition(
-                                        LottieCompositionSpec.RawRes(R.raw.ic_voice_wave_json)
-                                    )
-
-                                    LottieAnimation(
-                                        composition,
-                                        iterations = LottieConstants.IterateForever,
-                                        modifier = Modifier.weight(1f)
-                                    )
-
-                                } else {
-                                    Image(
-                                        painter = painterResource(R.drawable.voice_waveform),
-                                        contentDescription = null,
-                                        modifier = Modifier.weight(1f)
-                                    )
                                 }
-
-                                Spacer(Modifier.width(12.dp))
-
-
                             }
                         }
                     }
-                    else {
-                        if(showText){  voiceText = recognizedText}
+                }
+            }
 
+            Column(modifier = Modifier.fillMaxWidth().constrainAs(messageBar) {
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }.background(color = Color.White)) {
 
-                        TextField(
-                           // value = textInput + voiceText,
-                            value = state.message,
-                            onValueChange = {
-                                viewModel.onMessageChange(it)
-                               // textInput = it
-                                recognizedText = "" },
-                            modifier = Modifier.fillMaxWidth(),
-                            textStyle = TextStyle(
-                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                                fontSize = 13.sp,
-                                color = Color.Black
-                            ),
-                            placeholder = {
-                                Text(
-                                    "Ask anything…",
-                                    fontSize = 12.sp,
-                                    color = Color(0xFF949494),
-                                    fontFamily = FontFamily(Font(R.font.urbanist_regular))
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp).padding(bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.width(5.dp))
+                // Rounded text box
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentHeight()
+                        .background(Color(0xFFF5F0FF), RoundedCornerShape(28.dp))
+                        .padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.attach_ic),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .wrapContentSize().align(alignment = Alignment.Bottom)
+                            .padding(start = 13.dp, bottom = 13.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                // imageLauncher.launch("image/*")
+                                fileLauncher.launch(
+                                    arrayOf(
+                                        "image/*",
+                                        "application/pdf"
+                                    )
                                 )
-                            },
-                            maxLines = 4,
-                            colors = TextFieldDefaults.colors(
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                focusedTextColor = Color.Black,
-                                unfocusedTextColor = Color.Black,
-                                cursorColor = Color.Black
-                            ))
-                    }
-                }
-            }
+                            }
+                    )
 
-            Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
-            val isMessageEmpty =
-                state.message.isBlank() && recognizedText.isBlank()
-
-
-            if (isMessageEmpty) {
-                IconButton(
-                    onClick = {
-                        if (!isRecording) {
-                            recognizedText = ""
-                            showText = false
-                            speechRecognizer.startListening(intent)
-                        } else {
-                            speechRecognizer.stopListening()
+                    Column {
+                        if (state.images.isNotEmpty() || state.pdfs.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            InlineAttachmentPreview(
+                                images = state.images,
+                                pdfs = state.pdfs,
+                                onRemoveImage = viewModel::removeImage,
+                                onRemovePdf = viewModel::removePdf
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
                         }
-                    },
+                        if (!showText) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(0xFFF4EFFF), RoundedCornerShape(20.dp))
+                                    .padding(10.dp)
+                            ) {
+                                Text(
+                                    text = "See text",
+                                    color = Color(0xFF374151),
+                                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                                        .clickable {
+                                            showText = true
+                                        }
+                                )
 
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.voiceinc_ic),
-                        // painter = painterResource(id = R.drawable.ic_mic_icon),
-                        contentDescription = "Voice Input",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.wrapContentSize()
-                    )
-                }
-            }
-            else {
-                IconButton(
-                    onClick = {
-                        viewModel.sendMessageFromInput()
-                        onSendClicked()
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+
+                                    Icon(
+                                        painterResource(R.drawable.ic_close),
+                                        contentDescription = null,
+                                        tint = Color.Unspecified,
+                                        modifier = Modifier.size(23.dp).clickable {
+                                            speechRecognizer.cancel()
+                                            recognizedText = ""
+                                            viewModel.onMessageChange("")
+                                            rmsValue = 0f
+                                            isRecording = false
+                                            showText = true
+
+                                        }
+                                    )
+
+                                    Spacer(Modifier.width(12.dp))
+
+
+                                    if (isRecording) {
+                                        val composition by rememberLottieComposition(
+                                            LottieCompositionSpec.RawRes(R.raw.ic_voice_wave_json)
+                                        )
+
+                                        LottieAnimation(
+                                            composition,
+                                            iterations = LottieConstants.IterateForever,
+                                            modifier = Modifier.weight(1f)
+                                        )
+
+                                    } else {
+                                        Image(
+                                            painter = painterResource(R.drawable.voice_waveform),
+                                            contentDescription = null,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+
+                                    Spacer(Modifier.width(12.dp))
+
+
+                                }
+                            }
+                        } else {
+                            if (showText) {
+                                voiceText = recognizedText
+                            }
+
+
+                            TextField(
+                                // value = textInput + voiceText,
+                                value = state.message,
+                                onValueChange = {
+                                    viewModel.onMessageChange(it)
+                                    // textInput = it
+                                    recognizedText = ""
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                textStyle = TextStyle(
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                    fontSize = 13.sp,
+                                    color = Color.Black
+                                ),
+                                placeholder = {
+                                    Text(
+                                        "Ask anything…",
+                                        fontSize = 12.sp,
+                                        color = Color(0xFF949494),
+                                        fontFamily = FontFamily(Font(R.font.urbanist_regular))
+                                    )
+                                },
+                                maxLines = 4,
+                                colors = TextFieldDefaults.colors(
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    focusedContainerColor = Color.Transparent,
+                                    unfocusedContainerColor = Color.Transparent,
+                                    focusedTextColor = Color.Black,
+                                    unfocusedTextColor = Color.Black,
+                                    cursorColor = Color.Black
+                                )
+                            )
+                        }
                     }
-                ) {
-                    Icon(
-                        painterResource(R.drawable.send_ic),
-                        contentDescription = "Send",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.wrapContentSize()
-                    )
+                }
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                val isMessageEmpty =
+                    state.message.isBlank() && recognizedText.isBlank()
+
+
+                if (isMessageEmpty) {
+                    IconButton(
+                        onClick = {
+                            if (!isRecording) {
+                                recognizedText = ""
+                                showText = false
+                                speechRecognizer.startListening(intent)
+                            } else {
+                                speechRecognizer.stopListening()
+                            }
+                        },
+
+                        ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.voiceinc_ic),
+                            // painter = painterResource(id = R.drawable.ic_mic_icon),
+                            contentDescription = "Voice Input",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.wrapContentSize()
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = {
+                            viewModel.sendMessageFromInput()
+                            onSendClicked()
+                        }
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.send_ic),
+                            contentDescription = "Send",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.wrapContentSize()
+                        )
+                    }
+
                 }
             }
         }
+        }
+
     }
+
 }
 
 

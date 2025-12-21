@@ -72,6 +72,7 @@ import com.bussiness.curemegptapp.ui.dialog.CaseDialog
 import com.bussiness.curemegptapp.ui.theme.gradientBrush
 import com.bussiness.curemegptapp.ui.viewModel.main.ChatViewModel
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.imePadding
 
 
 @Composable
@@ -214,6 +215,7 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                         .padding(horizontal = 20.dp)
                 ) {
 
+
                     AIChatHeader(
                         logoRes = R.drawable.ic_logo,
                         sideArrow = R.drawable.left_ic,
@@ -232,6 +234,12 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                         },
                         onFilterClick = { showDrawer = true },
                     )
+
+                    Column(
+                        modifier = Modifier.fillMaxSize().imePadding()
+                    ) {
+
+
 
                     // Main Content
                     LazyColumn(
@@ -409,12 +417,14 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                         item {
                             Spacer(modifier = Modifier.height(16.dp))
                         }
+
+
                     }
 
 
                     BottomMessageBar1(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth().background(color = Color.Transparent)
                             .padding(horizontal = 5.dp).padding(bottom = 10.dp),
                         state = chatInputState,
                         viewModel = chatViewModel,
@@ -423,6 +433,8 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                             shouldNavigate = true
                         }
                     )
+
+                    }
                 }
 
 

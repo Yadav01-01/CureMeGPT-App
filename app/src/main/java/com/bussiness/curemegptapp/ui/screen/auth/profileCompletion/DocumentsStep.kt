@@ -22,9 +22,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.data.model.ProfileData
 import com.bussiness.curemegptapp.ui.component.DisclaimerBox
 import com.bussiness.curemegptapp.ui.component.FileAttachment
@@ -57,9 +59,10 @@ fun DocumentsStep(
     ) {
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
             ProfilePhotoPicker(
-                label = "Upload Files (X-Rays, Dental Scans, Prescriptions, Lab Reports)",
-                fileName = if (profileData.uploadedFiles.isEmpty()) "No file chosen"
-                else "${profileData.uploadedFiles.size} files selected",
+                label = stringResource(R.string.upload_files_label),
+              //  label = "Upload Files (X-Rays, Dental Scans, Prescriptions, Lab Reports)",
+                fileName = if (profileData.uploadedFiles.isEmpty()) stringResource(R.string.no_file_chosen) //"No file chosen"
+                else "${profileData.uploadedFiles.size} ${stringResource(R.string.files_selected)}", //files selected
                 onChooseClick = {
                     filePickerLauncher.launch(
                         arrayOf(
@@ -72,7 +75,7 @@ fun DocumentsStep(
             )
 
             Text(
-                "PDF, JPG, PNG, DICOM Supported",
+                stringResource(R.string.file_formats_supported),//"PDF, JPG, PNG, DICOM Supported",
                 fontSize = 12.sp,
                 color = Color.Gray,
                 modifier = Modifier
@@ -107,7 +110,7 @@ fun DocumentsStep(
                     .padding(20.dp)
             ) {
                 Text(
-                    text = "Attached Files",
+                    text = stringResource(R.string.attached_files_title), //"Attached Files",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -116,7 +119,7 @@ fun DocumentsStep(
 
                 if (profileData.uploadedFiles.isEmpty()) {
                     Text(
-                        text = "No files uploaded",
+                        text =  stringResource(R.string.no_files_uploaded),//"No files uploaded",
                         color = Color.Gray,
                         fontSize = 13.sp
                     )
@@ -134,8 +137,8 @@ fun DocumentsStep(
             Spacer(modifier = Modifier.height(24.dp))
 
             DisclaimerBox(
-                title = "You're almost ready!",
-                description = "You can always add more details, upload documents, or update your profile later from the settings menu.",
+                title = stringResource(R.string.disclaimer_title), //"You're almost ready!",
+                description = stringResource(R.string.disclaimer_description),//"You can always add more details, upload documents, or update your profile later from the settings menu.",
                 titleColor = Color(0xFF4338CA),
                 backColor = Color(0x084338CA)
             )
@@ -143,7 +146,7 @@ fun DocumentsStep(
             Spacer(modifier = Modifier.height(24.dp))
         }
         GradientButton(
-            text = "Get Started",
+            text = stringResource(R.string.button_get_started),//"Get Started",
             onClick = {
                 viewModel.submitProfile()
 
@@ -155,9 +158,13 @@ fun DocumentsStep(
                     Email: ${profileData.email}
                     Files: ${profileData.uploadedFiles.size}
                 """.trimIndent()
-
-                Toast.makeText(context, "Profile data logged in Logcat", Toast.LENGTH_LONG)
-                    .show()
+                // Create toast message
+                val toastMessage = context.getString(R.string.profile_completed_toast)
+                Toast.makeText(
+                    context,
+                    toastMessage,
+                    Toast.LENGTH_LONG
+                ).show()
                 onNext()
 
             }

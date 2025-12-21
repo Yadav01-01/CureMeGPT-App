@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -78,7 +79,7 @@ fun GeneralInfoStep(
             Row {
 
                 Text(
-                    text = "Blood Group",
+                    text = stringResource(R.string.blood_group_label),//"Blood Group",
                     color = Color.Black,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     fontWeight = FontWeight.Normal,
@@ -108,7 +109,7 @@ fun GeneralInfoStep(
 
 
                 Text(
-                    text = "Known Allergies",
+                    text = stringResource(R.string.known_allergies_label),//"Known Allergies",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -169,7 +170,7 @@ fun GeneralInfoStep(
 
             if ("Others" in selectedAllergies) {
                 ProfileInputWithoutLabelField(
-                    placeholder = "Write allergy",
+                    placeholder = stringResource(R.string.write_allergy_placeholder),//"Write allergy",
                     value = customAllergy,
                     onValueChange = { customAllergy = it }
                 )
@@ -177,9 +178,9 @@ fun GeneralInfoStep(
             }
 
             ProfileInputField(
-                label = "Emergency Contact Name (Optional)",
+                label = stringResource(R.string.emergency_name_label),//"Emergency Contact Name (Optional)",
                 isImportant = false,
-                placeholder = "e.g. Bob Dsouza",
+                placeholder = stringResource(R.string.emergency_name_placeholder),//"e.g. Bob Dsouza",
                 value = emergencyName,
                 onValueChange = { emergencyName = it }
             )
@@ -187,9 +188,9 @@ fun GeneralInfoStep(
             Spacer(modifier = Modifier.height(16.dp))
 
             ProfileInputField(
-                label = "Emergency Phone Number (Optional)",
+                label =stringResource(R.string.emergency_phone_label),// "Emergency Phone Number (Optional)",
                 isImportant = false,
-                placeholder = "e.g. 555 945 325",
+                placeholder = stringResource(R.string.emergency_phone_placeholder),//"e.g. 555 945 325",
                 value = emergencyPhone,
                 onValueChange = { emergencyPhone = it }
             )
@@ -197,7 +198,7 @@ fun GeneralInfoStep(
             Spacer(modifier = Modifier.height(24.dp))
         }
         GradientButton(
-            text = "Save & Continue",
+            text = stringResource(R.string.save_and_continue),//"Save & Continue",
             onClick = {
                 val allergiesList = selectedAllergies.toMutableList()
                 if ("Others" in selectedAllergies && customAllergy.isNotEmpty()) {

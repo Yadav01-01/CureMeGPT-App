@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -48,17 +49,24 @@ fun ResetScreen(navController: NavHostController) {
             .background(Color.White)
     ) {
         // Top Gradient Header
-        GradientHeader(heading = "Reset Your Password", description = "Enter your registered email or phone number to reset your password.")
+        GradientHeader( heading = stringResource(R.string.reset_password_title),
+            description = stringResource(R.string.reset_password_description)
+            //heading = "Reset Your Password",
+          //  description = "Enter your registered email or phone number to reset your password."
+        )
 
         Spacer(modifier = Modifier.height(55.dp))
 
         // Email Field
-        GradientIconInputField(icon = R.drawable.mail_ic,placeholder = "Email / Phone Number", value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
+        GradientIconInputField(icon = R.drawable.mail_ic,
+            placeholder = stringResource(R.string.email_phone_placeholder),//"Email / Phone Number",
+            value = email, onValueChange = { email = it },
+            keyboardType = KeyboardType.Email)
 
         Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
-        GradientButton(text = "Send Code", onClick = { navController.navigate("verifyOtp?from=reset&email=$email")
+        GradientButton(text = stringResource(R.string.send_code_button)/*"Send Code"*/, onClick = { navController.navigate("verifyOtp?from=reset&email=$email")
         },modifier = Modifier.height(54.dp).padding(horizontal = 7.dp))
 
         Spacer(modifier = Modifier.weight(1f))
@@ -71,7 +79,7 @@ fun ResetScreen(navController: NavHostController) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Back to" ,
+                text = stringResource(R.string.back_to_text)/*"Back to" */,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
@@ -79,7 +87,7 @@ fun ResetScreen(navController: NavHostController) {
             )
             Spacer(Modifier.width(4.dp))
             Text(
-                text = " Login",
+                text = stringResource(R.string.login_link)/*" Login"*/,
                 color = Color(0xFF4338CA),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,

@@ -1,3 +1,159 @@
 <resources>
     <string name="app_name">CureMeGPT App</string>
+    <!-- Profile Completion Documents Step -->
+    <string name="upload_files_label">Upload Files (X-Rays, Dental Scans, Prescriptions, Lab Reports)</string>
+    <string name="no_file_chosen">No file chosen</string>
+    <string name="files_selected">files selected</string>
+    <string name="file_formats_supported">PDF, JPG, PNG, DICOM Supported</string>
+    <string name="attached_files_title">Attached Files</string>
+    <string name="no_files_uploaded">No files uploaded</string>
+    <string name="disclaimer_title">You\'re almost ready!</string>
+    <string name="disclaimer_description">You can always add more details, upload documents, or update your profile later from the settings menu.</string>
+    <string name="button_get_started">Get Started</string>
+    <string name="profile_completed_toast">Profile data logged in Logcat</string>
+
+
+    <string name="blood_group_label">Blood Group</string>
+    <string name="known_allergies_label">Known Allergies</string>
+    <string name="write_allergy_placeholder">Write allergy</string>
+    <string name="emergency_name_label">Emergency Contact Name (Optional)</string>
+    <string name="emergency_name_placeholder">e.g. Bob Dsouza</string>
+    <string name="emergency_phone_label">Emergency Phone Number (Optional)</string>
+    <string name="emergency_phone_placeholder">e.g. 555 945 325</string>
+    <string name="save_and_continue">Save &amp; Continue</string>
+
+    <!-- History Step Strings -->
+    <string name="chronic_conditions_label">Chronic Conditions</string>
+    <string name="write_condition_placeholder">Write Condition</string>
+    <string name="surgical_history_label">Surgical History (Optional)</string>
+    <string name="surgical_history_placeholder">Any previous surgeries or major medical procedures...</string>
+    <string name="current_medications_label">Current Medications (Optional)</string>
+    <string name="medications_placeholder">Any medications you\'re currently taking...</string>
+    <string name="current_supplements_label">Current Supplements (Optional)</string>
+    <string name="supplements_placeholder">Any supplements you\'re currently taking...</string>
+    <string name="added_item_placeholder">Added item</string>
+    <string name="add_icon_description">Add</string>
+    <string name="remove_icon_description">Remove</string>
+
+    <!-- Personal Info Step Strings -->
+    <string name="full_name_label">Full Name</string>
+    <string name="full_name_placeholder">e.g., James Carter</string>
+    <string name="contact_number_label">Contact Number</string>
+    <string name="contact_number_placeholder">555 123 456</string>
+    <string name="email_label">Email Address</string>
+    <string name="email_placeholder">james@gmail.com</string>
+    <string name="date_of_birth_label">Date of Birth</string>
+    <string name="date_of_birth_placeholder">MM-DD-YYYY</string>
+    <string name="gender_label">Gender</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+    <string name="height_label">Height (Cm/Ft)</string>
+    <string name="height_placeholder">e.g., 172 Cm</string>
+    <string name="height_unit_cm">Cm</string>
+    <string name="height_unit_ft">Ft</string>
+    <string name="weight_label">Weight (Kg/Lb)</string>
+    <string name="weight_placeholder">e.g., 78 Kg</string>
+    <string name="weight_unit_kg">Kg</string>
+    <string name="weight_unit_lb">Lb</string>
+    <string name="profile_photo_label">Profile Photo (Optional)</string>
+    <string name="selected_file">selected_file</string>
+
+    <!-- Profile Completion Dialog Strings -->
+    <string name="profile_completed_title">Profile Setup Completed!</string>
+    <string name="profile_completed_message">You can now add your family members or start asking AI for help.</string>
+    <string name="go_to_ask_ai">Go to Ask AI</string>
+    <string name="add_member">Add Member</string>
+
+    <!-- Uncomment if you need these dialog strings later -->
+    <!--
+    <string name="medication_reminder_title">Medication Reminder</string>
+    <string name="medication_reminder_message">Time to take your</string>
+    <string name="medication_reminder_highlight">Lisinopril 10mg.</string>
+    <string name="medication_reminder_warning">Don\'t forget to take it with food</string>
+    <string name="snooze">Snooze</string>
+    <string name="mark_as_taken">Mark As Taken</string>
+
+    <string name="appointment_reminder_title">Dental Cleaning Today</string>
+    <string name="appointment_reminder_message">Don\'t forget your dental cleaning appointment </string>
+    <string name="appointment_reminder_highlight">today at 2:00 PM with Dr. Sarah Johnson.</string>
+    <string name="remind_later">Remind Me Later</string>
+    <string name="got_it">Got It</string>
+
+    <string name="complete_profile_title">Complete Your Profile</string>
+    <string name="complete_profile_benefit_1">Faster AI answers tailored to you</string>
+    <string name="complete_profile_benefit_2">Safer medication &amp; allergy checks</string>
+    <string name="complete_profile_benefit_3">Quicker reminders &amp; records Complete Now</string>
+    <string name="complete_now">Complete Now</string>
+    <string name="skip_for_now">Skip for Now</string>
+    -->
+
+
+    <!-- Create Account Screen Strings -->
+    <string name="create_account_title">Create Your Account</string>
+    <string name="create_account_description">Join and let AI guide your dental &amp; family health.</string>
+    <string name="email_phone_placeholder">Email / Phone Number</string>
+    <string name="password_placeholder">Password</string>
+    <string name="confirm_password_placeholder">Confirm Password</string>
+    <string name="sign_up_button">Sign Up</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="login_link">Login</string>
+    <string name="account_created_success">Account created successfully!</string>
+
+    <!-- Full Name placeholder is already defined as 'full_name_placeholder' -->
+
+    <!-- Login Screen Strings -->
+    <string name="welcome_back_title">Welcome Back!</string>
+    <string name="welcome_back_description">Sign in to continue your dental health journey.</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login_button">Login</string>
+    <string name="login_success">Login successful!</string>
+    <string name="new_here">New here?</string>
+    <string name="create_account_link">Create an account</string>
+
+    <!-- Note: 'email_phone_placeholder' and 'password_placeholder' are already defined -->
+
+    <!-- New Password Screen Strings -->
+    <string name="new_password_title">New Password</string>
+    <string name="new_password_description">Please enter your new password.</string>
+    <string name="password_updated_title">Password updated\nSuccessfully!</string>
+    <string name="password_updated_description">Your password has been updated.</string>
+    <string name="submit_button">Submit</string>
+
+    <!-- Note: 'password_placeholder' and 'confirm_password_placeholder' are already defined -->
+
+    <!-- Privacy Consent Screen Strings -->
+    <string name="privacy_consent_title">Privacy &amp; Consent</string>
+    <string name="privacy_consent_description">Please review and agree to continue</string>
+    <string name="important_disclaimers_title">Important Disclaimers</string>
+    <string name="warning_icon_description">Warning</string>
+    <string name="medical_disclaimer_title">Medical Disclaimer</string>
+    <string name="medical_disclaimer_description">This app provides AI-powered health insights for informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment.</string>
+    <string name="data_privacy_title">Data Privacy</string>
+    <string name="data_privacy_description">Your health data is encrypted and stored securely. We comply with HIPAA and other privacy regulations.</string>
+
+    <!-- Consent Checkbox Strings -->
+    <string name="consent_checkbox_1_part1">I Have Read And Agree To The </string>
+    <string name="privacy_policy_link">Privacy Policy</string>
+    <string name="consent_checkbox_2_part1">I Agree To The </string>
+    <string name="terms_of_service_link">Terms Of Service</string>
+    <string name="consent_checkbox_3">I Understand This App Does Not Replace Professional Medical Advice</string>
+    <string name="consent_checkbox_4">I Consent to the processing of my health data for AI analysis</string>
+
+    <!-- Button and Footer Strings -->
+    <string name="i_agree_continue_button">I Agree - Continue</string>
+    <string name="accept_all_terms_error">Please accept all terms to continue</string>
+    <string name="encrypted_icon_description">Encrypted</string>
+    <string name="encrypted_text">Encrypted</string>
+
+    <!-- Reset Password Screen Strings -->
+    <string name="reset_password_title">Reset Your Password</string>
+    <string name="reset_password_description">Enter your registered email or phone number to reset your password.</string>
+    <string name="send_code_button">Send Code</string>
+    <string name="back_to_text">Back to</string>
+
+    <!-- Note: 'email_phone_placeholder' and 'login_link' are already defined -->
+
+<!--    stringResource(R.string.known_allergies_label),-->
+
 </resources>

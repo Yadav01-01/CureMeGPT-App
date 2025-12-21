@@ -92,7 +92,7 @@ fun ChatHeader(
    // onMenuClick: () -> Unit,
     menuContent: @Composable () -> Unit   // 👈 ADD THIS
 ) {
-    Column {
+    Column (modifier = Modifier.background(color = Color.White)) {
 
 
         Row(

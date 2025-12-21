@@ -182,131 +182,132 @@ fun BottomMessageBar1(
     Column(
         modifier = modifier
             .fillMaxWidth()
-
+            .background(color = Color.Transparent)
             .padding(horizontal = 5.dp).padding(bottom = 8.dp)
     ) {
 
-        if (isVisible){
-
-
-        Surface(
-            modifier = Modifier
-                .wrapContentWidth()
-
-                .align(Alignment.CenterHorizontally)
-                .padding(horizontal = 18.dp),
-            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
-            color = Color.White,
-            shadowElevation = if (showUserDropdown) 2.dp else 0.dp
-        ) {
-
-            Surface(
-                modifier = Modifier
-                    .wrapContentWidth().padding(horizontal = 10.dp).padding(top = 6.dp)
-                    .clickable { showUserDropdown = !showUserDropdown },
-                shape = RoundedCornerShape(30.dp),
-                color = Color(0xFFF0EDFF),
-
-                ) {
-                Row(
-                    modifier = Modifier.padding(6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Image(
-                        painter = painterResource(R.drawable.ic_chat_circle_person_icon),
-                        contentDescription = null,
-                        modifier = Modifier.wrapContentSize()
-                    )
-
-                    Spacer(Modifier.width(4.dp))
-
-                    Text(
-                        selectedUser,
-                        color = Color(0xFF5B47DB),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Spacer(Modifier.width(4.dp))
-                    Image(
-
-                        painter = painterResource(
-                            if (showUserDropdown) R.drawable.ic_dropdown_show
-                            else R.drawable.ic_dropdown_icon
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 6.dp)
-                    )
-                }
-            }
-        }
-
-
-        if (showUserDropdown) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(vertical = 8.dp)
-                ) {
-                    users.forEachIndexed { index, user ->
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(44.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) {
-
-                                    selectedUser = user
-                                    showUserDropdown = false
-                                }
-                                .padding(horizontal = 16.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                // User name with proper styling
-                                Text(
-                                    text = user,
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                                    fontWeight = if (user == selectedUser) FontWeight.Medium else FontWeight.Normal,
-                                    color = if (user == selectedUser) Color(0xFF4338CA) else Color(0xFF374151)
-                                )
-
-                                // Tick icon only for selected user
-                                if (user == selectedUser) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_tick_icon),
-                                        contentDescription = "Selected",
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-
-       // Spacer(Modifier.height(20.dp))
-        }
-        Spacer(Modifier.height(20.dp))
+/*//        if (isVisible){
+//
+//
+////        Surface(
+////            modifier = Modifier
+////                .wrapContentWidth()
+////
+////                .align(Alignment.CenterHorizontally)
+////                .padding(horizontal = 18.dp),
+////            shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
+////            color = Color.Transparent,
+////            shadowElevation = if (showUserDropdown) 2.dp else 0.dp
+////        ) {
+////
+////            Surface(
+////                modifier = Modifier
+////                    .wrapContentWidth().padding(horizontal = 10.dp).padding(top = 6.dp)
+////                    .clickable { showUserDropdown = !showUserDropdown },
+////                shape = RoundedCornerShape(30.dp),
+////                color = Color(0xFFF0EDFF),
+////
+////                ) {
+////                Row(
+////                    modifier = Modifier.padding(6.dp),
+////                    verticalAlignment = Alignment.CenterVertically,
+////                    horizontalArrangement = Arrangement.SpaceBetween
+////                ) {
+////
+////                    Image(
+////                        painter = painterResource(R.drawable.ic_chat_circle_person_icon),
+////                        contentDescription = null,
+////                        modifier = Modifier.wrapContentSize()
+////                    )
+////
+////                    Spacer(Modifier.width(4.dp))
+////
+////                    Text(
+////                        selectedUser,
+////                        color = Color(0xFF5B47DB),
+////                        fontSize = 14.sp,
+////                        fontWeight = FontWeight.Medium
+////                    )
+////                    Spacer(Modifier.width(4.dp))
+////                    Image(
+////
+////                        painter = painterResource(
+////                            if (showUserDropdown) R.drawable.ic_dropdown_show
+////                            else R.drawable.ic_dropdown_icon
+////                        ),
+////                        contentDescription = null,
+////                        modifier = Modifier.padding(end = 6.dp)
+////                    )
+////                }
+////            }
+////        }
+////
+////
+////        if (showUserDropdown) {
+////            Card(
+////                modifier = Modifier
+////                    .fillMaxWidth()
+////                    .wrapContentHeight(),
+////                shape = RoundedCornerShape(16.dp),
+////                colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+////                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+////            ) {
+////                Column(
+////                    modifier = Modifier.padding(vertical = 8.dp)
+////                ) {
+////                    users.forEachIndexed { index, user ->
+////
+////                        Box(
+////                            modifier = Modifier
+////                                .fillMaxWidth()
+////                                .height(44.dp)
+////                                .clickable(
+////                                    interactionSource = remember { MutableInteractionSource() },
+////                                    indication = null
+////                                ) {
+////
+////                                    selectedUser = user
+////                                    showUserDropdown = false
+////                                }
+////                                .padding(horizontal = 16.dp)
+////                        ) {
+////                            Row(
+////                                modifier = Modifier.fillMaxSize(),
+////                                horizontalArrangement = Arrangement.SpaceBetween,
+////                                verticalAlignment = Alignment.CenterVertically
+////                            ) {
+////                                // User name with proper styling
+////                                Text(
+////                                    text = user,
+////                                    fontSize = 16.sp,
+////                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+////                                    fontWeight = if (user == selectedUser) FontWeight.Medium else FontWeight.Normal,
+////                                    color = if (user == selectedUser) Color(0xFF4338CA) else Color(0xFF374151)
+////                                )
+////
+////                                // Tick icon only for selected user
+////                                if (user == selectedUser) {
+////                                    Image(
+////                                        painter = painterResource(id = R.drawable.ic_tick_icon),
+////                                        contentDescription = "Selected",
+////                                        modifier = Modifier.size(20.dp)
+////                                    )
+////                                }
+////                            }
+////                        }
+////
+////                    }
+////                }
+////            }
+////        }
+//
+//
+//       // Spacer(Modifier.height(20.dp))
+//        }
+       // Spacer(Modifier.height(20.dp))*/
+        Spacer(modifier = Modifier.height(5.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().background(Color.Transparent),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(5.dp))
