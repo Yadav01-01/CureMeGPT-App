@@ -14,7 +14,7 @@ import androidx.navigation.navArgument
 
 import com.bussiness.curemegptapp.ui.screen.main.schedule.HealthScheduleScreen
 import com.bussiness.curemegptapp.ui.screen.main.thingNeedingAttention.ThingNeedingAttentionScreen
-import com.bussiness.curemegptapp.ui.screen.main.addMedication.AddMedicationScreen
+import com.bussiness.curemegptapp.ui.screen.main.medication.AddMedicationScreen
 import com.bussiness.curemegptapp.ui.screen.main.alert.AlertScreen
 import com.bussiness.curemegptapp.ui.screen.main.familyMembersScreen.FamilyMembersScreen
 import com.bussiness.curemegptapp.ui.screen.main.familyPersonProfile.FamilyPersonProfileScreen
@@ -32,8 +32,10 @@ import com.bussiness.curemegptapp.ui.screen.main.chat.OpenChatScreen
 import com.bussiness.curemegptapp.ui.screen.main.editFamilyMemberDetails.EditFamilyMemberDetailsScreen
 import com.bussiness.curemegptapp.ui.screen.main.editProfile.EditProfileScreen
 import com.bussiness.curemegptapp.ui.screen.main.healthReports.HealthReportsScreen
+import com.bussiness.curemegptapp.ui.screen.main.medication.EditMedicationScreen
 import com.bussiness.curemegptapp.ui.screen.main.myProfile.MyProfileScreen
 import com.bussiness.curemegptapp.ui.screen.main.reports.ReportScreen
+import com.bussiness.curemegptapp.ui.screen.main.rescheduleAppointment.RescheduleAppointmentScreen
 import com.bussiness.curemegptapp.ui.screen.settings.SettingsScreen
 import com.bussiness.curemegptapp.ui.screen.settingsScreens.AboutScreen
 import com.bussiness.curemegptapp.ui.screen.settingsScreens.AccountPrivacyScreen
@@ -122,8 +124,16 @@ fun MainNavGraph(
             AccountPrivacyScreen(navController)
         }
 
-
-        composable<AppDestination.Reset> { ResetScreen(navController) }
+        composable(
+            route = "reset?from={from}",
+            arguments = listOf(
+                navArgument("from") { defaultValue = "" }
+            )
+        ) { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from") ?: ""
+            ResetScreen(navController, from)
+        }
+       // composable<AppDestination.Reset> { ResetScreen(navController) }
         // composable<AppDestination.VerifyOtp> { VerifyOtpScreen(navController) }
         composable(
             route = "verifyOtp?from={from}&email={email}",
@@ -136,7 +146,7 @@ fun MainNavGraph(
             val email = backStackEntry.arguments?.getString("email") ?: ""
             VerifyOtpScreen(navController, from, email)
         }
-        composable<AppDestination.NewPassword> { NewPasswordScreen(navController) }
+        composable<AppDestination.NewPassword> { NewPasswordScreen(navController, "main") }
 
         composable<AppDestination.DeleteAccountScreen> { DeleteAccountScreen(navController) }
 
@@ -155,6 +165,11 @@ fun MainNavGraph(
         }
 
         composable<AppDestination.EditFamilyMemberDetailsScreen> { EditFamilyMemberDetailsScreen(navController) }
+
+        composable<AppDestination.RescheduleAppointmentScreen> { RescheduleAppointmentScreen(navController) }
+
+        composable<AppDestination.EditMedicationScreen> { EditMedicationScreen(navController) }
+
         composable(
             route = "openChat?from={from}",
             arguments = listOf(
@@ -165,6 +180,5 @@ fun MainNavGraph(
             OpenChatScreen(navController, from)
         }
         composable<AppDestination.ChatDataScreen> { ChatDataScreen(navController) }
-
     }
 }

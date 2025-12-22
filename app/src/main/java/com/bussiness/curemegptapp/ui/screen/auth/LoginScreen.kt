@@ -82,7 +82,9 @@ fun LoginScreen(navController: NavHostController) {
                 .padding(horizontal = 18.dp)
                 .align(Alignment.End)
                 .clickable( interactionSource = remember { MutableInteractionSource() },
-                    indication = null){navController.navigate(AppDestination.Reset) },
+                    indication = null){
+                    navController.navigate("reset?from=auth")
+                                      },
             fontSize = 17.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             color = Color.Black,

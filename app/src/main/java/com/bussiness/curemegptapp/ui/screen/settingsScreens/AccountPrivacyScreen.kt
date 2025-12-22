@@ -112,10 +112,10 @@ fun AccountPrivacyScreen(navController: NavHostController) {
             Spacer(Modifier.height(6.dp))
 
         SettingOptionItem(
-            icon = R.drawable.ic_reset_icons,   // your delete icon
+            icon = R.drawable.ic_reset_icons,
             title = "Reset Your Password"
         ) {
-            navController.navigate(AppDestination.Reset)
+            navController.navigate("reset?from=main")
         }
 
 

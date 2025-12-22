@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.ui.screen.main.addMedication
+package com.bussiness.curemegptapp.ui.screen.main.medication
 
 import android.net.Uri
 import android.os.Build
@@ -38,10 +38,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,8 +55,6 @@ import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.ContinueButton
-import com.bussiness.curemegptapp.ui.component.FileAttachment
-import com.bussiness.curemegptapp.ui.component.ProfileInputField
 import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField2
 import com.bussiness.curemegptapp.ui.component.ProfileInputSmallField
 import com.bussiness.curemegptapp.ui.component.ProfilePhotoPicker
@@ -61,7 +64,6 @@ import com.bussiness.curemegptapp.ui.component.UniversalInputField
 import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
 import com.bussiness.curemegptapp.ui.dialog.SuccessfulDialog
-import com.bussiness.curemegptapp.ui.dialog.TimePickerDialog
 
 //AddMedicationScreen
 
@@ -136,7 +138,7 @@ fun AddMedicationScreen(
             .background(Color(0xFFFFFFFF))
     ) {
 
-        TopBarHeader1(title = "Add Medication", onBackClick = {})
+        TopBarHeader1(title = stringResource(R.string.add_medication_title)/*"Add Medication"*/, onBackClick = {})
 
         Column(
             modifier = Modifier
@@ -146,7 +148,7 @@ fun AddMedicationScreen(
 
 
             Text(
-                text = "For Family Member",
+                text = stringResource(R.string.for_family_member_label)/*"For Family Member"*/,
                 fontSize = 15.sp,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -166,7 +168,7 @@ fun AddMedicationScreen(
 
             Spacer(Modifier.height(24.dp))
             Text(
-                text = "Medication Type",
+                text = stringResource(R.string.medication_type_label)/*"Medication Type"*/,
                 fontSize = 15.sp,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -187,9 +189,9 @@ fun AddMedicationScreen(
 
             Row (Modifier.padding(vertical = 24.dp)) {
                 ProfileInputSmallField(
-                    label = "Medication Name",
+                    label = stringResource(R.string.medication_name_label)/*"Medication Name"*/,
                     isImportant = false,
-                    placeholder = "e.g., Amoxicillin",
+                    placeholder = stringResource(R.string.medication_name_placeholder)/*"e.g., Amoxicillin"*/,
                     value = medicationName,
                     onValueChange = { medicationName = it },
                     modifier = Modifier.weight(1f)
@@ -197,9 +199,9 @@ fun AddMedicationScreen(
                 Spacer(Modifier.width(5.dp))
 
                 ProfileInputSmallField(
-                    label = "Dosage",
+                    label = stringResource(R.string.dosage_label)/*"Dosage"*/,
                     isImportant = false,
-                    placeholder = "e.g., 500mg",
+                    placeholder = stringResource(R.string.dosage_placeholder)/*"e.g., 500mg"*/,
                     value = dosage,
                     onValueChange = { dosage = it },
                     modifier = Modifier.weight(1f)
@@ -210,7 +212,7 @@ fun AddMedicationScreen(
 
 
             Text(
-                text = "Frequency",
+                text = stringResource(R.string.frequency_label)/*"Frequency"*/,
                 fontSize = 15.sp,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -231,7 +233,7 @@ fun AddMedicationScreen(
             if (selectFrequency == "Weekly")
             {
                 Text(
-                    text = "Day",
+                    text = stringResource(R.string.day_label)/*"Day"*/,
                     fontSize = 15.sp,
                     color = Color.Black,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -253,7 +255,7 @@ fun AddMedicationScreen(
             Spacer(Modifier.height(24.dp))
 
             Text(
-                text = "Reminder time",
+                text = stringResource(R.string.reminder_time_label)/*"Reminder time"*/,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Normal,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular))
@@ -271,13 +273,14 @@ fun AddMedicationScreen(
                         value = reminderValue,   // ⭐ FIXED — Row ka real value
                         onValueChange = { newValue ->
                             if (index == 0) {   // ⭐ Only first editable
+                                val formattedValue = formatTimeInput(newValue)
                                 val updated = currentReminderTime.toMutableList()
-                                updated[index] = newValue
+                                updated[index] = formattedValue
                                 currentReminderTime = updated
                             }
                         },
                         placeholder = {
-                            Text("00:00:00")
+                            Text(stringResource(R.string.time_format_placeholder)/*"00:00:00"*/)
                         },
                         trailingIcon = {
                             Image(
@@ -352,9 +355,9 @@ fun AddMedicationScreen(
 
             Row (modifier = Modifier.padding(horizontal = 5.dp, vertical = 24.dp)) {
                 UniversalInputField(
-                    title = "Start Date",
+                    title = stringResource(R.string.start_date_label)/*"Start Date"*/,
                     isImportant = false,
-                    placeholder = "MM-DD-YYYY",
+                    placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
                     value = startDate,
                     modifier = Modifier.weight(1f),
                     rightIcon = R.drawable.ic_calender_icon
@@ -363,9 +366,9 @@ fun AddMedicationScreen(
                 }
                 Spacer(Modifier.width(5.dp))
                 UniversalInputField(
-                    title = "End Date (Optional)",
+                    title = stringResource(R.string.end_date_optional_label)/*"End Date (Optional)"*/,
                     isImportant = false,
-                    placeholder = "MM-DD-YYYY",
+                    placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
                     value = endDate,
                     modifier = Modifier.weight(1f),
                     rightIcon = R.drawable.ic_calender_icon
@@ -377,8 +380,8 @@ fun AddMedicationScreen(
 
 
             ProfilePhotoPicker(
-                label = "Upload Prescription (Optional)",
-                fileName = uploadedFiles?.let { getFileName(it) } ?: "No file chosen",
+                label = stringResource(R.string.upload_prescription_optional_label)/*"Upload Prescription (Optional)"*/,
+                fileName = uploadedFiles?.let { getFileName(it) } ?: stringResource(R.string.no_file_chosen)/*"No file chosen"*/,
                 onChooseClick = {
                     filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
                 }
@@ -386,7 +389,7 @@ fun AddMedicationScreen(
 
 
             Text(
-                "PDF, JPG, PNG, DICOM Supported",
+                stringResource(R.string.file_formats_supported)/* "PDF, JPG, PNG, DICOM Supported"*/,
                 fontSize = 12.sp,
                 color = Color.Gray,
                 modifier = Modifier
@@ -398,9 +401,9 @@ fun AddMedicationScreen(
             )
             Spacer(Modifier.height(24.dp))
             ProfileInputMultipleLineField2(
-                label = "Notes",
+                label = stringResource(R.string.notes_label)/*"Notes"*/,
                 isImportant = false,
-                placeholder = "Special instructions, side effects to watch for....",
+                placeholder = stringResource(R.string.notes_placeholder)/*"Special instructions, side effects to watch for...."*/,
                 value = description,
                 onValueChange = { description = it },
                 heightOfEditText = 135.dp,
@@ -429,7 +432,7 @@ fun AddMedicationScreen(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
-                    text = "Enable reminder",
+                    text = stringResource(R.string.enable_reminder_label)/*"Enable reminder"*/,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     fontWeight = FontWeight.Normal,
                     fontSize = 15.sp,
@@ -445,11 +448,11 @@ fun AddMedicationScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
 
-                CancelButton(title = "Cancel") {
+                CancelButton(title = stringResource(R.string.cancel_button)/*"Cancel"*/) {
 
                 }
 
-                ContinueButton(text = "Add Medication") {
+                ContinueButton(text = stringResource(R.string.add_medication_button)/*"Add Medication"*/) {
                     showDialogSuccessFully = true
                 }
             }
@@ -478,18 +481,13 @@ fun AddMedicationScreen(
     }
 
     if (showDialogSuccessFully) {
-        SuccessfulDialog(title = "Medication Added \nSuccessfully", description = "Your medication has been saved and reminders are set.",
+        SuccessfulDialog(title = stringResource(R.string.medication_added_success_title)/*"Medication Added \nSuccessfully"*/, description = stringResource(R.string.medication_added_success_description)/*"Your medication has been saved and reminders are set."*/,
             onDismiss = { showDialogSuccessFully = false },
             onOkClick = { showDialogSuccessFully = false }
         )
     }
 
 }
-
-fun getFileName(uri: Uri): String {
-    return uri.lastPathSegment?.substringAfterLast("/") ?: "File"
-}
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)

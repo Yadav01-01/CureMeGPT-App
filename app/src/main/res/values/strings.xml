@@ -196,6 +196,210 @@
     <string name="continue_button">Continue</string>
 
 
+    <!-- Add Medication Screen Strings -->
+    <string name="add_medication_title">Add Medication</string>
+    <string name="edit_medication_title">Edit Medication</string>
+    <string name="for_family_member_label">For Family Member</string>
+    <string name="medication_type_label">Medication Type</string>
+    <string name="select_appointment_type">Select Appointment Type</string>
+    <string name="medicine_type">Medicine</string>
+    <string name="supplements_type">Supplements</string>
+    <string name="medication_name_label">Medication Name</string>
+    <string name="medication_name_placeholder">e.g., Amoxicillin</string>
+    <string name="dosage_label">Dosage</string>
+    <string name="dosage_placeholder">e.g., 500mg</string>
+    <string name="frequency_label">Frequency</string>
+    <string name="select_frequency_placeholder">Select Frequency</string>
+    <string name="daily_frequency">Daily</string>
+    <string name="alternate_days_frequency">Alternate Days</string>
+    <string name="weekly_frequency">Weekly</string>
+    <string name="day_label">Day</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="reminder_time_label">Reminder time</string>
+    <string name="time_format_placeholder">00:00:00</string>
+    <string name="clock_icon_description">clock</string>
+    <string name="start_date_label">Start Date</string>
+    <string name="end_date_optional_label">End Date (Optional)</string>
+    <string name="date_format_placeholder">MM-DD-YYYY</string>
+    <string name="upload_prescription_optional_label">Upload Prescription (Optional)</string>
+<string name="notes_label">Notes</string>
+    <string name="notes_placeholder">Special instructions, side effects to watch for....</string>
+    <string name="enable_reminder_label">Enable reminder</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="add_medication_button">Add Medication</string>
+    <string name="update_medication_button">Update</string>
+    <string name="medication_added_success_title">Medication Added \nSuccessfully</string>
+    <string name="medication_added_success_description">Your medication has been saved and reminders are set.</string>
+    <string name="file_default_name">File</string>
+
+    <!-- Appointment Type Options -->
+    <string name="normal_checkup">Normal Check-up</string>
+    <string name="dental_checkup">Dental Check-up</string>
+    <string name="root_canal">Root Canal</string>
+    <string name="brain_checkup">Brain Check-up</string>
+    <string name="hair_checkup">Hair Check-up</string>
+    <string name="skin_checkup">Skin Check-up</string>
+    <string name="heart_checkup">Heart Check-up</string>
+    <string name="lungs_checkup">Lungs Check-up</string>
+    <string name="liver_checkup">Liver Check-up</string>
+    <string name="intestine_checkup">Intestine Check-up</string>
+    <string name="kidney_checkup">Kidney Check-up</string>
+    <string name="bones_checkup">Bones Check-up</string>
+    <string name="feet_checkup">Feet Check-up</string>
+    <string name="hand_checkup">Hand Check-up</string>
+    <string name="ent_checkup">ENT Check-up</string>
+
+    <!-- Alert Screen Strings -->
+    <string name="alerts_title">Alerts</string>
+    <string name="rosy_logan_name">Rosy Logan</string>
+    <string name="james_logan_name">James Logan</string>
+    <string name="medication_reminder_title">Medication Reminder</string>
+    <string name="medication_reminder_description">Time to take your Lisinopril 10mg. Don\'t forget to take it with food.</string>
+    <string name="just_now_time">Just Now</string>
+    <string name="urgent_health_report_title">Urgent: Health Report Available</string>
+    <string name="urgent_health_report_description">Your recent blood test results show elevated cholesterol levels. Please schedule a follow-up with your doctor.</string>
+    <string name="thirty_minutes_ago_time">30m ago</string>
+    <string name="high_priority">High</string>
+    <string name="appointment_reminder_title">Dental Cleaning Today</string>
+    <string name="appointment_reminder_description">Don\'t forget your dental cleaning appointment today at 2:00 PM with Dr. Sarah Johnson.</string>
+    <string name="thirty_two_minutes_ago_time">32m ago</string>
+    <string name="medium_priority">Medium</string>
+    <string name="for_label">For</string>
+    <string name="mark_as_complete_label">Mark As Complete</string>
+    <string name="action_required_label">Action Required</string>
+
+    <!-- Chat Screen Strings -->
+    <string name="james_myself_user">James (Myself)</string>
+    <string name="chat_background_description">Chat background</string>
+    <string name="switch_to_case_text">Switch to Case</string>
+    <string name="share_chat_message">Hey 👋
+
+This is a dummy chat message.
+Just testing share feature.
+
+Shared from CureMeGPT App 🚀</string>
+    <string name="share_chat_via">Share chat via</string>
+    <string name="switch_to_case_dialog_title">Switch to Case Chat?</string>
+    <string name="switch_to_case_dialog_description">This chat will be converted into a case chat. Your conversation will be tracked with case history and medical records. Do you want to continue?</string>
+    <string name="stay_on_normal_chat_button">Stay on Normal Chat</string>
+    <string name="delete_chat_dialog_title">Delete Chat?</string>
+    <string name="delete_chat_dialog_message">Once deleted, this chat and its medical history cannot be recovered.</string>
+    <string name="delete_chat_warning_text">Deleting may affect AI\'s ability to suggest based on your past health history.</string>
+    <string name="delete_chat_bottom_text">You\'re always in control — deleted chats cannot be restored.</string>
+    <string name="delete_chat_confirm_button">Yes, Delete Chat</string>
+
+    <!-- Menu Drawer Strings -->
+    <string name="logo_icon_description">Logo</string>
+    <string name="search_placeholder">Search</string>
+    <string name="search_icon_description">Search</string>
+    <string name="new_chat_button">New Chat</string>
+    <string name="new_case_chat_button">New Case Chat</string>
+    <string name="chat_history_title">Chat History</string>
+    <string name="case_chat_history_title">Case Chat History</string>
+    <string name="selected_icon_description">Selected</string>
+    <string name="menu_icon_description">Menu</string>
+    <string name="no_case_history_available">No case history available</string>
+
+    <!-- Chat History Items -->
+    <string name="toothache_fever_chat">Toothache &amp; Fever Co...</string>
+    <string name="cough_cold_chat">Cough, Cold &amp; Oral He...</string>
+    <string name="medicine_chat">Medicine</string>
+    <string name="cough_short_chat">Cough, C...</string>
+    <string name="general_checkup_chat">General Check-up &amp; H...</string>
+    <string name="medicine_advice_chat">Medicine Advice + De...</string>
+
+    <!-- User List -->
+    <string name="rose_logan_spouse_user">Rose Logan (Spouse)</string>
+    <string name="peter_logan_son_user">Peter Logan (Son)</string>
+
+    <!-- Case History Strings for James -->
+    <string name="toothache_treatment_case">Toothache Treatment - Nov 2023</string>
+    <string name="annual_checkup_case">Annual Checkup - Aug 2023</string>
+    <string name="headache_consultation_case">Headache Consultation - Jun 2023</string>
+    <string name="stomach_issue_case">Stomach Issue - Mar 2023</string>
+    <string name="dental_cleaning_case">Dental Cleaning - Jan 2023</string>
+    <string name="general_health_review_case">General Health Review</string>
+
+    <!-- Case History Strings for Rose Logan -->
+    <string name="pregnancy_checkup_case">Pregnancy Checkup - Dec 2023</string>
+    <string name="migraine_treatment_case">Migraine Treatment - Oct 2023</string>
+    <string name="postpartum_recovery_case">Postpartum Recovery - Sep 2023</string>
+    <string name="skin_consultation_case">Skin Consultation - Jul 2023</string>
+    <string name="sleep_disorder_case">Sleep Disorder - May 2023</string>
+    <string name="stress_management_case">Stress Management</string>
+
+    <!-- Case History Strings for Peter Logan -->
+    <string name="childhood_allergy_test_case">Childhood Allergy Test - Nov 2023</string>
+    <string name="growth_monitoring_case">Growth Monitoring - Sep 2023</string>
+    <string name="immunization_update_case">Immunization Update - Aug 2023</string>
+    <string name="asthma_management_case">Asthma Management - Jun 2023</string>
+    <string name="pediatric_checkup_case">Pediatric Checkup - Apr 2023</string>
+    <string name="nutrition_counseling_case">Nutrition Counseling</string>
+
+
+    <!-- Add these to your existing strings.xml file -->
+    <string name="edit_family_member_details_title">Edit Family Member Details</string>
+    <string name="member_profile_updated_title">Member\'s Profile Updated Successfully</string>
+    <string name="member_profile_updated_description">Member\'s Profile has been updated.</string>
+    <string name="edit_profile">Edit Profile</string>
+
+
+    <!-- Add these to your existing strings.xml file -->
+    <string name="family_members_title">Family Members</string>
+    <string name="family_profiles_icon_description">Family profiles icon</string>
+    <string name="family_profiles_title">Family Profiles</string>
+    <string name="members_total_format">%d Members Total</string>
+    <string name="add_member_description">Add member</string>
+
+    <!-- Stat card strings -->
+    <string name="appointments_title">Appointments</string>
+    <string name="appointments_description">Track and manage your doctor visits.</string>
+    <string name="medications_title">Medications</string>
+    <string name="medications_description">Stay on top of your prescriptions.</string>
+    <string name="stat_icon_description">Stat icon</string>
+
+    <!-- Filter options -->
+    <string name="all_members_filter">All Members</string>
+    <string name="children_filter">Children</string>
+    <string name="adults_filter">Adults</string>
+    <string name="seniors_filter">Seniors</string>
+    <string name="friends_filter">Friends</string>
+    <string name="relatives_filter">Relatives</string>
+
+    <!-- Relationship strings -->
+    <string name="self_relationship">Self</string>
+    <string name="spouse_relationship">Spouse</string>
+    <string name="son_relationship">Son</string>
+    <string name="daughter_relationship">Daughter</string>
+    <string name="mother_relationship">Mother</string>
+    <string name="father_relationship">Father</string>
+    <string name="friend_relationship">Friend</string>
+    <string name="brother_relationship">Brother</string>
+    <string name="sister_relationship">Sister</string>
+
+    <!-- Search and filter -->
+    <string name="filter_icon_description">Filter</string>
+    <string name="no_results_icon_description">No results</string>
+    <string name="no_family_members_found">No family members found</string>
+    <string name="try_different_search_filter">Try a different search or filter</string>
+
+    <!-- Family member card -->
+    <string name="family_member_photo_description">%s\'s photo</string>
+    <string name="age_format">%d yrs</string>
+    <string name="appointments_icon_description">Appointments</string>
+    <string name="medications_icon_description">Medications</string>
+
+    <!-- Delete dialog -->
+    <string name="delete_member_dialog_title">Delete Member?</string>
+    <string name="delete_member_dialog_message">Are you sure you want to delete %s\'s profile? This action cannot be undone.</string>
+    <string name="delete_button">Delete</string>
+
     <!--    stringResource(R.string.known_allergies_label),-->
 
 </resources>

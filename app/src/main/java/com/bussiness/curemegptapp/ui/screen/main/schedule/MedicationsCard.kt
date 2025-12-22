@@ -157,7 +157,7 @@ fun MedicationsCard(medication: Medication,onEditClick: () -> Unit,
 
                     EditDeleteMenu(
                         modifier = Modifier,
-                       onEditClick = {  },
+                       onEditClick = { onEditClick() },
                         onDeleteClick = {  onDeleteClick() })
                 }
 

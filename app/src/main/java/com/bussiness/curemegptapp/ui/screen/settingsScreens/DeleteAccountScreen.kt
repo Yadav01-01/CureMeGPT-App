@@ -84,7 +84,19 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
             .verticalScroll(rememberScrollState())
             .padding(top =20.dp, start =20.dp,end = 20.dp )
     ) {
+        Spacer(Modifier.height(20.dp))
+        Text("Delete my account", fontSize = 18.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF3C3C3C))
 
+        Spacer(Modifier.height(10.dp))
+
+        Text("Why would you like to delete your account", fontSize = 15.sp,
+            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+            fontWeight = FontWeight.Normal,
+            color = Color(0xFF697383))
+        Spacer(Modifier.height(30.dp))
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F9FD)),

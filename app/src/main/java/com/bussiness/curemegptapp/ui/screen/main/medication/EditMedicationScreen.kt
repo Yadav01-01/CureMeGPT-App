@@ -1,0 +1,915 @@
+package com.bussiness.curemegptapp.ui.screen.main.medication
+
+//EditMedicationScreen
+
+
+import android.net.Uri
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.ui.component.CancelButton
+import com.bussiness.curemegptapp.ui.component.ContinueButton
+import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField2
+import com.bussiness.curemegptapp.ui.component.ProfileInputSmallField
+import com.bussiness.curemegptapp.ui.component.ProfilePhotoPicker
+import com.bussiness.curemegptapp.ui.component.RoundedCustomCheckbox
+import com.bussiness.curemegptapp.ui.component.TopBarHeader1
+import com.bussiness.curemegptapp.ui.component.UniversalInputField
+import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
+import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
+import com.bussiness.curemegptapp.ui.dialog.SuccessfulDialog
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun EditMedicationScreen(
+    navController: NavHostController
+) {
+    // DUMMY DATA INITIALIZED WITH REALISTIC VALUES
+    var dateOfBirth by remember { mutableStateOf("") }
+    var startDate by remember { mutableStateOf("04-15-2024") } // DUMMY: Two weeks ago
+    var endDate by remember { mutableStateOf("05-15-2024") } // DUMMY: One month course
+    var currentReminder by remember { mutableStateOf("") }
+    var medicationName by remember { mutableStateOf("Amoxicillin") } // DUMMY: Common antibiotic
+    var dosage by remember { mutableStateOf("500mg") } // DUMMY: Standard dosage
+    var selectedMyself by remember { mutableStateOf("Myself") } // DUMMY: For myself
+    var selectFrequency by remember { mutableStateOf("Daily") } // DUMMY: Daily medication
+    var selectDayName by remember { mutableStateOf("Monday") } // DUMMY: Starting day
+    val myselfOptions = listOf("Myself", "Jane Smith", "Alice Johnson", "Bob Williams")
+    val selectedMedicationTypeOptions = listOf("Medicine", "Supplements")
+    val selectDayNameOptions = listOf(
+        "Sunday", "Monday", "Tuesday", "Wednesday",
+        "Thursday", "Friday", "Saturday"
+    )
+    val selectFrequencyOptions = listOf("Daily", "Alternate Days", "Weekly")
+    var selectedMedicationType by remember { mutableStateOf("Medicine") } // DUMMY: Prescription medicine
+    var description by remember { mutableStateOf("Take one tablet after breakfast. Avoid dairy products 2 hours before or after. May cause mild stomach upset.") } // DUMMY: Real instructions
+    var showDialog by remember { mutableStateOf(false) }
+    var showDialog1 by remember { mutableStateOf(false) }
+    var showDialogSuccessFully by remember { mutableStateOf(false) }
+    val appointmentOptions = listOf(
+        "Normal Check-up", "Dental Check-up", "Root Canal", "Brain Check-up",
+        "Hair Check-up", "Skin Check-up", "Heart Check-up", "Lungs Check-up",
+        "Liver Check-up", "Intestine Check-up", "Kidney Check-up", "Bones Check-up",
+        "Feet Check-up", "Hand Check-up", "ENT Check-up"
+    )
+
+    // DUMMY: Two reminder times - morning and evening
+    var currentReminderTime by remember {
+        mutableStateOf(listOf("08:00:00", "20:00:00"))
+    }
+
+    var uploadedFiles by remember { mutableStateOf<Uri?>(null) }
+    var checked by remember { mutableStateOf(true) } // DUMMY: Reminders enabled by default
+
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            uploadedFiles = uri
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .verticalScroll(rememberScrollState())
+            .background(Color(0xFFFFFFFF))
+    ) {
+
+        TopBarHeader1(
+            title = stringResource(R.string.edit_medication_title),
+            onBackClick = { navController.popBackStack() }
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 19.dp, vertical = 30.dp)
+        ) {
+
+            Text(
+                text = stringResource(R.string.for_family_member_label),
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            CustomPowerSpinner(
+                selectedText = selectedMyself,
+                onSelectionChanged = { reason ->
+                    selectedMyself = reason
+                },
+                horizontalPadding = 24.dp,
+                reasons = myselfOptions
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                text = stringResource(R.string.medication_type_label),
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            CustomPowerSpinner(
+                selectedText = selectedMedicationType,
+                onSelectionChanged = { reason ->
+                    selectedMedicationType = reason
+                },
+                horizontalPadding = 24.dp,
+                reasons = selectedMedicationTypeOptions
+            )
+
+            Row(Modifier.padding(vertical = 24.dp)) {
+                ProfileInputSmallField(
+                    label = stringResource(R.string.medication_name_label),
+                    isImportant = false,
+                    placeholder = stringResource(R.string.medication_name_placeholder),
+                    value = medicationName,
+                    onValueChange = { medicationName = it },
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(Modifier.width(5.dp))
+
+                ProfileInputSmallField(
+                    label = stringResource(R.string.dosage_label),
+                    isImportant = false,
+                    placeholder = stringResource(R.string.dosage_placeholder),
+                    value = dosage,
+                    onValueChange = { dosage = it },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Text(
+                text = stringResource(R.string.frequency_label),
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            CustomPowerSpinner(
+                selectedText = selectFrequency,
+                onSelectionChanged = { reason ->
+                    selectFrequency = reason
+                },
+                horizontalPadding = 24.dp,
+                reasons = selectFrequencyOptions
+            )
+
+            if (selectFrequency == "Weekly") {
+                Text(
+                    text = stringResource(R.string.day_label),
+                    fontSize = 15.sp,
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                CustomPowerSpinner(
+                    selectedText = selectDayName,
+                    onSelectionChanged = { reason ->
+                        selectDayName = reason
+                    },
+                    horizontalPadding = 24.dp,
+                    reasons = selectDayNameOptions
+                )
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                text = stringResource(R.string.reminder_time_label),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular))
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            currentReminderTime.forEachIndexed { index, reminderValue ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = reminderValue,
+                        onValueChange = { newValue ->
+                            if (index == 0) {
+                                val formattedValue = formatTimeInput(newValue)
+                                val updated = currentReminderTime.toMutableList()
+                                updated[index] = formattedValue
+                                currentReminderTime = updated
+                            }
+                        },
+                        placeholder = {
+                            Text(stringResource(R.string.time_format_placeholder))
+                        },
+                        trailingIcon = {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_appointed_gray_icon),
+                                contentDescription = "clock",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        },
+                        enabled = index == 0,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(30.dp))
+                            .border(1.dp, Color(0xFF697383), RoundedCornerShape(30.dp)),
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            disabledContainerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        )
+                    )
+
+                    if (index == 0) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_add_icon),
+                            contentDescription = "Add",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    if (currentReminderTime[0].isNotBlank()) {
+                                        val updated = currentReminderTime.toMutableList()
+                                        updated.add(updated[0])
+                                        updated[0] = ""
+                                        currentReminderTime = updated
+                                    }
+                                }
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_remove_icon),
+                            contentDescription = "Remove",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    val updatedList = currentReminderTime.toMutableList()
+                                    updatedList.removeAt(index)
+                                    currentReminderTime = updatedList
+                                }
+                        )
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+
+            Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 24.dp)) {
+                UniversalInputField(
+                    title = stringResource(R.string.start_date_label),
+                    isImportant = false,
+                    placeholder = stringResource(R.string.date_format_placeholder),
+                    value = startDate,
+                    modifier = Modifier.weight(1f),
+                    rightIcon = R.drawable.ic_calender_icon
+                ) {
+                    showDialog = true
+                }
+                Spacer(Modifier.width(5.dp))
+                UniversalInputField(
+                    title = stringResource(R.string.end_date_optional_label),
+                    isImportant = false,
+                    placeholder = stringResource(R.string.date_format_placeholder),
+                    value = endDate,
+                    modifier = Modifier.weight(1f),
+                    rightIcon = R.drawable.ic_calender_icon
+                ) {
+                    showDialog1 = true
+                }
+            }
+
+            ProfilePhotoPicker(
+                label = stringResource(R.string.upload_prescription_optional_label),
+                fileName = uploadedFiles?.let { getFileName(it) } ?: stringResource(R.string.no_file_chosen),
+                onChooseClick = {
+                    filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
+                }
+            )
+
+            Text(
+                stringResource(R.string.file_formats_supported),
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
+                    }
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            ProfileInputMultipleLineField2(
+                label = stringResource(R.string.notes_label),
+                isImportant = false,
+                placeholder = stringResource(R.string.notes_placeholder),
+                value = description,
+                onValueChange = { description = it },
+                heightOfEditText = 135.dp,
+                paddingHorizontal = 0.dp,
+                borderColor = Color(0xFF697383),
+                textColor = Color(0xFF697383)
+            )
+
+            Spacer(Modifier.height(30.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { checked = !checked },
+                verticalAlignment = Alignment.Top
+            ) {
+                RoundedCustomCheckbox(
+                    checked = checked,
+                    onCheckedChange = { checked = it }
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = stringResource(R.string.enable_reminder_label),
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 15.sp,
+                    color = Color.Black,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(top = 2.dp)
+                )
+            }
+
+            Spacer(Modifier.height(30.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                CancelButton(title = stringResource(R.string.cancel_button)) {
+                    navController.popBackStack()
+                }
+
+                ContinueButton(text = stringResource(R.string.update_medication_button)) {
+                    // In real app, this would save to database
+                    showDialogSuccessFully = true
+                }
+            }
+
+            Spacer(Modifier.height(37.dp))
+        }
+    }
+
+    if (showDialog) {
+        CalendarDialog(
+            onDismiss = { showDialog = false },
+            onDateApplied = {
+                showDialog = false
+                startDate = it.toString()
+            }
+        )
+    }
+
+    if (showDialog1) {
+        CalendarDialog(
+            onDismiss = { showDialog1 = false },
+            onDateApplied = {
+                showDialog1 = false
+                endDate = it.toString()
+            }
+        )
+    }
+
+    if (showDialogSuccessFully) {
+        SuccessfulDialog(
+            title = stringResource(R.string.medication_added_success_title),
+            description = stringResource(R.string.medication_added_success_description),
+            onDismiss = {
+                showDialogSuccessFully = false
+                navController.popBackStack()
+            },
+            onOkClick = {
+                showDialogSuccessFully = false
+                navController.popBackStack()
+            }
+        )
+    }
+}
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun EditMedicationScreenPreview() {
+    val navController = rememberNavController()
+    EditMedicationScreen(navController = navController)
+}
+/*
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun EditMedicationScreen(
+    navController: NavHostController
+) {
+    var dateOfBirth by remember { mutableStateOf("") }
+    var startDate by remember { mutableStateOf("") }
+    var endDate by remember { mutableStateOf("") }
+    var currentReminder by remember { mutableStateOf("") }
+    var medicationName by remember { mutableStateOf("") }
+    var dosage by remember { mutableStateOf("") }
+    var selectedMyself by remember { mutableStateOf("Myself") }
+    var selectFrequency by remember { mutableStateOf("Select Frequency") }
+    var selectDayName by remember { mutableStateOf("Select Frequency") }
+    val myselfOptions =
+        listOf("Myself", "Jane Smith", "Alice Johnson", "Bob Williams") // Added example options
+    val selectedMedicationTypeOptions =
+        listOf("Medicine", "Supplements")
+    val selectDayNameOptions =
+        listOf(   "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday") // Added example options
+    val selectFrequencyOptions =
+        listOf("Daily", "Alternate Days", "Weekly") // Added example options
+    var selectedMedicationType by remember { mutableStateOf("Select Appointment Type") }
+    var description by remember { mutableStateOf("") }
+    var showDialog by remember { mutableStateOf(false) }
+    var showDialog1 by remember { mutableStateOf(false) }
+    var showDialogSuccessFully by remember { mutableStateOf(false) }
+    val appointmentOptions = listOf(
+        "Normal Check-up",
+        "Dental Check-up",
+        "Root Canal",
+        "Brain Check-up",
+        "Hair Check-up",
+        "Skin Check-up",
+        "Heart Check-up",
+        "Lungs Check-up",
+        "Liver Check-up",
+        "Intestine Check-up",
+        "Kidney Check-up",
+        "Bones Check-up",
+        "Feet Check-up",
+        "Hand Check-up",
+        "ENT Check-up"
+    )
+
+    var currentReminderTime by remember { mutableStateOf(listOf("")) }
+
+    var uploadedFiles by remember { mutableStateOf<Uri?>(null) }
+    var checked by remember { mutableStateOf(false) }   // ⭐ FIXED
+
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri != null) {
+            uploadedFiles = uri   // ⭐ Only one file stored
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize() .statusBarsPadding().verticalScroll(rememberScrollState())
+            .background(Color(0xFFFFFFFF))
+    ) {
+
+        TopBarHeader1(title = stringResource(R.string.edit_medication_title)/*"Add Medication"*/, onBackClick = {})
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 19.dp, vertical = 30.dp)
+        ) {
+
+
+            Text(
+                text = stringResource(R.string.for_family_member_label)/*"For Family Member"*/,
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            CustomPowerSpinner(
+                selectedText = selectedMyself,
+                onSelectionChanged = { reason ->
+                    selectedMyself = reason
+                },
+                horizontalPadding = 24.dp,
+                reasons = myselfOptions // Pass the list of options here
+            )
+
+            Spacer(Modifier.height(24.dp))
+            Text(
+                text = stringResource(R.string.medication_type_label)/*"Medication Type"*/,
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            )
+            Spacer(Modifier.height(8.dp))
+            CustomPowerSpinner(
+                selectedText = selectedMedicationType,
+                onSelectionChanged = { reason ->
+                    selectedMedicationType = reason
+                },
+                horizontalPadding = 24.dp,
+                reasons = selectedMedicationTypeOptions // Pass the list of options here
+            )
+
+
+
+
+            Row (Modifier.padding(vertical = 24.dp)) {
+                ProfileInputSmallField(
+                    label = stringResource(R.string.medication_name_label)/*"Medication Name"*/,
+                    isImportant = false,
+                    placeholder = stringResource(R.string.medication_name_placeholder)/*"e.g., Amoxicillin"*/,
+                    value = medicationName,
+                    onValueChange = { medicationName = it },
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(Modifier.width(5.dp))
+
+                ProfileInputSmallField(
+                    label = stringResource(R.string.dosage_label)/*"Dosage"*/,
+                    isImportant = false,
+                    placeholder = stringResource(R.string.dosage_placeholder)/*"e.g., 500mg"*/,
+                    value = dosage,
+                    onValueChange = { dosage = it },
+                    modifier = Modifier.weight(1f)
+                )
+
+            }
+
+
+
+            Text(
+                text = stringResource(R.string.frequency_label)/*"Frequency"*/,
+                fontSize = 15.sp,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            CustomPowerSpinner(
+                selectedText = selectFrequency,
+                onSelectionChanged = { reason ->
+                    selectFrequency = reason
+                },
+                horizontalPadding = 24.dp,
+                reasons = selectFrequencyOptions // Pass the list of options here
+            )
+
+            if (selectFrequency == "Weekly")
+            {
+                Text(
+                    text = stringResource(R.string.day_label)/*"Day"*/,
+                    fontSize = 15.sp,
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                CustomPowerSpinner(
+                    selectedText = selectDayName,
+                    onSelectionChanged = { reason ->
+                        selectDayName = reason
+                    },
+                    horizontalPadding = 24.dp,
+                    reasons = selectDayNameOptions // Pass the list of options here
+                )
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            Text(
+                text = stringResource(R.string.reminder_time_label)/*"Reminder time"*/,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular))
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            currentReminderTime.forEachIndexed { index, reminderValue ->
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    OutlinedTextField(
+                        value = reminderValue,   // ⭐ FIXED — Row ka real value
+                        onValueChange = { newValue ->
+                            if (index == 0) {   // ⭐ Only first editable
+                                val formattedValue = formatTimeInput(newValue)
+                                val updated = currentReminderTime.toMutableList()
+                                updated[index] = formattedValue
+                                currentReminderTime = updated
+                            }
+                        },
+                        placeholder = {
+                            Text(stringResource(R.string.time_format_placeholder)/*"00:00:00"*/)
+                        },
+                        trailingIcon = {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_appointed_gray_icon),
+                                contentDescription = "clock",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        },
+                        enabled = index == 0,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(30.dp))
+                            .border(1.dp, Color(0xFF697383), RoundedCornerShape(30.dp)),
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White,
+                            disabledContainerColor = Color.White,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        )
+                    )
+
+                    if (index == 0) {
+                        // ⭐ ADD BUTTON (only for first)
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_add_icon),
+                            contentDescription = "Add",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable( interactionSource = remember { MutableInteractionSource() },
+                                    indication = null) {
+
+                                    if (currentReminderTime[0].isNotBlank()) {
+
+                                        val updated = currentReminderTime.toMutableList()
+
+                                        // ⭐ Add item with first value
+                                        updated.add(updated[0])
+
+                                        // ⭐ Clear first field
+                                        updated[0] = ""
+
+                                        currentReminderTime = updated
+                                    }
+                                }
+                        )
+                    } else {
+                        // ⭐ REMOVE BUTTON (for other rows)
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_remove_icon),
+                            contentDescription = "Remove",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable( interactionSource = remember { MutableInteractionSource() },
+                                    indication = null) {
+                                    val updatedList = currentReminderTime.toMutableList()
+                                    updatedList.removeAt(index)
+                                    currentReminderTime = updatedList
+                                }
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(8.dp))
+            }
+
+            Spacer(Modifier.width(24.dp))
+
+            Row (modifier = Modifier.padding(horizontal = 5.dp, vertical = 24.dp)) {
+                UniversalInputField(
+                    title = stringResource(R.string.start_date_label)/*"Start Date"*/,
+                    isImportant = false,
+                    placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
+                    value = startDate,
+                    modifier = Modifier.weight(1f),
+                    rightIcon = R.drawable.ic_calender_icon
+                ) {
+                    showDialog = true
+                }
+                Spacer(Modifier.width(5.dp))
+                UniversalInputField(
+                    title = stringResource(R.string.end_date_optional_label)/*"End Date (Optional)"*/,
+                    isImportant = false,
+                    placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
+                    value = endDate,
+                    modifier = Modifier.weight(1f),
+                    rightIcon = R.drawable.ic_calender_icon
+                ) {
+                    showDialog1 = true
+                }
+
+            }
+
+
+            ProfilePhotoPicker(
+                label = stringResource(R.string.upload_prescription_optional_label)/*"Upload Prescription (Optional)"*/,
+                fileName = uploadedFiles?.let { getFileName(it) } ?: stringResource(R.string.no_file_chosen)/*"No file chosen"*/,
+                onChooseClick = {
+                    filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
+                }
+            )
+
+
+            Text(
+                stringResource(R.string.file_formats_supported)/* "PDF, JPG, PNG, DICOM Supported"*/,
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null) {
+                        filePickerLauncher.launch(arrayOf("image/*", "application/pdf", "application/dicom"))
+                    }
+            )
+            Spacer(Modifier.height(24.dp))
+            ProfileInputMultipleLineField2(
+                label = stringResource(R.string.notes_label)/*"Notes"*/,
+                isImportant = false,
+                placeholder = stringResource(R.string.notes_placeholder)/*"Special instructions, side effects to watch for...."*/,
+                value = description,
+                onValueChange = { description = it },
+                heightOfEditText = 135.dp,
+                paddingHorizontal = 0.dp,
+                borderColor = Color(0xFF697383),
+                textColor = Color(0xFF697383)
+            )
+
+            Spacer(Modifier.height(30.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable( interactionSource = remember { MutableInteractionSource() },
+                        indication = null) {  checked = !checked },
+                verticalAlignment = Alignment.Top
+            ) {
+
+
+                RoundedCustomCheckbox(
+                    checked = checked,
+                    onCheckedChange = {  checked = it  }
+                )
+
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = stringResource(R.string.enable_reminder_label)/*"Enable reminder"*/,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 15.sp,
+                    color = Color.Black,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(top = 2.dp)
+                )
+            }
+
+            Spacer(Modifier.height(30.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+
+                CancelButton(title = stringResource(R.string.cancel_button)/*"Cancel"*/) {
+
+                }
+
+                ContinueButton(text = stringResource(R.string.add_medication_button)/*"Add Medication"*/) {
+                    showDialogSuccessFully = true
+                }
+            }
+            Spacer(Modifier.height(37.dp))
+        }
+    }
+    if (showDialog) {
+        CalendarDialog(
+            onDismiss = { showDialog = false },
+            onDateApplied = {
+                // SELECTED DATE HERE
+                showDialog = false
+                dateOfBirth = it.toString()
+            }
+        )
+    }
+    if (showDialog1) {
+        CalendarDialog(
+            onDismiss = { showDialog = false },
+            onDateApplied = {
+                // SELECTED DATE HERE
+                showDialog = false
+                dateOfBirth = it.toString()
+            }
+        )
+    }
+
+    if (showDialogSuccessFully) {
+        SuccessfulDialog(title = stringResource(R.string.medication_added_success_title)/*"Medication Added \nSuccessfully"*/, description = stringResource(R.string.medication_added_success_description)/*"Your medication has been saved and reminders are set."*/,
+            onDismiss = { showDialogSuccessFully = false },
+            onOkClick = { showDialogSuccessFully = false }
+        )
+    }
+
+}
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun EditMedicationScreenPreview() {
+    val navController = rememberNavController()
+    EditMedicationScreen(navController = navController)
+}
+
+ */

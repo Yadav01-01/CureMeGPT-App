@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -100,7 +101,7 @@ fun EditProfileScreen(
         TopBarHeader(
             currentStep = currentStep,
             onBackClick = { viewModel.goToPreviousStep() },
-            title = "Edit Profile",
+            title = stringResource(R.string.edit_profile)/*"Edit Profile"*/,
             skipDisplay = false
         )
 
@@ -201,7 +202,7 @@ fun EditProfileScreen(
         }
     }
 }
-
+/*
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PersonalInfoStep(
@@ -1048,8 +1049,8 @@ fun DocumentsStep(
 
 
     }
-}
-
+}*/*/*/
+*/
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)

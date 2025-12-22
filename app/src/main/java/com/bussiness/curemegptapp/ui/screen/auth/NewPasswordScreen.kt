@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
@@ -27,14 +28,30 @@ import com.bussiness.curemegptapp.ui.dialog.SuccessfulDialog
 import com.bussiness.curemegptapp.util.ValidationUtils
 
 @Composable
-fun NewPasswordScreen(navController: NavHostController) {
+fun NewPasswordScreen(navController: NavHostController, from: String) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
-        SuccessfulDialog(title = stringResource(R.string.password_updated_title),/*"Password updated \nSuccessfully!",*/ description = "Your password has been updated.",
-            onDismiss = { showDialog = false },
-            onOkClick = { showDialog = false }
+        SuccessfulDialog(
+            title = stringResource(R.string.password_updated_title),/*"Password updated \nSuccessfully!",*/
+            description = "Your password has been updated.",
+            onDismiss = {
+                if (from == "auth") {
+                    navController.navigate(AppDestination.Login)
+                } else {
+                    navController.navigateUp()
+                }
+                showDialog = false
+            },
+            onOkClick = {
+                if (from == "auth") {
+                    navController.navigate(AppDestination.Login)
+                } else {
+                    navController.navigateUp()
+                }
+                showDialog = false
+            }
         )
     }
     Column(
@@ -43,8 +60,10 @@ fun NewPasswordScreen(navController: NavHostController) {
             .background(Color.White)
     ) {
         // Top Gradient Header
-        GradientHeader(heading = stringResource(R.string.new_password_title),
-            description = stringResource(R.string.new_password_description)/*heading = "New Password", description = "Please enter your new password."*/)
+        GradientHeader(
+            heading = stringResource(R.string.new_password_title),
+            description = stringResource(R.string.new_password_description)/*heading = "New Password", description = "Please enter your new password."*/
+        )
 
         Spacer(modifier = Modifier.height(55.dp))
 
@@ -52,16 +71,28 @@ fun NewPasswordScreen(navController: NavHostController) {
         var password by remember { mutableStateOf("") }
         var confirmPassword by remember { mutableStateOf("") }
 
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = stringResource(R.string.password_placeholder)/*"Password"*/, value = password, onValueChange = { password = it }, isPassword = true)
+        GradientIconInputField(
+            icon = R.drawable.pass_ic,
+            placeholder = stringResource(R.string.password_placeholder)/*"Password"*/,
+            value = password,
+            onValueChange = { password = it },
+            isPassword = true
+        )
 
         Spacer(Modifier.height(20.dp))
 
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = stringResource(R.string.confirm_password_placeholder)/*"Confirm Password"*/, value = confirmPassword, onValueChange = { confirmPassword = it }, isPassword = true)
+        GradientIconInputField(
+            icon = R.drawable.pass_ic,
+            placeholder = stringResource(R.string.confirm_password_placeholder)/*"Confirm Password"*/,
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            isPassword = true
+        )
 
         Spacer(Modifier.height(20.dp))
 
         // Gradient Submit Button
-       // GradientButton(text = stringResource(R.string.submit_button)/*"Submit"*/, onClick = { showDialog = true})
+        // GradientButton(text = stringResource(R.string.submit_button)/*"Submit"*/, onClick = { showDialog = true})
         // Gradient Submit Button with validation
         GradientButton(
             text = stringResource(R.string.submit_button),
@@ -69,14 +100,20 @@ fun NewPasswordScreen(navController: NavHostController) {
                 // Validate new password
                 val passwordValidation = ValidationUtils.validatePassword(password)
                 if (!passwordValidation.isValid) {
-                    Toast.makeText(context, passwordValidation.errorMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, passwordValidation.errorMessage, Toast.LENGTH_LONG)
+                        .show()
                     return@GradientButton
                 }
 
                 // Validate password confirmation
-                val confirmPasswordValidation = ValidationUtils.validateConfirmPassword(password, confirmPassword)
+                val confirmPasswordValidation =
+                    ValidationUtils.validateConfirmPassword(password, confirmPassword)
                 if (!confirmPasswordValidation.isValid) {
-                    Toast.makeText(context, confirmPasswordValidation.errorMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        confirmPasswordValidation.errorMessage,
+                        Toast.LENGTH_LONG
+                    ).show()
                     return@GradientButton
                 }
 
@@ -95,5 +132,5 @@ fun NewPasswordScreen(navController: NavHostController) {
 @Composable
 fun NewPasswordScreenPreview() {
     val navController = rememberNavController()
-    NewPasswordScreen(navController = navController)
+    NewPasswordScreen(navController = navController, "")
 }

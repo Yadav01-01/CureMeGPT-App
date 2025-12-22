@@ -38,7 +38,7 @@ import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
 
 @Composable
-fun ResetScreen(navController: NavHostController) {
+fun ResetScreen(navController: NavHostController, fromScreen: String? = "") {
 
     // FORM
     var email by remember { mutableStateOf("") }
@@ -66,12 +66,23 @@ fun ResetScreen(navController: NavHostController) {
         Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
-        GradientButton(text = stringResource(R.string.send_code_button)/*"Send Code"*/, onClick = { navController.navigate("verifyOtp?from=reset&email=$email")
+        GradientButton(text = stringResource(R.string.send_code_button)/*"Send Code"*/,
+            onClick = {
+                if (fromScreen == "auth") {
+                    navController.navigate("verifyOtp?from=reset&email=$email")
+                }else {
+                    navController.navigate("verifyOtp?from=reset&email=$email") {
+                        popUpTo("reset?from={from}") {
+                            inclusive = true
+                        }
+                    }
+                }
         },modifier = Modifier.height(54.dp).padding(horizontal = 7.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 
         // Bottom Signup
+        /*
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,6 +106,59 @@ fun ResetScreen(navController: NavHostController) {
                 modifier = Modifier.clickable(  interactionSource = remember { MutableInteractionSource() },
                     indication = null){ navController.navigate(AppDestination.Login)}
             )
+        }
+
+         */
+        // BOTTOM: BACK TO LOGIN
+        if (fromScreen == "main") {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 42.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.back),//"Back",
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontSize = 17.sp,
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        navController.navigateUp()
+
+                    }
+                )
+
+            }
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 42.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.back_to_text),//"Back to",
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.login_link),//"Login",
+                    color = Color(0xFF4338CA),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        navController.navigate(AppDestination.Login)
+                    }
+                )
+            }
         }
     }
 }

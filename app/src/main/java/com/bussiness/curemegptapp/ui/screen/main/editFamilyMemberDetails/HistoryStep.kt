@@ -1,4 +1,4 @@
-package com.bussiness.curemegptapp.ui.screen.main.addFamilyMemberScreen
+package com.bussiness.curemegptapp.ui.screen.main.editFamilyMemberDetails
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,10 +47,11 @@ import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField
 import com.bussiness.curemegptapp.ui.component.ProfileInputWithoutLabelField
 import com.bussiness.curemegptapp.ui.viewModel.auth.ProfileCompletionViewModel
 import com.bussiness.curemegptapp.ui.viewModel.main.AddFamilyMemberViewModel
+import com.bussiness.curemegptapp.ui.viewModel.main.EditProfileViewModel
 
 @Composable
 fun HistoryStep(
-    viewModel: AddFamilyMemberViewModel,
+    viewModel: EditProfileViewModel,
     profileData: ProfileData,
     onNext: () -> Unit
 ) {

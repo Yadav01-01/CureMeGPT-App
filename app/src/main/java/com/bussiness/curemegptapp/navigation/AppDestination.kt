@@ -119,4 +119,10 @@ sealed class AppDestination {
     @Serializable
     data object ChatDataScreen : AppDestination()
 
+    @Serializable
+    data object RescheduleAppointmentScreen : AppDestination()
+
+    @Serializable
+    data object EditMedicationScreen : AppDestination()
+
 }

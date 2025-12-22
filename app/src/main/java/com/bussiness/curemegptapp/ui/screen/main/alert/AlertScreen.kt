@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +48,6 @@ import com.bussiness.curemegptapp.data.model.AlertModel
 import com.bussiness.curemegptapp.ui.component.TopBarHeader1
 import com.bussiness.curemegptapp.ui.screen.main.scheduleNewAppointment.ScheduleNewAppointmentScreen
 
-
 @Composable
 fun AlertScreen(
     navController: NavHostController
@@ -55,29 +55,29 @@ fun AlertScreen(
     val alertList = listOf(
         AlertModel(
             id = 1,
-            name = "Rosy Logan",
-            title = "Medication Reminder",
-            description = "Time to take your Lisinopril 10mg. Don't forget to take it with food.",
-            time = "Just Now",
+            name = stringResource(R.string.rosy_logan_name),
+            title = stringResource(R.string.medication_reminder_title),
+            description = stringResource(R.string.medication_reminder_description),
+            time = stringResource(R.string.just_now_time),
             priority = "",
             actionRequired = false
         ),
         AlertModel(
             id = 2,
-            name = "James Logan",
-            title = "Urgent: Health Report Available",
-            description = "Your recent blood test results show elevated cholesterol levels. Please schedule a follow-up with your doctor.",
-            time = "30m ago",
-            priority = "High",
+            name = stringResource(R.string.james_logan_name),
+            title = stringResource(R.string.urgent_health_report_title),
+            description = stringResource(R.string.urgent_health_report_description),
+            time = stringResource(R.string.thirty_minutes_ago_time),
+            priority = stringResource(R.string.high_priority),
             actionRequired = true
         ),
         AlertModel(
             id = 3,
-            name = "James Logan",
-            title = "Dental Cleaning Today",
-            description = "Don't forget your dental cleaning appointment today at 2:00 PM with Dr. Sarah Johnson.",
-            time = "32m ago",
-            priority = "Medium",
+            name = stringResource(R.string.james_logan_name),
+            title = stringResource(R.string.appointment_reminder_title),
+            description = stringResource(R.string.appointment_reminder_description),
+            time = stringResource(R.string.thirty_two_minutes_ago_time),
+            priority = stringResource(R.string.medium_priority),
             actionRequired = false
         )
     )
@@ -89,7 +89,7 @@ fun AlertScreen(
             .background(Color(0xFFFFFFFF)) .statusBarsPadding()
     ) {
 
-        TopBarHeader1(title = "Alerts", onBackClick = {})
+        TopBarHeader1(title = stringResource(R.string.alerts_title), onBackClick = {})
 
         Column(
             modifier = Modifier
@@ -101,7 +101,7 @@ fun AlertScreen(
                 contentPadding = PaddingValues(bottom = 50.dp, top = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
 
-            ) {
+                ) {
                 items(alertList) { item ->
                     AlertCard(
                         name = item.name,
@@ -118,9 +118,11 @@ fun AlertScreen(
         }
 
 
-        }
+    }
 
 }
+
+
 
 
 @Preview(showBackground = true)

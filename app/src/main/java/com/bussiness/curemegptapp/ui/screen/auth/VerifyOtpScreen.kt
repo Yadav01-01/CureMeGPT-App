@@ -145,7 +145,12 @@ var enterCompleteOtp = stringResource(R.string.enter_complete_otp)
                         if (fromScreen == "create") {
                             showDialog = true
                         } else {
-                            navController.navigate(AppDestination.NewPassword)
+//                            navController.navigate(AppDestination.NewPassword)
+                            navController.navigate(AppDestination.NewPassword) {
+                                popUpTo("verifyOtp?from={from}&email={email}") {
+                                    inclusive = true
+                                }
+                            }
                         }
 
                     }

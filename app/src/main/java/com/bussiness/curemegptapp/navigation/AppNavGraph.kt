@@ -45,7 +45,26 @@ fun AppNavGraph(navController: NavHostController,modifier : Modifier = Modifier)
             composable<AppDestination.Splash> { SplashScreen(navController) }
             composable<AppDestination.Onboarding> { OnboardingScreen(navController) }
             composable<AppDestination.Login> { LoginScreen(navController) }
-            composable<AppDestination.Reset> { ResetScreen(navController) }
+          //  composable<AppDestination.Reset> { ResetScreen(navController) }
+//            composable(
+//                route = "reset?from={from}",
+//                arguments = listOf(
+//                    navArgument("from") { defaultValue = "" }
+//                )
+//            ) { backStackEntry ->
+//                val from = backStackEntry.arguments?.getString("from") ?: ""
+//                ResetScreen(navController, from)
+//            }
+            composable(
+                route = "reset?from={from}",
+                arguments = listOf(
+                    navArgument("from") { defaultValue = "" },
+                )
+            ) { backStackEntry ->
+                val from = backStackEntry.arguments?.getString("from") ?: ""
+                ResetScreen(navController, from)
+            }
+
             // composable<AppDestination.VerifyOtp> { VerifyOtpScreen(navController) }
             composable(
                 route = "verifyOtp?from={from}&email={email}",
@@ -58,7 +77,9 @@ fun AppNavGraph(navController: NavHostController,modifier : Modifier = Modifier)
                 val email = backStackEntry.arguments?.getString("email") ?: ""
                 VerifyOtpScreen(navController, from, email)
             }
-            composable<AppDestination.NewPassword> { NewPasswordScreen(navController) }
+
+
+            composable<AppDestination.NewPassword> { NewPasswordScreen(navController,"auth") }
             composable<AppDestination.CreateAccount> { CreateAccountScreen(navController) }
             composable<AppDestination.PrivacyConsent> { PrivacyConsentScreen(navController) }
             composable<AppDestination.ProfileCompletion> { ProfileCompletionScreen(navController) }

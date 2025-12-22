@@ -319,7 +319,9 @@ fun HealthScheduleScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(filteredList) { appointment ->
-                        AppointmentCard(appointment = appointment, onEditClick = {}, onDeleteClick = {showDeleteDialog = true})
+                        AppointmentCard(appointment = appointment, onEditClick = {
+                            navController.navigate(AppDestination.RescheduleAppointmentScreen)},
+                            onDeleteClick = {showDeleteDialog = true})
                     }
                 }
             } else {
@@ -395,7 +397,9 @@ fun HealthScheduleScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(filteredList1) { medication ->
-                        MedicationsCard(medication = medication, onEditClick = {}, onDeleteClick = {showDeleteDialog1 = true})
+                        MedicationsCard(medication = medication,
+                            onEditClick = {navController.navigate(AppDestination.EditMedicationScreen)},
+                            onDeleteClick = {showDeleteDialog1 = true})
                     }
                 }
 
