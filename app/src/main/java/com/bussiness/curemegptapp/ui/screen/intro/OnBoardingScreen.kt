@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -113,7 +114,7 @@ fun OnboardingScreen(navController: NavHostController) {
                     })
                 }
                 Spacer(modifier = Modifier.width(16.dp))
-                ContinueButton(text = if (isLastPage) "Get Started" else if (isFirstPage )"Next"  else "Continue", onClick = {
+                ContinueButton(text = if (isLastPage) stringResource(R.string.get_started)/*"Get Started"*/ else if (isFirstPage ) stringResource(R.string.next_button)/*"Next"*/  else stringResource(R.string.continue_button)/*"Continue"*/, onClick = {
                     if (isLastPage) {
                         navController.navigate(AppDestination.Login)
                     } else {

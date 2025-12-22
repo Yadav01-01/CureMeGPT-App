@@ -154,6 +154,48 @@
 
     <!-- Note: 'email_phone_placeholder' and 'login_link' are already defined -->
 
-<!--    stringResource(R.string.known_allergies_label),-->
+    <!-- Verify OTP Screen Strings -->
+    <string name="verify_your_account">Verify Your Account</string>
+    <string name="otp_sent_description">We\'ve sent a 5-digit code to your %s.</string>
+    <string name="verify_and_continue">Verify &amp; Continue</string>
+    <string name="please_enter_otp">Please enter OTP</string>
+    <string name="enter_complete_otp">Enter complete 5-digit OTP</string>
+    <string name="invalid_otp">Invalid OTP</string>
+    <string name="didnt_receive_code">Didn\'t receive code? </string>
+    <string name="resend_otp_in">Resend OTP in </string>
+    <string name="time_seconds">%ss</string>
+    <string name="resend_now">Resend Now</string>
+    <string name="back">Back</string>
+
+    <!-- Account Created Dialog Strings -->
+    <string name="account_created_success2">Account Created\nSuccessfully!</string>
+    <string name="account_ready_description">Your account is ready. Start exploring now!</string>
+
+    <!-- Navigation -->
+    <string name="open_chat_navigation">openChat?from=auth</string>
+
+    <!-- Onboarding Screen Strings -->
+    <string name="onboarding_title_1">Never Miss a Dose</string>
+    <string name="onboarding_description_1">Smart reminders keep your medications and prescriptions on track, so your health stays in control.</string>
+
+    <string name="onboarding_title_2">See What Matters, Fast</string>
+    <string name="onboarding_description_2">Get instant answers, health summaries, and personalized insights at a glance.</string>
+
+    <string name="onboarding_title_3">Family Health, Connected</string>
+    <string name="onboarding_description_3">Add family members, manage profiles, and track everyone\'s care in one place.</string>
+
+    <string name="onboarding_title_4">Arrive Prepared</string>
+    <string name="onboarding_description_4">AI organizes your symptoms and records into a simple summary for every doctor visit.</string>
+
+    <string name="onboarding_title_5">Ask, Understand, Act.</string>
+    <string name="onboarding_description_5">From quick questions to daily guidance, CureMeGPT helps you make informed health choices.</string>
+
+    <string name="onboarding_image_description">Onboarding Image</string>
+    <string name="get_started">Get Started</string>
+    <string name="next_button">Next</string>
+    <string name="continue_button">Continue</string>
+
+
+    <!--    stringResource(R.string.known_allergies_label),-->
 
 </resources>

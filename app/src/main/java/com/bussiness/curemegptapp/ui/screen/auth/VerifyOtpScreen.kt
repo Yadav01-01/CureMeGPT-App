@@ -37,6 +37,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -69,8 +70,8 @@ fun VerifyOtpScreen(
 
     if (showDialog) {
         AccountCreatedDialog(
-            title = "Account Created\nSuccessfully!",
-            description = "Your account is ready. Start exploring now!",
+            title = stringResource(R.string.account_created_success2),//"Account Created\nSuccessfully!",
+            description = stringResource(R.string.account_ready_description), //"Your account is ready. Start exploring now!",
             onDismiss = { showDialog = false },
             onSetupProfile = {
                 showDialog = false
@@ -99,8 +100,8 @@ fun VerifyOtpScreen(
     ) {
 
         GradientHeader(
-            heading = "Verify Your Account",
-            description = "We’ve sent a 5-digit code to your $email."
+            heading = stringResource(R.string.verify_your_account),//"Verify Your Account",
+            description = stringResource(R.string.otp_sent_description, email ?: "")//"We’ve sent a 5-digit code to your $email."
         )
 
         Spacer(Modifier.height(55.dp))
@@ -121,17 +122,18 @@ fun VerifyOtpScreen(
 
 
         Spacer(Modifier.height(20.dp))
-
+var pleaseEnterOtp = stringResource(R.string.please_enter_otp)
+var enterCompleteOtp = stringResource(R.string.enter_complete_otp)
         GradientButton(
-            text = "Verify & Continue",
+            text = stringResource(R.string.verify_and_continue),//"Verify & Continue",
             onClick = {
                 when {
                     otp.isEmpty() -> {
-                        Toast.makeText(context, "Please enter OTP", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, pleaseEnterOtp, Toast.LENGTH_SHORT).show()
                     }
 
                     otp.length < 5 -> {
-                        Toast.makeText(context, "Enter complete 5-digit OTP", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, enterCompleteOtp, Toast.LENGTH_SHORT)
                             .show()
                     }
 
@@ -161,7 +163,7 @@ fun VerifyOtpScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Didn’t receive code? ",
+                text = stringResource(R.string.didnt_receive_code),//"Didn’t receive code? ",
                 color = Color.Black,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
@@ -170,7 +172,7 @@ fun VerifyOtpScreen(
 
             if (timeLeft > 0) {
                 Text(
-                    text = "Resend OTP in ",
+                    text = stringResource(R.string.resend_otp_in),//"Resend OTP in ",
                     color = Color.Black,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
@@ -186,7 +188,7 @@ fun VerifyOtpScreen(
                 )
             } else {
                 Text(
-                    text = "Resend Now",
+                    text = stringResource(R.string.resend_now),//"Resend Now",
                     color = Color(0xFF4338CA),
                     fontSize = 15.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_bold)),
@@ -211,7 +213,7 @@ fun VerifyOtpScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Back",
+                    text = stringResource(R.string.back),//"Back",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontSize = 17.sp,
                     modifier = Modifier.clickable(
@@ -231,14 +233,14 @@ fun VerifyOtpScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Back to",
+                    text = stringResource(R.string.back_to_text),//"Back to",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(Modifier.width(4.dp))
                 Text(
-                    text = "Login",
+                    text = stringResource(R.string.login_link),//"Login",
                     color = Color(0xFF4338CA),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Medium,

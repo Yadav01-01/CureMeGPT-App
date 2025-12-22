@@ -689,6 +689,7 @@ fun BottomMessageBar2(
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
 

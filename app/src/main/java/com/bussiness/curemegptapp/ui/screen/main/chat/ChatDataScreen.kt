@@ -80,7 +80,7 @@ fun ChatDataScreen(navController: NavHostController) {
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize().imePadding()
 
         ) {
 
@@ -178,7 +178,7 @@ fun ChatDataScreen(navController: NavHostController) {
                                 start.linkTo(parent.start)
                                 end.linkTo(parent.end)
                             }
-                            .padding(bottom = 10.dp),
+                        ,
                         state = uiState,
                         viewModel = viewModel
                     )
