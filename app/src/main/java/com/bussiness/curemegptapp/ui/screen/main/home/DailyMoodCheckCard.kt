@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -42,11 +43,11 @@ fun DailyMoodCheckCard(
 
 
     val moodList = listOf(
-        Pair(R.drawable.mood1, "Low"),
-        Pair(R.drawable.mood2, "Down"),
-        Pair(R.drawable.mood3, "Neutral"),
-        Pair(R.drawable.mood4, "Good"),
-        Pair(R.drawable.mood5, "Great")
+        Pair(R.drawable.mood1, stringResource(R.string.mood_low)/*"Low"*/),
+        Pair(R.drawable.mood2, stringResource(R.string.mood_down)/*"Down"*/),
+        Pair(R.drawable.mood3, stringResource(R.string.mood_neutral)/*"Neutral"*/),
+        Pair(R.drawable.mood4, stringResource(R.string.mood_good)/*"Good"*/),
+        Pair(R.drawable.mood5,  stringResource(R.string.mood_great)/*"Great"*/)
     )
 
     Card(
@@ -74,7 +75,7 @@ fun DailyMoodCheckCard(
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
-                        text = "Daily Mood Check",
+                        text = stringResource(R.string.daily_mood_check_title)/*"Daily Mood Check"*/,
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                         fontWeight = FontWeight.Medium,
@@ -120,7 +121,7 @@ fun DailyMoodCheckCard(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
                 Text(
-                    text = "Skip for Now",
+                    text = stringResource(R.string.skip_for_now)/*"Skip for Now"*/,
                     color = Color.White,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontWeight = FontWeight.Medium,

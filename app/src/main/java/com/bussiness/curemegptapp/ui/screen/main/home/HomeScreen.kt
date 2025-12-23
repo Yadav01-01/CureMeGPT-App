@@ -70,6 +70,7 @@ import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
 import com.bussiness.curemegptapp.ui.dialog.CompleteProfileDialog
 import com.bussiness.curemegptapp.util.SessionManager
@@ -100,12 +101,12 @@ fun HomeScreen(
     if (showAlertDialog2) {
         AlertCardDialog(
             icon =  R.drawable.ic_medication,
-            title = "Medication Reminder",
-            message = "Time to take your",
-            highlightText = "Lisinopril 10mg.",
-            warningText = "Don't forget to take it with food",
-            cancelText = "Snooze",
-            confirmText = "Mark As Taken",
+            title = stringResource(R.string.medication_reminder_title)/*"Medication Reminder"*/,
+            message =  stringResource(R.string.medication_reminder_message)/*"Time to take your"*/,
+            highlightText = stringResource(R.string.medication_reminder_highlight)/*"Lisinopril 10mg."*/,
+            warningText = stringResource(R.string.medication_reminder_warning)/*"Don't forget to take it with food"*/,
+            cancelText = stringResource(R.string.snooze)/*"Snooze"*/,
+            confirmText = stringResource(R.string.mark_as_taken)/*"Mark As Taken"*/,
             onDismiss = { showAlertDialog2 = false },
             onConfirm = { showAlertDialog2 = false
                 showAlertDialog3 = true  }
@@ -116,11 +117,11 @@ fun HomeScreen(
     if (showAlertDialog3) {
         AlertCardDialog(
             icon =  R.drawable.ic_appointment,
-            title = "Dental Cleaning Today",
-            message = "Don't forget your dental cleaning appointment ",
-            highlightText = "today at 2:00 PM with Dr. Sarah Johnson.",
-            cancelText = "Remind Me Later",
-            confirmText = "Got It",
+            title = stringResource(R.string.appointment_reminder_title)/*"Dental Cleaning Today"*/,
+            message = stringResource(R.string.appointment_reminder_message)/*"Don't forget your dental cleaning appointment "*/,
+            highlightText = stringResource(R.string.appointment_reminder_highlight)/*"today at 2:00 PM with Dr. Sarah Johnson."*/,
+            cancelText = stringResource(R.string.remind_later)/*"Remind Me Later"*/,
+            confirmText = stringResource(R.string.got_it)/*"Got It"*/,
             onDismiss = { showAlertDialog3 = false },
             onConfirm = { showAlertDialog3 = false
                 showCompleteDialog = true}
@@ -129,15 +130,18 @@ fun HomeScreen(
     if (showCompleteDialog) {
         CompleteProfileDialog(
             icon = R.drawable.ic_person_complete_icon,
-            title = "Complete Your Profile",
+            title = stringResource(R.string.complete_profile_title)/*"Complete Your Profile"*/,
             checklist = listOf(
-                "Faster AI answers tailored to you",
+                stringResource(R.string.complete_profile_benefit_1),
+                stringResource(R.string.complete_profile_benefit_2),
+                stringResource(R.string.complete_profile_benefit_3)
+             /*   "Faster AI answers tailored to you",
                 "Safer medication & allergy checks",
-                "Quicker reminders & records Complete Now"
+                "Quicker reminders & records Complete Now"*/
             ),
-            cancelText = "Remind Me Later",
-            confirmText = "Complete Now",
-            skipText = "Skip for Now",
+            cancelText = stringResource(R.string.remind_later)/*"Remind Me Later"*/,
+            confirmText = stringResource(R.string.complete_now)/*"Complete Now"*/,
+            skipText = stringResource(R.string.skip_for_now)/*"Skip for Now"*/,
 
             onDismiss = {
                 showCompleteDialog = false

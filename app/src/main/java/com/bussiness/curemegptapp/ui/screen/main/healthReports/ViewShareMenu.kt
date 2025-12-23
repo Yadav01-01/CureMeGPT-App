@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -61,7 +62,7 @@ fun ViewShareMenu(
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = "View",
+                        text = stringResource(R.string.view)/*"View"*/,
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                         color = Color(0xFF374151),
                         fontSize = 16.sp
@@ -83,7 +84,7 @@ fun ViewShareMenu(
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = "Share",
+                        text = stringResource(R.string.share)/*"Share"*/,
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                         color = Color(0xFF374151),
                         fontSize = 16.sp

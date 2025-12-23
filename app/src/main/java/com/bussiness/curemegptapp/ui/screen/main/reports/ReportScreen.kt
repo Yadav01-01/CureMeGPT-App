@@ -1,6 +1,7 @@
 package com.bussiness.curemegptapp.ui.screen.main.reports
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -37,13 +39,17 @@ fun ReportScreen(navController: NavHostController) {
     ) {
 
         val attachmentList = listOf(
-            "xray_001.jpg",
+            stringResource(R.string.attachment_xray),
+            stringResource(R.string.attachment_analysis_report),
+            stringResource(R.string.attachment_blood_test),
+            stringResource(R.string.attachment_prescription)
+          /*  "xray_001.jpg",
             "analysis_report.pdf",
             "blood_test_result.png",
-            "prescription_2025.pdf"
+            "prescription_2025.pdf"*/
         )
         var priority = "Attention"
-        TopBarHeader2(title = "Back to Reports", onBackClick = {})
+        TopBarHeader2(title = stringResource(R.string.back_to_reports)/*"Back to Reports"*/, onBackClick = {})
         Spacer(modifier = Modifier.height(8.dp))
 
         Column(
@@ -77,7 +83,7 @@ fun ReportScreen(navController: NavHostController) {
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = "Blood Test Results",
+                        text = stringResource(R.string.blood_test_results)/*"Blood Test Results"*/,
                         fontSize = 23.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                         fontWeight = FontWeight.Normal,
@@ -114,7 +120,7 @@ fun ReportScreen(navController: NavHostController) {
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "8/26/2025",
+                            text = stringResource(R.string.report_date)/*"8/26/2025"*/,
                             fontSize = 16.sp,
                             color = Color.Black,
                             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -141,7 +147,7 @@ fun ReportScreen(navController: NavHostController) {
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
-                            text = "James Logan",
+                            text = stringResource(R.string.patient_name)/*"James Logan"*/,
                             fontSize = 16.sp,
                             color = Color(0xFF4338CA),
                             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -180,7 +186,7 @@ fun ReportScreen(navController: NavHostController) {
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "Summary",
+                        text = stringResource(R.string.summary)/*"Summary"*/,
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_semibold)),
                         fontWeight = FontWeight.SemiBold,
@@ -208,7 +214,7 @@ fun ReportScreen(navController: NavHostController) {
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "Detailed Analysis",
+                        text = stringResource(R.string.detailed_analysis)/*"Detailed Analysis"*/,
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_semibold)),
                         fontWeight = FontWeight.SemiBold,
@@ -216,7 +222,7 @@ fun ReportScreen(navController: NavHostController) {
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        text = "AI analysis detected a small cavity formation in tooth #14 (upper left first molar). The cavity appears to be in the early stages of development, affecting only the enamel layer. Recommended treatment includes fluoride application and monitoring.",
+                        text = stringResource(R.string.detailed_analysis_content)/*"AI analysis detected a small cavity formation in tooth #14 (upper left first molar). The cavity appears to be in the early stages of development, affecting only the enamel layer. Recommended treatment includes fluoride application and monitoring."*/,
                         fontSize = 15.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                         fontWeight = FontWeight.Normal,
@@ -236,7 +242,7 @@ fun ReportScreen(navController: NavHostController) {
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "AI Insights",
+                        text = stringResource(R.string.ai_insights)/*"AI Insights"*/,
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_semibold)),
                         fontWeight = FontWeight.SemiBold,
@@ -244,13 +250,32 @@ fun ReportScreen(navController: NavHostController) {
                     )
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    InsightRow("Cavity size", "2mm diameter")
+       /*             InsightRow("Cavity size", "2mm diameter")
                     Spacer(modifier = Modifier.height(20.dp))
                     InsightRow("Location", "Occlusal surface")
                     Spacer(modifier = Modifier.height(20.dp))
                     InsightRow("Severity", "Early stage")
                     Spacer(modifier = Modifier.height(20.dp))
-                    InsightRow("Treatment urgency", "Within 2-4 weeks")
+                    InsightRow("Treatment urgency", "Within 2-4 weeks")*/
+                    InsightRow(
+                        label = stringResource(R.string.cavity_size),
+                        value = stringResource(R.string.cavity_size_value)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    InsightRow(
+                        label = stringResource(R.string.location),
+                        value = stringResource(R.string.location_value)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    InsightRow(
+                        label = stringResource(R.string.severity),
+                        value = stringResource(R.string.severity_value)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    InsightRow(
+                        label = stringResource(R.string.treatment_urgency),
+                        value = stringResource(R.string.treatment_urgency_value)
+                    )
                 }
             }
 
@@ -264,7 +289,7 @@ fun ReportScreen(navController: NavHostController) {
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "Attachments",
+                        text = stringResource(R.string.attachments)/*"Attachments"*/,
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_semibold)),
                         fontWeight = FontWeight.SemiBold,
@@ -315,11 +340,10 @@ fun InsightRow(label: String, value: String) {
 
 
 
+@SuppressLint("SuspiciousIndentation")
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ReportScreenPreview() {
     val navController = rememberNavController()
-
         ReportScreen(navController)
-
 }

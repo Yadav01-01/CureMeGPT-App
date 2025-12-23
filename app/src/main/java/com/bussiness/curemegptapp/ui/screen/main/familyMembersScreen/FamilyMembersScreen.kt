@@ -65,8 +65,6 @@ data class FamilyMember(
     val imageRes: Int? = null
 )
 
-
-
 @Composable
 fun FamilyMembersScreen(navController: NavHostController) {
     // Original list of all members
@@ -567,6 +565,7 @@ fun FamilyMembersScreenPreview() {
     val navController = rememberNavController()
     FamilyMembersScreen(navController = navController)
 }
+
 /*
 @Composable
 fun FamilyMembersScreen(navController: NavHostController) {

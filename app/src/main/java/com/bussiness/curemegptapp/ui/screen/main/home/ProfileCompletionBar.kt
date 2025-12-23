@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,7 +32,7 @@ fun ProfileCompletionBar(progress: Float) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Profile Completion",
+            text = stringResource(R.string.profile_completion)/*"Profile Completion"*/,
             fontSize = 16.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal,

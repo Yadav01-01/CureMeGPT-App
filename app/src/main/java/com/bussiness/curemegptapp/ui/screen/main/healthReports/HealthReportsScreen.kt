@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -78,7 +79,7 @@ fun HealthReportsScreen(navController: NavHostController) {
     val reportData = listOf(
         ReportData(
             icon = R.drawable.ic_app_reporting_icon,   // apna icon change kar lena
-            title = "Dental X-ray Analysis",
+            title = stringResource(R.string.dental_xray_report_title)/*"Dental X-ray Analysis"*/,
             patientName = "Peter Logan",
             priority = "Attention",
             date = "08/26/2025",
@@ -123,7 +124,7 @@ fun HealthReportsScreen(navController: NavHostController) {
                 .fillMaxSize()
         ) {
 
-            CommonHeader("Health Reports")
+            CommonHeader(stringResource(R.string.health_reports_title)/*"Health Reports"*/)
 
             Spacer(modifier = Modifier.height(7.dp))
                 Row(
@@ -144,7 +145,7 @@ fun HealthReportsScreen(navController: NavHostController) {
                             onValueChange = { searchQuery = it },
                             placeholder = {
                                 Text(
-                                    text = "Search",
+                                    text = stringResource(R.string.search_placeholder)/*"Search"*/,
                                     color = Color(0xFFBCBCBC),
                                     fontSize = 16.sp,
                                     fontFamily = FontFamily(Font(R.font.urbanist_regular))
@@ -153,7 +154,7 @@ fun HealthReportsScreen(navController: NavHostController) {
                             leadingIcon = {
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_search_icon),
-                                    contentDescription = "Search",
+                                    contentDescription = stringResource(R.string.search_placeholder),
                                     modifier = Modifier.size(18.dp)
                                 )
                             },

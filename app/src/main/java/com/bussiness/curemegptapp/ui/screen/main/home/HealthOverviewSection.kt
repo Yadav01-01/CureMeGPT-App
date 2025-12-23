@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -90,7 +91,7 @@ fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Health Overview",
+            text = stringResource(R.string.health_overview_title)/*"Health Overview"*/,
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             fontWeight = FontWeight.Medium,
@@ -98,7 +99,7 @@ fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit) {
         )
 
         GradientRedButton(
-            text = "Add",
+            text = stringResource(R.string.add_button_text)/*"Add"*/,
             icon = R.drawable.ic_plus_normal_icon,
             width = 88.dp,
             height = 42.dp,
@@ -305,7 +306,7 @@ fun UserHealthCard(profile: HealthProfile) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Active Alerts",
+                text = stringResource(R.string.active_alerts_title)/*"Active Alerts"*/,
                 fontSize = 14.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
@@ -334,7 +335,7 @@ fun UserHealthCard(profile: HealthProfile) {
             ) {
 
                 GradientRedButton(
-                    text = "Schedule",
+                    text = stringResource(R.string.schedule_button_text)/*"Schedule"*/,
                     icon = R.drawable.ic_schedule_attention_icon,
                     width = 101.dp,
                     height = 42.dp,
@@ -346,7 +347,7 @@ fun UserHealthCard(profile: HealthProfile) {
                 )
 
                 GradientRedButton(
-                    text = "Ask Ai",
+                    text = stringResource(R.string.ask_ai_button_text)/*"Ask Ai"*/,
                     icon = R.drawable.ic_ask_ai_icon,
                     width = 80.dp,
                     height = 42.dp,
@@ -362,7 +363,7 @@ fun UserHealthCard(profile: HealthProfile) {
                 )
 
                 AppointmentBox(
-                    text = "Appointment in 7 Days",
+                    text = stringResource(R.string.appointment_in_days_format, 7),
                     modifier = Modifier
                         .width(180.dp)
                         .height(42.dp)

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,8 +31,16 @@ fun ThingsNeedingAttention(
 ) {
 
     val attention = listOf(
-        Triple("Tooth Pain Symptoms Detected", "For: James Logan", true),
-        Triple("Overdue Dental Cleaning", "For: Rosy Logan", true),
+        Triple(
+            stringResource(R.string.tooth_pain_detected_title),
+            stringResource(R.string.for_label) + " " + stringResource(R.string.james_logan_name),
+            true
+        ),
+        Triple(
+            stringResource(R.string.overdue_dental_cleaning_title),
+            stringResource(R.string.for_label) + " " + stringResource(R.string.rosy_logan_name),
+            true
+        ),
     )
 
 
@@ -41,7 +50,7 @@ fun ThingsNeedingAttention(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Thing Needing Attention",
+            text = stringResource(R.string.things_needing_attention_title)/*"Thing Needing Attention"*/,
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             fontWeight = FontWeight.Medium,
@@ -49,7 +58,7 @@ fun ThingsNeedingAttention(
         )
 
         GradientButton2(
-            text = "View All",
+            text = stringResource(R.string.view_all_button)/*"View All"*/,
             fontSize = 12.sp,
             paddingHorizontal = 2.dp,
             onClick = onViewAllClick,
@@ -78,3 +87,5 @@ fun ThingsNeedingAttention(
     }
 
 }
+
+

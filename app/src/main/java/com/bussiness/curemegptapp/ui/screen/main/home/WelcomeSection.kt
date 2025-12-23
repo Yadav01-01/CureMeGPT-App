@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +42,7 @@ fun WelcomeSection(userGreating: String, userName: String) {
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Here's your health overview for today",
+            text = stringResource(R.string.here_your_health_overview_for_today)/*"Here's your health overview for today"*/,
             fontSize = 14.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal,

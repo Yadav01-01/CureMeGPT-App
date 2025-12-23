@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -89,7 +90,7 @@ fun ScheduleNewAppointmentScreen(
             .background(Color(0xFFFFFFFF))
     ) {
 
-        TopBarHeader1(title = "Schedule New Appointment", onBackClick = {})
+        TopBarHeader1(title = stringResource(R.string.schedule_new_appointment_title), onBackClick = {})
 
         Column(
             modifier = Modifier
@@ -99,7 +100,7 @@ fun ScheduleNewAppointmentScreen(
 
 
             Text(
-                text = "For Whom",
+                text = stringResource(R.string.for_whom_label)/*"For Whom"*/,
                 fontSize = 15.sp,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -119,7 +120,7 @@ fun ScheduleNewAppointmentScreen(
 
             Spacer(Modifier.height(24.dp))
             Text(
-                text = "Appointment Type",
+                text = stringResource(R.string.appointment_type_label)/*"Appointment Type"*/,
                 fontSize = 15.sp,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -137,9 +138,9 @@ fun ScheduleNewAppointmentScreen(
 
             Spacer(Modifier.height(24.dp))
             ProfileInputMultipleLineField2(
-                label = "Description",
+                label = stringResource(R.string.description_label)/*"Description"*/,
                 isImportant = false,
-                placeholder = "Type here....",
+                placeholder = stringResource(R.string.type_here_placeholder)/*"Type here...."*/,
                 value = description,
                 onValueChange = { description = it },
                 heightOfEditText = 135.dp,
@@ -152,9 +153,9 @@ fun ScheduleNewAppointmentScreen(
 
             Row (modifier = Modifier.padding(horizontal = 5.dp)) {
                 UniversalInputField(
-                    title = "Date",
+                    title = stringResource(R.string.date_label)/*"Date"*/,
                     isImportant = false,
-                    placeholder = "MM-DD-YYYY",
+                    placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
                     value = dateOfBirth,
                     modifier = Modifier.weight(1f),
                     rightIcon = R.drawable.ic_calender_icon
@@ -163,9 +164,9 @@ fun ScheduleNewAppointmentScreen(
                 }
                 Spacer(Modifier.width(5.dp))
                 UniversalInputField(
-                    title = "Time",
+                    title = stringResource(R.string.time_label)/*"Time"*/,
                     isImportant = false,
-                    placeholder = "00:00:00",
+                    placeholder = stringResource(R.string.time_format_placeholder)/*"00:00:00"*/,
                     value = time,
                     modifier = Modifier.weight(1f),
                     rightIcon = R.drawable.ic_appointed_gray_icon
@@ -177,9 +178,9 @@ fun ScheduleNewAppointmentScreen(
             Spacer(Modifier.width(24.dp))
 
             ProfileInputField(
-                label = "Preferred Doctor",
+                label = stringResource(R.string.preferred_doctor_label)/*"Preferred Doctor"*/,
                 isImportant = false,
-                placeholder = "e.g., Dr. John Deo",
+                placeholder = stringResource(R.string.doctor_placeholder)/*"e.g., Dr. John Deo"*/,
                 value = preferredDoctor,
                 onValueChange = { preferredDoctor = it }
             )
@@ -187,9 +188,9 @@ fun ScheduleNewAppointmentScreen(
             Spacer(Modifier.width(24.dp))
 
             ProfileInputField(
-                label = "Preferred Clinic",
+                label = stringResource(R.string.preferred_clinic_label)/*"Preferred Clinic"*/,
                 isImportant = false,
-                placeholder = "e.g., Bright Smile Dental",
+                placeholder = stringResource(R.string.clinic_placeholder)/*"e.g., Bright Smile Dental"*/,
                 value = preferredClinic,
                 onValueChange = { preferredClinic = it }
             )
@@ -197,7 +198,7 @@ fun ScheduleNewAppointmentScreen(
             Spacer(Modifier.height(24.dp))
 
             Text(
-                text = "Appointment Reminder",
+                text = stringResource(R.string.appointment_reminder_label)/*"Appointment Reminder"*/,
                 fontSize = 15.sp,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -221,11 +222,11 @@ fun ScheduleNewAppointmentScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
 
-                CancelButton(title = "Cancel") {
+                CancelButton(title = stringResource(R.string.cancel_button)/*"Cancel"*/) {
 
                 }
 
-                ContinueButton(text = "Schedule") {
+                ContinueButton(text = stringResource(R.string.schedule_button)/*"Schedule"*/) {
                     showDialogSuccessFully = true
                 }
             }
@@ -254,7 +255,7 @@ fun ScheduleNewAppointmentScreen(
     }
 
     if (showDialogSuccessFully) {
-        SuccessfulDialog(title = "Appointment Scheduled \nSuccessfully", description = "Your appointment reminder are set.",
+        SuccessfulDialog(title = stringResource(R.string.schedule_success_title)/*"Appointment Scheduled \nSuccessfully"*/, description = stringResource(R.string.schedule_success_description)/*"Your appointment reminder are set."*/,
             onDismiss = { showDialogSuccessFully = false },
             onOkClick = { showDialogSuccessFully = false }
         )

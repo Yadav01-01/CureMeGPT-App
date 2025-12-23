@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -171,7 +172,7 @@ fun ProfileContent(
                         }
 
                         Text(
-                            text = "My Profile",
+                            text = stringResource(R.string.my_profile_title)/*"My Profile"*/,
                             fontSize = 20.sp,
                             fontFamily = FontFamily(Font(R.font.onest_medium)),
                             fontWeight = FontWeight.Medium,
