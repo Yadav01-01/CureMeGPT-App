@@ -235,12 +235,16 @@ fun HomeScreen(
             ) {
                 MedicationsAndAllergies(
                     medications = uiState.medications,
-                    allergies = uiState.allergies
+                    allergies = uiState.allergies,
+                    onEditClick = {
+                        navController.navigate(AppDestination.EditProfileScreen)
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
                 RecommendedSteps(steps = uiState.recommendedSteps)
             }
+            //AppDestination.EditProfileScreen
 
             Spacer(modifier = Modifier.height(20.dp))
             ThingsNeedingAttention(
@@ -257,7 +261,9 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             HealthOverviewSection(alerts = uiState.alerts, onAddClick = {
                 navController.navigate("addFamilyMember?from=main")
-            })
+            },onEditClick = {
+                navController.navigate(AppDestination.EditFamilyMemberDetailsScreen)
+            }, onSchedule = {navController.navigate(AppDestination.ScheduleNewAppointment)}, onAskAi = {navController.navigate("openChat?from=main")})
         }
     }
 }

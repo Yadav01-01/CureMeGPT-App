@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -58,7 +59,7 @@ fun SettingsScreen(navController: NavHostController) {
             .background(Color(0xFFFFFFFF))
             .statusBarsPadding()
     ) {
-        TopBarHeader2(title = "Settings", onBackClick = { navController.popBackStack() })
+        TopBarHeader2(title = stringResource(R.string.settings_title)/*"Settings"*/, onBackClick = { navController.popBackStack() })
 
         Column(
             modifier = Modifier
@@ -76,7 +77,7 @@ fun SettingsScreen(navController: NavHostController) {
                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                     SettingsMenuItem(
                         icon = R.drawable.ic_info_setting_icon,
-                        title = "About CureMeGPT",
+                        title = stringResource(R.string.settings_about)/*"About CureMeGPT"*/,
                         onClick = { navController.navigate(AppDestination.AboutScreen) }
                     )
 
@@ -84,7 +85,7 @@ fun SettingsScreen(navController: NavHostController) {
 
                     SettingsMenuItem(
                         icon = R.drawable.ic_privacy_policy_setting_icon,
-                        title = "Privacy Policy",
+                        title = stringResource(R.string.settings_privacy_policy)/*"Privacy Policy"*/,
                         onClick = { navController.navigate(AppDestination.PrivacyPolicyScreen) }
                     )
 
@@ -92,7 +93,7 @@ fun SettingsScreen(navController: NavHostController) {
 
                     SettingsMenuItem(
                         icon = R.drawable.ic_terms_condition_setting_icon,
-                        title = "Terms & Conditions",
+                        title = stringResource(R.string.settings_terms_conditions)/*"Terms & Conditions"*/,
                         onClick = { navController.navigate(AppDestination.TermsAndConditionsScreen) }
                     )
 
@@ -100,7 +101,7 @@ fun SettingsScreen(navController: NavHostController) {
 
                     SettingsMenuItem(
                         icon = R.drawable.ic_ask_setting_icon,
-                        title = "Frequently Ask Questions",
+                        title = stringResource(R.string.settings_faq)/*"Frequently Ask Questions"*/,
                         onClick = { navController.navigate(AppDestination.FrequentlyAskQuestionsScreen) }
                     )
 
@@ -108,7 +109,7 @@ fun SettingsScreen(navController: NavHostController) {
 
                     SettingsMenuItem(
                         icon = R.drawable.ic_account_setting_icon,
-                        title = "Account Privacy",
+                        title = stringResource(R.string.settings_account_privacy)/*"Account Privacy"*/,
                         onClick = { navController.navigate(AppDestination.AccountPrivacyScreen) }
 
                     )
@@ -117,7 +118,7 @@ fun SettingsScreen(navController: NavHostController) {
 
                     SettingsMenuItem(
                         icon = R.drawable.ic_help_setting_icon,
-                        title = "Help & Support",
+                        title = stringResource(R.string.settings_help_support)/*"Help & Support"*/,
                         onClick = { navController.navigate(AppDestination.HelpSupportScreen) }
                     )
 
@@ -152,7 +153,7 @@ fun SettingsScreen(navController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Logout",
+                    text = stringResource(R.string.settings_logout_button)/*"Logout"*/,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -177,7 +178,7 @@ fun SettingsScreen(navController: NavHostController) {
 
             // Version Text
             Text(
-                text = "Version 0.0.1",
+                text = stringResource(R.string.settings_version)/*"Version 0.0.1"*/,
                 fontSize = 14.sp,
                 color = Color(0xFF697383),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -199,10 +200,10 @@ fun SettingsScreen(navController: NavHostController) {
 
     if (showDialog){
         LogOutDialog(
-            title = "Confirm Logout",
-            message = "Are you sure you want to log out of your account?",
-            cancelText = "Cancel",
-            confirmText = "Yes, Logout",
+            title = stringResource(R.string.settings_logout_dialog_title)/*"Confirm Logout"*/,
+            message = stringResource(R.string.settings_logout_dialog_message)/*"Are you sure you want to log out of your account?"*/,
+            cancelText = stringResource(R.string.cancel_button)/*"Cancel"*/,
+            confirmText = stringResource(R.string.settings_logout_dialog_confirm)/*"Yes, Logout"*/,
             onDismiss = {
                 showDialog = false
             },

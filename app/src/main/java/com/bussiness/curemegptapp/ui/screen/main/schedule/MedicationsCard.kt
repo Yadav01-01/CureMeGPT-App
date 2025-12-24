@@ -184,8 +184,8 @@ fun MedicationsCard(medication: Medication,onEditClick: () -> Unit,
                     Text(
                         text = medication.frequency,
                         fontSize = 10.sp,
-                        color = Color(0xFF211C64),
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                        color = Color(0xFF4338CA),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 1.dp),
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                         fontWeight = FontWeight.Medium
                     )
@@ -385,11 +385,11 @@ fun MedicationsCard(medication: Medication,onEditClick: () -> Unit,
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 // Instructions
                 Row(
-                    verticalAlignment = Alignment.Top
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_note_health_icon),

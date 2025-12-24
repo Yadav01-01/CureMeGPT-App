@@ -52,7 +52,7 @@ fun DailyMoodCheckCard(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(36.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF4338CA))
     ) {
 
@@ -125,7 +125,7 @@ fun DailyMoodCheckCard(
                     color = Color.White,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 )
             }
         }

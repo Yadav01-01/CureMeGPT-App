@@ -79,7 +79,7 @@ val profiles = listOf(
 
 
 @Composable
-fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit) {
+fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit,onEditClick: () -> Unit,onSchedule: ()-> Unit,onAskAi: () -> Unit) {
     val profiles = remember { profiles }
     var selectedProfile by remember {
         mutableStateOf(profiles.first())
@@ -149,7 +149,9 @@ fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit) {
 
 
     Spacer(modifier = Modifier.height(42.dp))
-    UserHealthCard(profile = selectedProfile)
+    UserHealthCard(profile = selectedProfile, onEditClick={
+        onEditClick()
+    }, onSchedule = {onSchedule()}, onAskAi = {onAskAi()})
 
     Spacer(modifier = Modifier.height(71.dp))
 }
@@ -214,7 +216,7 @@ fun ProfileTab(
 
 
 @Composable
-fun UserHealthCard(profile: HealthProfile) {
+fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()-> Unit,onAskAi : ()-> Unit) {
     val alerts = listOf(
         "Blood pressure medication reminder",
         "Annual checkup due"
@@ -297,7 +299,7 @@ fun UserHealthCard(profile: HealthProfile) {
                         .size(45.dp)
                         .clickable( interactionSource = remember { MutableInteractionSource() },
                             indication = null) {
-
+onEditClick()
                         }
                 )
 
@@ -343,7 +345,7 @@ fun UserHealthCard(profile: HealthProfile) {
                     fontSize = 12.sp,
                     horizontalPadding = 12.dp,
                     modifier = Modifier.alignByBaseline(),
-                    onClick = { }
+                    onClick = { onSchedule()}
                 )
 
                 GradientRedButton(
@@ -359,7 +361,7 @@ fun UserHealthCard(profile: HealthProfile) {
                         Color(0xFF4338CA),
                         Color(0xFF211C64)
                     ),
-                    onClick = { }
+                    onClick = { onAskAi()}
                 )
 
                 AppointmentBox(

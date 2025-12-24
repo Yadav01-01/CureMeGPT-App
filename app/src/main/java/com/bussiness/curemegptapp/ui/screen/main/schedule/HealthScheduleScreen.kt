@@ -3,6 +3,8 @@ package com.bussiness.curemegptapp.ui.screen.main.schedule
 //import com.bussiness.curemegptapp.ui.component.AppointmentMenuPopup
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -55,6 +58,13 @@ import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialog
 import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialogProperties
 import com.bussiness.curemegptapp.ui.sheet.FilterAppointmentsBottomSheet
 import com.bussiness.curemegptapp.ui.sheet.FilterFamilyMembersSheet
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+val appDateFormatter: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
 data class Appointment(
     val title: String,
@@ -88,6 +98,7 @@ data class MedicationTime(
     val isChecked: Boolean = false
 )
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HealthScheduleScreen(navController: NavHostController) {
     var showSheet by remember { mutableStateOf(false) }
@@ -105,8 +116,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
         Appointment(
             title = stringResource(R.string.normal_checkup),
             doctor = stringResource(R.string.dr_emily_rodriguez),
-            patientName = "Peter Logan",
-            date = stringResource(R.string.schedule_date_sep_1),
+            patientName = "John Doe",
+            date = "09/01/2025",
             time = stringResource(R.string.schedule_time_1030_am),
             location = stringResource(R.string.health_care_hub_address),
             description = stringResource(R.string.regular_checkup_description),
@@ -115,8 +126,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
         Appointment(
             title = stringResource(R.string.dental_checkup),
             doctor = stringResource(R.string.dr_sarah_johnson),
-            patientName = "James Logan",
-            date = stringResource(R.string.schedule_date_aug_26),
+            patientName = "Bob Williams",
+            date = "08/26/2025",
             time = stringResource(R.string.schedule_time_1030_am),
             location = stringResource(R.string.cooper_square_address),
             description = stringResource(R.string.regular_checkup_description),
@@ -125,8 +136,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
         Appointment(
             title = stringResource(R.string.root_canal),
             doctor = stringResource(R.string.dr_sarah_johnson),
-            patientName = "James Logan",
-            date = stringResource(R.string.schedule_date_aug_26),
+            patientName = "Alice Johnson",
+            date = "09/05/2025",
             time = stringResource(R.string.schedule_time_1030_am),
             location = stringResource(R.string.cooper_square_address),
             description = stringResource(R.string.regular_checkup_description),
@@ -136,8 +147,18 @@ fun HealthScheduleScreen(navController: NavHostController) {
         Appointment(
             title = stringResource(R.string.root_canal),
             doctor = stringResource(R.string.dr_sarah_johnson),
-            patientName = "James Logan",
-            date = stringResource(R.string.schedule_date_aug_26),
+            patientName = "John Doe",
+            date = "12/24/2025",
+            time = stringResource(R.string.schedule_time_1030_am),
+            location = stringResource(R.string.cooper_square_address),
+            description = stringResource(R.string.regular_checkup_description),
+            icon = R.drawable.ic_tooth_light,
+            isVisibleItem = false
+        ),   Appointment(
+            title = stringResource(R.string.root_canal),
+            doctor = stringResource(R.string.dr_sarah_johnson),
+            patientName = "John Doe",
+            date = "12/25/2025",
             time = stringResource(R.string.schedule_time_1030_am),
             location = stringResource(R.string.cooper_square_address),
             description = stringResource(R.string.regular_checkup_description),
@@ -147,8 +168,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
         Appointment(
             title = stringResource(R.string.root_canal),
             doctor = stringResource(R.string.dr_sarah_johnson),
-            patientName = "James Logan",
-            date = stringResource(R.string.schedule_date_aug_26),
+            patientName = "Jane Smith",
+            date = "12/24/2026",
             time = stringResource(R.string.schedule_time_1030_am),
             location = stringResource(R.string.cooper_square_address),
             description = stringResource(R.string.regular_checkup_description),
@@ -162,7 +183,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
             icon = R.drawable.ic_medication_icon,
             title = stringResource(R.string.albuterol_inhaler_2_puffs),
             patientName = "Peter Logan",
-            medicationType = stringResource(R.string.medication_type_label),
+            medicationType = stringResource(R.string.medication_type_label1),
             frequency = stringResource(R.string.weekly_frequency),
             days = stringResource(R.string.monday_tuesday_days),
             times = listOf(
@@ -180,7 +201,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
             icon = R.drawable.ic_medication_icon,
             title = stringResource(R.string.albuterol_inhaler),
             patientName = "Peter Logan",
-            medicationType = stringResource(R.string.medication_type_label),
+            medicationType = stringResource(R.string.medication_type_label1),
             frequency = stringResource(R.string.weekly_frequency),
             days = stringResource(R.string.monday_tuesday_days),
             times = listOf(
@@ -198,7 +219,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
             icon = R.drawable.ic_medication_icon,
             title = stringResource(R.string.supplements_name),
             patientName = "Peter Logan",
-            medicationType = stringResource(R.string.medication_type_label),
+            medicationType = stringResource(R.string.medication_type_label1),
             frequency = stringResource(R.string.weekly_frequency),
             days = stringResource(R.string.monday_tuesday_days),
             times = listOf(
@@ -218,12 +239,50 @@ fun HealthScheduleScreen(navController: NavHostController) {
         )
     )
 
+    var selectedFilter by remember { mutableStateOf("All") }   // Today, Upcoming, Past, All
+    var selectedMember by remember { mutableStateOf<String?>(null) }
+    var selectedMemberMed by remember { mutableStateOf<String?>(null) }
+
+//    val filteredList = appointments.filter { item ->
+//        item.title.contains(searchQuery, ignoreCase = true)
+//    }
     val filteredList = appointments.filter { item ->
-        item.title.contains(searchQuery, ignoreCase = true)
+
+        val searchMatch =
+            item.title.contains(searchQuery, true) ||
+                    item.doctor.contains(searchQuery, true) ||
+                    item.patientName.contains(searchQuery, true)
+
+        val memberMatch =
+            selectedMember == null || item.patientName == selectedMember
+
+        val dateMatch = when (selectedFilter) {
+            "Today" -> item.date == getTodayDate()
+            "Upcoming" -> isUpcoming(item.date)
+            "Past" -> isPast(item.date)
+            else -> true
+        }
+
+        searchMatch && memberMatch && dateMatch
     }
+
+//    val filteredList1 = medication.filter { item ->
+//        item.title.contains(searchQuery, ignoreCase = true)
+//    }
+
     val filteredList1 = medication.filter { item ->
-        item.title.contains(searchQuery, ignoreCase = true)
+        val searchMatch =
+            item.title.contains(searchQuery, true) ||
+                    item.patientName.contains(searchQuery, true)
+
+        val memberMatch =
+            selectedMemberMed == null || item.patientName == selectedMemberMed
+
+        searchMatch && memberMatch
     }
+
+
+
 
     Box(
         modifier = Modifier
@@ -238,7 +297,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
         ) {
 
             CommonHeader(stringResource(R.string.health_schedule_title))
-
+            Spacer(modifier = Modifier.height(16.dp))
             // ---------- TABS ----------
             Row(
                 modifier = Modifier
@@ -286,11 +345,16 @@ fun HealthScheduleScreen(navController: NavHostController) {
                                 )
                             },
                             leadingIcon = {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_search_icon),
-                                    contentDescription = stringResource(R.string.search_icon_description),
-                                    modifier = Modifier.size(18.dp)
-                                )
+                                Row{
+
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_search_icon),
+                                        contentDescription = stringResource(R.string.search_icon_description),
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+
                             },
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color(0xFFF4F4F4),
@@ -321,6 +385,9 @@ fun HealthScheduleScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // ---------- LIST ----------
+                if (filteredList.isEmpty()) {
+                    NoDataFound("No Appointments Found")
+                } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(bottom = 100.dp, start = 16.dp, end = 16.dp),
@@ -335,7 +402,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
                             onDeleteClick = { showDeleteDialog = true }
                         )
                     }
-                }
+                }}
             } else {
                 Row(
                     modifier = Modifier
@@ -362,11 +429,14 @@ fun HealthScheduleScreen(navController: NavHostController) {
                                 )
                             },
                             leadingIcon = {
+                                Row{
+
+                                    Spacer(modifier = Modifier.width(10.dp))
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_search_icon),
                                     contentDescription = stringResource(R.string.search_icon_description),
                                     modifier = Modifier.size(18.dp)
-                                )
+                                )}
                             },
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color(0xFFF4F4F4),
@@ -397,6 +467,9 @@ fun HealthScheduleScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // ---------- LIST ----------
+                if (filteredList1.isEmpty()) {
+                    NoDataFound("No Medications Found")
+                } else {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(bottom = 100.dp, start = 16.dp, end = 16.dp),
@@ -409,7 +482,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
                             onDeleteClick = { showDeleteDialog1 = true }
                         )
                     }
-                }
+                }}
             }
         }
 
@@ -451,6 +524,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
                 onApply = { filter, member ->
                     // Apply filter logic here
                     println("Applied filter: $filter, member: $member")
+                    selectedFilter = filter
+                    selectedMember = member
                     showSheet = false
                 }
             )
@@ -469,8 +544,20 @@ fun HealthScheduleScreen(navController: NavHostController) {
                 enableEdgeToEdge = false,
             )
         ) {
+//            FilterFamilyMembersSheet(
+//                members = members,
+////                        selectedMemberMed = member
+////                        showSheet1 = false
+//
+//            )
+
             FilterFamilyMembersSheet(
-                members = members
+                members = members,
+                selected = selectedMemberMed,
+                onSelect = { member ->
+                    selectedMemberMed = member     // 🔥 filter apply
+                    showSheet1 = false             // 🔥 close sheet
+                }
             )
         }
     }
@@ -519,12 +606,64 @@ fun TabButton(
     ) {
         Text(
             text = text,
-            fontSize = 16.sp,
+            fontSize = 15.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal
         )
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getTodayDate(): String {
+    return LocalDate.now().format(appDateFormatter)   // aap yaha real formatter laga sakte ho
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun isUpcoming(date: String): Boolean {
+    val itemDate = LocalDate.parse(date, appDateFormatter)
+    val today = LocalDate.parse(getTodayDate(), appDateFormatter)
+    return itemDate.isAfter(today)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun isPast(date: String): Boolean {
+    val itemDate = LocalDate.parse(date, appDateFormatter)
+    val today = LocalDate.parse(getTodayDate(), appDateFormatter)
+    return itemDate.isBefore(today)
+}
+
+@Composable
+fun NoDataFound(text: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//            Image(
+//                painter = painterResource(R.drawable.ic_no_data), // optional
+//                contentDescription = null,
+//                modifier = Modifier.size(120.dp)
+//            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = text,
+                color = Color(0xFF9E9E9E),
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular))
+            )
+        }
+    }
+}
+
+
+
+//fun isUpcoming(date: String): Boolean {
+//    return date.contains("Sep") // demo logic
+//}
+//
+//fun isPast(date: String): Boolean {
+//    return date.contains("Aug") // demo logic
+//}
+
 /*
 data class Appointment(
     val title: String,

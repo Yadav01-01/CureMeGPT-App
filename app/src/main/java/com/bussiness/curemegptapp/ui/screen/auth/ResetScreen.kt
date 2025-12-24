@@ -1,5 +1,6 @@
 package com.bussiness.curemegptapp.ui.screen.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,13 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -36,12 +40,39 @@ import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
+import com.bussiness.curemegptapp.util.ValidationUtils
 
 @Composable
 fun ResetScreen(navController: NavHostController, fromScreen: String? = "") {
 
     // FORM
     var email by remember { mutableStateOf("") }
+    var validationError by remember { mutableStateOf("") }
+    var showErrorToast by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
+    // Validation logic
+    fun validateInput(): Boolean {
+        val validationResult = ValidationUtils.validateEmailOrPhone(email)
+        if (!validationResult.isValid) {
+            validationError = validationResult.errorMessage
+            return false
+        }
+        return true
+    }
+
+    // Show Toast when validation error occurs
+    LaunchedEffect(showErrorToast) {
+        if (showErrorToast) {
+            Toast.makeText(
+                context,
+                validationError,
+                Toast.LENGTH_LONG
+            ).show()
+            showErrorToast = false
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -60,13 +91,15 @@ fun ResetScreen(navController: NavHostController, fromScreen: String? = "") {
         // Email Field
         GradientIconInputField(icon = R.drawable.mail_ic,
             placeholder = stringResource(R.string.email_phone_placeholder),//"Email / Phone Number",
-            value = email, onValueChange = { email = it },
+            value = email, onValueChange = {
+                email = it
+                validationError = ""},
             keyboardType = KeyboardType.Email)
 
         Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
-        GradientButton(text = stringResource(R.string.send_code_button)/*"Send Code"*/,
+     /*   GradientButton(text = stringResource(R.string.send_code_button)*//*"Send Code"*//*,
             onClick = {
                 if (fromScreen == "auth") {
                     navController.navigate("verifyOtp?from=reset&email=$email")
@@ -77,7 +110,40 @@ fun ResetScreen(navController: NavHostController, fromScreen: String? = "") {
                         }
                     }
                 }
-        },modifier = Modifier.height(54.dp).padding(horizontal = 7.dp))
+        },modifier = Modifier.height(54.dp).padding(horizontal = 7.dp))*/
+
+        GradientButton(
+            text = stringResource(R.string.send_code_button),
+            onClick = {
+                if (validateInput()) {
+                    // Show success toast
+                    Toast.makeText(
+                        context,
+                        "Reset code sent to $email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // Navigate to OTP screen after validation
+                    val route = if (fromScreen == "auth") {
+                        "verifyOtp?from=reset&email=$email"
+                    } else {
+                        "verifyOtp?from=reset&email=$email"
+                    }
+
+                    navController.navigate(route) {
+                        if (fromScreen != "auth") {
+                            popUpTo("reset?from={from}") {
+                                inclusive = true
+                            }
+                        }
+                    }
+                } else {
+                    // Show error toast
+                    showErrorToast = true
+                }
+            },
+            modifier = Modifier.height(54.dp).padding(horizontal = 7.dp)
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 

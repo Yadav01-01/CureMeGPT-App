@@ -116,7 +116,7 @@ fun CommonHeader(
             )
         }
         //HorizontalDivider(modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFFEBE1FF)))
-        Divider(color = Color(0xFFEBE1FF), thickness = 2.dp)
+        Divider(color = Color(0xFFEBE1FF), thickness = 1.dp)
     }
 }
 

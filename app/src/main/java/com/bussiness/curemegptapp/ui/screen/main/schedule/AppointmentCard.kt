@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.GradientRedButton
+import com.bussiness.curemegptapp.ui.component.GradientViewSummaryButton
 import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
 
 @Composable
@@ -80,13 +81,25 @@ fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
-                    Text(
-                        text = appointment.title,
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Column(   modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = appointment.title,
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                            fontWeight = FontWeight.Medium,
+
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = appointment.doctor,
+                            fontSize = 13.sp,
+                            color = Color(0xFF374151),
+                            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+
 
 
                     PostContentMenu(
@@ -100,27 +113,19 @@ fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
 
 
 
-                Spacer(modifier = Modifier.height(4.dp))
 
-                Text(
-                    text = appointment.doctor,
-                    fontSize = 14.sp,
-                    color = Color(0xFF374151),
-                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                    fontWeight = FontWeight.Medium
-                )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = "For: ${appointment.patientName}",
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     color = Color(0xFF4338CA),
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     fontWeight = FontWeight.Normal
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 // Date and Time
                 Row(
@@ -132,7 +137,7 @@ fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
                         modifier = Modifier.size(29.dp),
 
                         )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = appointment.date,
                         fontSize = 14.sp,
@@ -140,13 +145,13 @@ fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
                         fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                         fontWeight = FontWeight.Normal
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Image(
                         painter = painterResource(id = R.drawable.ic_date_health_icon),
                         contentDescription = null,
                         modifier = Modifier.size(29.dp),
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = appointment.time,
                         fontSize = 14.sp,
@@ -203,13 +208,14 @@ fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
 
                 if(appointment.isVisibleItem){
                     // View Summary Button
-                    GradientRedButton(
+                    GradientViewSummaryButton(
                         text = "View Summary",
-                        icon = R.drawable.ic_summary_view_icon,
+                        icon = R.drawable.ic_summary_view_icon1,
                         width = 155.dp,
                         height = 35.dp,
                         fontSize = 14.sp,
                         imageSize = 18.dp,
+                        verticalPadding = 5.dp,
                         modifier = Modifier.align(Alignment.End),
                         gradientColors = listOf(
                             Color(0xFF4338CA),

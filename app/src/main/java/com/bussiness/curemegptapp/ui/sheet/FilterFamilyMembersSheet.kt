@@ -42,14 +42,16 @@ import androidx.compose.foundation.lazy.items
 @Composable
 fun FilterFamilyMembersSheet(
 
-    members : List<String> = listOf(
-        "James (Myself)",
-        "Rose Logan (Spouse)",
-        "Peter Logan (Son)"
-    ),
-
+//    members : List<String> = listOf(
+//        "James (Myself)",
+//        "Rose Logan (Spouse)",
+//        "Peter Logan (Son)"
+//    ),
+    members: List<String>,
+    selected: String?,
+    onSelect: (String?) -> Unit
 ) {
-    var selectedMember by remember { mutableStateOf("James (Myself)") }
+    var selectedMember by remember { mutableStateOf(selected) }
 
 
 
@@ -106,6 +108,7 @@ fun FilterFamilyMembersSheet(
                         .clickable( interactionSource = remember { MutableInteractionSource() },
                             indication = null) {
                             selectedMember = item
+                            onSelect(item)
                         },
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically

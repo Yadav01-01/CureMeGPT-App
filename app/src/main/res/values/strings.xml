@@ -206,6 +206,7 @@
     <string name="edit_medication_title">Edit Medication</string>
     <string name="for_family_member_label">For Family Member</string>
     <string name="medication_type_label">Medication Type</string>
+    <string name="medication_type_label1">Medication</string>
     <string name="select_appointment_type">Select Appointment Type</string>
     <string name="medicine_type">Medicine</string>
     <string name="supplements_type">Supplements</string>
@@ -703,6 +704,32 @@ Shared from CureMeGPT App 🚀</string>
     <string name="thing_needing_attention_dental_cleaning">Overdue Dental Cleaning</string>
     <string name="thing_for_james_logan">For: James Logan</string>
     <string name="thing_for_rosy_logan">For: Rosy Logan</string>
+
+
+    <!-- Settings Screen Strings -->
+    <string name="settings_title">Settings</string>
+
+    <!-- Settings Menu Items -->
+    <string name="settings_about">About CureMeGPT</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_terms_conditions">Terms &amp; Conditions</string>
+    <string name="settings_faq">Frequently Ask Questions</string>
+    <string name="settings_account_privacy">Account Privacy</string>
+    <string name="settings_help_support">Help &amp; Support</string>
+
+    <!-- Logout Section -->
+    <string name="settings_logout_button">Logout</string>
+    <string name="settings_logout_icon_desc">Logout</string>
+
+    <!-- Dialog Strings -->
+    <string name="settings_logout_dialog_title">Confirm Logout</string>
+    <string name="settings_logout_dialog_message">Are you sure you want to log out of your account?</string>
+    <string name="settings_logout_dialog_confirm">Yes, Logout</string>
+
+    <!-- Other Settings Strings -->
+    <string name="settings_version">Version 0.0.1</string>
+    <string name="settings_bottom_icons_desc">Bottom icons</string>
+    <string name="settings_navigate_icon_desc">Navigate</string>
 
     <!--    stringResource(R.string.known_allergies_label),-->
 

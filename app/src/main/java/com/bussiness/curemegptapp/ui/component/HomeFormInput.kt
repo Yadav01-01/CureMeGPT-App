@@ -53,7 +53,9 @@ fun HomeHeader(
             painter = painterResource(id = logoRes),
             contentDescription = "Logo",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.wrapContentWidth().height( 30.dp) // Adjust size according to your logo
+            modifier = Modifier
+                .wrapContentWidth()
+                .height(30.dp) // Adjust size according to your logo
         )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -64,20 +66,26 @@ fun HomeHeader(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(45.dp)
-                    .padding(end = 8.dp).clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){
+                    .padding(end = 8.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         onClickNotification()
                     }
             )
 
             // Profile Image
             Row(
-                modifier = modifier.width(74.dp).height(52.dp)
+                modifier = modifier
+                    .width(74.dp)
+                    .height(52.dp)
                     .background(
                         color = Color(0xFFEBE1FF),
                         shape = RoundedCornerShape(50) // Capsule shape
                     )
-                    .clickable(interactionSource = remember { MutableInteractionSource() },
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) { onClick() }
                     .padding(horizontal = 5.dp, vertical = 5.dp),
@@ -119,18 +127,18 @@ fun GradientRedButton(
         Color(0xFFF31D1D),
         Color(0xFF8D1111)
     ),
-    modifier :Modifier  = Modifier,
-    imageSize : Dp = 10.dp,
-    horizontalPadding : Dp =16.dp,
-    verticalPadding : Dp =8.dp,
-    fontSize : TextUnit  = 12.sp,
+    modifier: Modifier = Modifier,
+    imageSize: Dp = 10.dp,
+    horizontalPadding: Dp = 16.dp,
+    verticalPadding: Dp = 8.dp,
+    fontSize: TextUnit = 12.sp,
     onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         shape = RoundedCornerShape(31.dp),
-        contentPadding = PaddingValues(horizontal = horizontalPadding, vertical =verticalPadding),
+        contentPadding = PaddingValues(horizontal = horizontalPadding, vertical = verticalPadding),
         modifier = modifier
             .width(width)
             .height(height)
@@ -161,6 +169,121 @@ fun GradientRedButton(
     }
 }
 
+//@Composable
+//fun GradientViewSummaryButton(
+//    text: String,
+//    icon: Int? = null,
+//    width: Dp = 109.dp,
+//    height: Dp = 39.dp,
+//    gradientColors: List<Color> = listOf(
+//        Color(0xFFF31D1D),
+//        Color(0xFF8D1111)
+//    ),
+//    modifier :Modifier  = Modifier,
+//    imageSize : Dp = 10.dp,
+//    horizontalPadding : Dp =16.dp,
+//    verticalPadding : Dp =8.dp,
+//    fontSize : TextUnit  = 12.sp,
+//    onClick: () -> Unit
+//) {
+//    Button(
+//        onClick = onClick,
+//        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+//        shape = RoundedCornerShape(31.dp),
+//        contentPadding = PaddingValues(horizontal = horizontalPadding, vertical =2.dp),
+//        modifier = modifier
+//            .width(width)
+//            .height(30.dp)
+//            .background(
+//                brush = Brush.horizontalGradient(gradientColors),
+//                shape = RoundedCornerShape(31.dp)
+//            )
+//    ) {
+//
+//        // Icon (optional)
+//        icon?.let {
+//            Image(
+//                painter = painterResource(id = it),
+//                contentDescription = null,
+//                modifier = Modifier.size(imageSize)
+//            )
+//            Spacer(modifier = Modifier.width(7.dp))
+//        }
+//
+//        // Text
+//        Text(
+//            text = text,
+//            fontSize = fontSize,
+//            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+//            fontWeight = FontWeight.Medium,
+//            color = Color.White
+//        )
+//    }
+//}
+
+@Composable
+fun GradientViewSummaryButton(
+    text: String,
+    icon: Int? = null,
+    width: Dp = 109.dp,
+    height: Dp = 39.dp,
+    gradientColors: List<Color> = listOf(
+        Color(0xFFF31D1D),
+        Color(0xFF8D1111)
+    ),
+    modifier: Modifier = Modifier,
+    imageSize: Dp = 10.dp,
+    horizontalPadding: Dp = 14.dp,
+    verticalPadding: Dp = 8.dp,
+    fontSize: TextUnit = 12.sp,
+    onClick: () -> Unit
+) {
+
+    Box(
+        modifier = modifier
+            .width(width)
+            .height(height)
+            .clip(RoundedCornerShape(31.dp))
+            .background(brush = Brush.horizontalGradient(gradientColors))
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(
+                horizontal = horizontalPadding,
+                vertical = verticalPadding
+            )
+        ) {
+
+            // Icon
+            icon?.let {
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    modifier = Modifier.size(imageSize)
+                )
+                Spacer(modifier = Modifier.width(7.dp))
+            }
+            Column {
+                // Text
+                Text(
+                    text = text,
+                    fontSize = fontSize,
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White,
+                    modifier= Modifier.padding(bottom = 5.dp)
+                )
+
+            }
+        }
+    }
+}
+
+
 @Composable
 fun AppointmentBox(
     text: String,
@@ -172,11 +295,14 @@ fun AppointmentBox(
         modifier = modifier
             .border(1.dp, Color(0xFF697383), RoundedCornerShape(30.dp))
             .clip(RoundedCornerShape(20.dp))
-            .clickable( interactionSource = remember { MutableInteractionSource() },
-                indication = null) { onClick() }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick() }
             .padding(horizontal = 10.dp, vertical = 6.dp)
     ) {
-        Row( modifier = Modifier.padding(top = 2.dp),
+        Row(
+            modifier = Modifier.padding(top = 2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -256,9 +382,12 @@ fun MoodOptionSelectable(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .background(if (isSelected) Color.White else Color.Transparent)
-            .padding(horizontal = 8.dp, vertical = 6.dp)
-            .clickable( interactionSource = remember { MutableInteractionSource() },
-                        indication = null){ onClick() },
+            .padding(horizontal = 8.dp)
+            .padding(top = 6.dp, bottom = 4.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -273,7 +402,7 @@ fun MoodOptionSelectable(
         Text(
             text = label,
             color = if (isSelected) Color(0xFF4338CA) else Color.White,
-            fontSize = 13.sp,
+            fontSize = 12.sp,
             fontFamily = FontFamily(Font(if (isSelected) R.font.urbanist_semibold else R.font.urbanist_medium)),
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
         )
