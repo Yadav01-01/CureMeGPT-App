@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
@@ -55,9 +56,8 @@ fun TermsAndConditionsScreen(navController: NavHostController) {
             .background(Color(0xFFFFFFFF))
             .statusBarsPadding()
     ) {
-        TopBarHeader2(title = "Terms & Conditions", onBackClick = { navController.popBackStack() })
-        val fullText =
-            "Your privacy is our top priority. CureMeGPT collects only the information necessary to provide personalized health insights and improve your experience. This may include basic profile details, family member information, chat history, and health preferences. We do not share or sell your personal data with third parties without your consent. All data is stored securely and handled in compliance with privacy regulations. You have full control over your data and can update, export, or delete it at any time through your profile settings."
+        TopBarHeader2(title = stringResource(R.string.settings_terms_conditions)/*"Terms & Conditions"*/, onBackClick = { navController.popBackStack() })
+        val fullText = "Your privacy is our top priority. CureMeGPT collects only the information necessary to provide personalized health insights and improve your experience. This may include basic profile details, family member information, chat history, and health preferences. We do not share or sell your personal data with third parties without your consent. All data is stored securely and handled in compliance with privacy regulations. You have full control over your data and can update, export, or delete it at any time through your profile settings."
 
         val keyword = "CureMeGPT"
         val keywordColor = Color(0xFF4338CA)   // Purple

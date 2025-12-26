@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
@@ -60,7 +61,7 @@ fun AccountPrivacyScreen(navController: NavHostController) {
             .background(Color(0xFFFFFFFF))
             .statusBarsPadding()
     ) {
-        TopBarHeader2(title = "About CureMeGPT", onBackClick = { navController.popBackStack() })
+        TopBarHeader2(title = stringResource(R.string.account_privacy), onBackClick = { navController.popBackStack() })
         val fullText =
             "CureMeGPT is your personal AI health companion, designed to bring trusted medical and dental guidance right to your fingertips. From quick health checks and symptom insights to daily wellness tracking and preventive reminders, our mission is to make healthcare simple, accessible, and available 24/7. We combine the power of AI with a user-friendly design to give you instant answers, tailored advice, and personalized care for you and your family. CureMeGPT is here to help you stay healthier, informed, and confident about your well-being—anytime, anywhere."
 
@@ -113,7 +114,7 @@ fun AccountPrivacyScreen(navController: NavHostController) {
 
         SettingOptionItem(
             icon = R.drawable.ic_reset_icons,
-            title = "Reset Your Password"
+            title = stringResource(R.string.reset_password_title1)/*"Reset Your Password"*/
         ) {
             navController.navigate("reset?from=main")
         }
@@ -121,7 +122,7 @@ fun AccountPrivacyScreen(navController: NavHostController) {
 
         SettingOptionItem(
             icon = R.drawable.ic_delete_icon_new,   // your delete icon
-            title = "Delete Account"
+            title = stringResource(R.string.delete_account)/*"Delete Account"*/
         ) {
             navController.navigate(AppDestination.DeleteAccountScreen)
         }

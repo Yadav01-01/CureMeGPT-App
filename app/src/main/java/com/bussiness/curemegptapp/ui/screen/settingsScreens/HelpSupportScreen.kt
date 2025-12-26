@@ -3,6 +3,7 @@ package com.bussiness.curemegptapp.ui.screen.settingsScreens
 //HelpSupportScreen
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
@@ -42,7 +44,7 @@ fun HelpSupportScreen(navController: NavHostController) {
             .background(Color.White).statusBarsPadding()
     ) {
         // Top Bar
-        TopBarHeader2(title = "Help & Support", onBackClick = { navController.popBackStack() })
+        TopBarHeader2(title = stringResource(R.string.help_support)/*"Help & Support"*/, onBackClick = { navController.popBackStack() })
 
 
         // Content
@@ -58,7 +60,7 @@ fun HelpSupportScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Need Medical Help? We're Here for You!",
+                    text = stringResource(R.string.need_medical_help)/*"Need Medical Help? We're Here for You!"*/,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -123,7 +125,7 @@ fun HelpSupportScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Need Quick Answers?",
+                    text = stringResource(R.string.need_quick_answers)/*"Need Quick Answers?"*/,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -166,7 +168,7 @@ fun HelpSupportScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Feedback & Suggestions",
+                    text = stringResource(R.string.feedback_suggestions)/*"Feedback & Suggestions"*/,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -196,7 +198,7 @@ fun HelpSupportScreen(navController: NavHostController) {
 
             // Footer
             Text(
-                text = "© 2025 CureMeGPT · Your privacy is our priority",
+                text = stringResource(R.string.footer_text)/*"© 2025 CureMeGPT · Your privacy is our priority"*/,
                 fontSize = 14.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
@@ -208,6 +210,7 @@ fun HelpSupportScreen(navController: NavHostController) {
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HelpSupportScreenPreview() {

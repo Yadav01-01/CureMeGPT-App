@@ -731,6 +731,40 @@ Shared from CureMeGPT App 🚀</string>
     <string name="settings_bottom_icons_desc">Bottom icons</string>
     <string name="settings_navigate_icon_desc">Navigate</string>
 
+    <string name="account_privacy">Account Privacy</string>
+    <string name="reset_password_title1">Reset Your Password</string>
+    <string name="delete_account">Delete Account</string>
+
+    <!-- Delete Account Screen Strings -->
+    <string name="delete_my_account">Delete my account</string>
+    <string name="why_delete_account_question">Why would you like to delete your account</string>
+    <string name="reason_no_longer_use">I no longer use the app</string>
+    <string name="reason_data_privacy">I’m concerned about my data privacy</string>
+    <string name="reason_another_app">I found another app I prefer</string>
+    <string name="reason_not_meet_needs">The app doesn’t meet my needs</string>
+    <string name="reason_remove_personal_data">I want to remove all my personal data</string>
+    <string name="dont_want_use_anymore">I don’t want to use CureMeGPT anymore</string>
+    <string name="feedback_question">Do you have any feedback for us? (optional)</string>
+    <string name="share_feedback_placeholder">Please share your feedback (optional)</string>
+    <string name="delete_account_button">Delete Account</string>
+    <string name="navigate">Navigate</string>
+
+    <string name="settings_faq1">Frequently Ask Questions</string>
+
+    <!-- Help & Support Screen Strings -->
+    <string name="help_support">Help &amp; Support</string>
+    <string name="need_medical_help">Need Medical Help? We\'re Here for You!</string>
+    <string name="email_us_button">Email Us: support@curemegpt.com</string>
+    <string name="need_quick_answers">Need Quick Answers?</string>
+    <string name="faq_section">FAQ section</string>
+    <string name="feedback_suggestions">Feedback &amp; Suggestions</string>
+    <string name="footer_text">© 2025 CureMeGPT · Your privacy is our priority</string>
+
+    <!-- Help & Support Content -->
+    <string name="help_content_1">Whether you need help with your profile, AI chat, or technical issues, the CureMeGPT support team is ready to assist you anytime.</string>
+    <string name="help_content_2">Visit our FAQ section to explore answers about AI consultations, profile setup, medication reminders, and privacy settings.</string>
+    <string name="help_content_3">Help us improve CureMeGPT by sharing your feedback or new feature ideas. Your input helps us build a smarter, more caring health assistant.</string>
+
     <!--    stringResource(R.string.known_allergies_label),-->
 
 </resources>

@@ -52,8 +52,8 @@ import com.bussiness.curemegptapp.ui.theme.AppGradientColors
 import com.bussiness.curemegptapp.ui.theme.gradientBrush
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 
-//FrequentlyAskQuestionsScreen
 
 @Composable
 fun FrequentlyAskQuestionsScreen(navController: NavHostController) {
@@ -63,7 +63,7 @@ fun FrequentlyAskQuestionsScreen(navController: NavHostController) {
             .background(Color(0xFFFFFFFF))
             .statusBarsPadding()
     ) {
-        TopBarHeader2(title = "Frequently Ask Questions", onBackClick = { navController.popBackStack() })
+        TopBarHeader2(title = stringResource(R.string.settings_faq1)/*"Frequently Ask Questions"*/, onBackClick = { navController.popBackStack() })
 
         val sampleFaqData =    listOf(
             ExpandableItem(
@@ -147,155 +147,7 @@ fun FrequentlyAskQuestionsScreen(navController: NavHostController) {
     }
 }
 
-//@Composable
-//fun ExpandableCard(
-//    item: ExpandableItem,
-//    onToggle: (ExpandableItem) -> Unit
-//) {
-//    Column {
-//
-//
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .clip(RoundedCornerShape(12.dp))
-//                .background(
-//                    brush = gradientBrush
-//                )
-//        ) {
-//            Column(
-//                modifier = Modifier.padding(20.dp)
-//            ) {
-//                // Header
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .clickable(
-//                            interactionSource = remember { MutableInteractionSource() },
-//                            indication = null
-//                        ) { onToggle(item) },
-//                    horizontalArrangement = Arrangement.SpaceBetween,
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(
-//                        text = item.title,
-//                        color = Color.Black,
-//                        fontSize = 14.sp,
-//                        fontFamily = FontFamily(Font(R.font.urbanist_semibold)),
-//                        modifier = Modifier.weight(1f)
-//                    )
-//
-//                    Icon(
-//                        painter = if (item.isExpanded) {
-//                            painterResource(R.drawable.ic_show_drop_down_icon)
-//                        } else {
-//                            painterResource(R.drawable.ic_hide_drop_down_icon)
-//                        },
-//                        contentDescription = if (item.isExpanded) TextResources.Collapse else TextResources.Expand,
-//                        tint = Color.Black
-//                    )
-//                }
-//
-//
-//            }
-//        }
-//
-//        Spacer(Modifier.height(10.dp))
-//        AnimatedVisibility(
-//            visible = item.isExpanded,
-//            enter = expandVertically(),
-//            exit = shrinkVertically(),
-//            modifier = Modifier.clip(RoundedCornerShape(10.dp)).background(Color(0xFF333333)).padding(vertical = 5.dp))
-//        {
-//            Text(
-//                text = item.content,
-//                color = Color.White,
-//                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-//                fontSize = 14.sp,
-//                lineHeight = 20.sp,
-//                modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp )
-//            )
-//        }
-//        if (item.isExpanded){
-//            Spacer(Modifier.height(10.dp))
-//        }
-//    }
-//}
 
-//@Composable
-//fun ExpandableCard(
-//    item: ExpandableItem,
-//    onToggle: (ExpandableItem) -> Unit
-//) {
-//
-//
-//
-//    Column {
-//
-//        // Top Gradient Header
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .clip(RoundedCornerShape(14.dp))
-//                .background(gradientBrush)
-//                .clickable(
-//                    interactionSource = remember { MutableInteractionSource() },
-//                    indication = null
-//                ) { onToggle(item) }
-//                .padding(horizontal = 20.dp, vertical = 18.dp)
-//        ) {
-//
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.SpaceBetween
-//            ) {
-//
-//                Text(
-//                    text = item.title,
-//                    color = Color.White,
-//                    fontSize = 15.sp,
-//                    fontFamily = FontFamily(Font(R.font.urbanist_semibold)),
-//                    modifier = Modifier.weight(1f)
-//                )
-//
-//                Icon(
-//                    painter = if (item.isExpanded)
-//                        painterResource(R.drawable.ic_show_drop_down_icon)
-//                    else
-//                        painterResource(R.drawable.ic_hide_drop_down_icon),
-//                    contentDescription = null,
-//                    tint = Color.Unspecified,
-//                    modifier = Modifier.size(22.dp)
-//                )
-//            }
-//        }
-//
-//        // Space between header & body
-//        AnimatedVisibility(
-//            visible = item.isExpanded,
-//            enter = expandVertically(),
-//            exit = shrinkVertically()
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .clip(RoundedCornerShape(14.dp))
-//                    .background(Color(0xFFF3F1FF))
-//                    .padding(horizontal = 20.dp, vertical = 15.dp)
-//            ) {
-//                Text(
-//                    text = item.content,
-//                    color = Color(0xFF000000),
-//                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-//                    fontSize = 14.sp,
-//                    lineHeight = 20.sp
-//                )
-//            }
-//        }
-//
-//        Spacer(modifier = Modifier.height(12.dp))
-//    }
-//}
 @Composable
 fun ExpandableCard(
     item: ExpandableItem,

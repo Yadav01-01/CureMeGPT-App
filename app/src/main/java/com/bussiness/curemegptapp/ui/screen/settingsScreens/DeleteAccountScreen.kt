@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -57,7 +58,7 @@ fun DeleteAccountScreen(navController: NavHostController) {
             .background(Color(0xFFFFFFFF))
             .statusBarsPadding()
     ) {
-        TopBarHeader2(title = "Delete Account", onBackClick = { navController.popBackStack() })
+        TopBarHeader2(title = stringResource(R.string.delete_account)/*"Delete Account"*/, onBackClick = { navController.popBackStack() })
 
         // --------- IF selectedReason == null → IMAGE-1 SCREEN ---------
         if (selectedReason == null) {
@@ -85,14 +86,14 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
             .padding(top =20.dp, start =20.dp,end = 20.dp )
     ) {
         Spacer(Modifier.height(20.dp))
-        Text("Delete my account", fontSize = 18.sp,
+        Text(stringResource(R.string.delete_my_account)/*"Delete my account"*/, fontSize = 18.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             fontWeight = FontWeight.Medium,
             color = Color(0xFF3C3C3C))
 
         Spacer(Modifier.height(10.dp))
 
-        Text("Why would you like to delete your account", fontSize = 15.sp,
+        Text(stringResource(R.string.why_delete_account_question)/*"Why would you like to delete your account"*/, fontSize = 15.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal,
             color = Color(0xFF697383))
@@ -108,7 +109,7 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
                 SettingsMenuItem(
                     icon = R.drawable.ic_info_setting_icon,
                     iconBoolean = false,
-                    title = "I no longer use the app",
+                    title = stringResource(R.string.reason_no_longer_use)/*"I no longer use the app"*/,
                     onClick = { onReasonSelected("I no longer use the app") }
                 )
 
@@ -117,7 +118,7 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
                 SettingsMenuItem(
                     icon = R.drawable.ic_privacy_policy_setting_icon,
                     iconBoolean = false,
-                    title = "I’m concerned about my data privacy",
+                    title = stringResource(R.string.reason_data_privacy)/*"I’m concerned about my data privacy"*/,
                     onClick = { onReasonSelected("I’m concerned about my data privacy") }
                 )
 
@@ -126,7 +127,7 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
                 SettingsMenuItem(
                     icon = R.drawable.ic_terms_condition_setting_icon,
                     iconBoolean = false,
-                    title = "I found another app I prefer",
+                    title = stringResource(R.string.reason_another_app)/*"I found another app I prefer"*/,
                     onClick = { onReasonSelected("I found another app I prefer") }
                 )
 
@@ -135,7 +136,7 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
                 SettingsMenuItem(
                     icon = R.drawable.ic_ask_setting_icon,
                     iconBoolean = false,
-                    title = "The app doesn’t meet my needs",
+                    title = stringResource(R.string.reason_not_meet_needs)/*"The app doesn’t meet my needs"*/,
                     onClick = { onReasonSelected("The app doesn’t meet my needs") }
                 )
 
@@ -144,7 +145,7 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
                 SettingsMenuItem(
                     icon = R.drawable.ic_account_setting_icon,
                     iconBoolean = false,
-                    title = "I want to remove all my personal data",
+                    title = stringResource(R.string.reason_remove_personal_data)/*"I want to remove all my personal data"*/,
                     onClick = { onReasonSelected("I want to remove all my personal data") }
                 )
             }
@@ -169,7 +170,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String) {
 //        )
 
                 Text(
-            text = "I don’t want to use CureMeGPT anymore",
+            text = stringResource(R.string.dont_want_use_anymore)/*"I don’t want to use CureMeGPT anymore"*/,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -179,7 +180,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String) {
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "Do you have any feedback for us? (optional)",
+            text = stringResource(R.string.feedback_question)/*"Do you have any feedback for us? (optional)"*/,
             fontSize = 15.sp,
             fontWeight = FontWeight.Normal,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
@@ -201,7 +202,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String) {
                 .padding(0.dp),   // TextField ka already internal padding hota hai
             placeholder = {
                 Text(
-                    text = "Please share your feedback (optional)",
+                    text = stringResource(R.string.share_feedback_placeholder)/*"Please share your feedback (optional)"*/,
                     color = Color(0xFF697383),
                     fontSize = 14.sp
                 )
@@ -224,7 +225,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String) {
 
 
         GradientButton(
-            text = "Delete Account",
+            text = stringResource(R.string.delete_account_button)/*"Delete Account"*/,
             onClick = {
 
             }
