@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp() {
     val navController = rememberNavController()
-//    TransparentStatusBar(darkIcons = true)
+   TransparentStatusBar(darkIcons = true)
     MaterialTheme {
         AppNavGraph(navController)
     }

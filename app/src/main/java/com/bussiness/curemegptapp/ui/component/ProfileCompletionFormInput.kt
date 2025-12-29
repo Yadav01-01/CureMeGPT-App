@@ -1034,7 +1034,7 @@ fun TopBarHeader1(title: String, onBackClick: () -> Unit) {
             Spacer(Modifier.width(19.dp))
             Text(
                 text = title,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium
             )
