@@ -143,6 +143,8 @@ fun HealthReportsScreen(navController: NavHostController) {
                         TextField(
                             value = searchQuery,
                             onValueChange = { searchQuery = it },
+                            singleLine = true,
+                            maxLines = 1,
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.search_placeholder)/*"Search"*/,

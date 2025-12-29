@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     private val initialSteps = listOf(
         "Set a reminder for your blood pressure medication",
         "Schedule your annual checkup",
-        "Complete emergency contact information"
+        "Complete emergency contact information. Complete emergency contact information"
     )
     private val initialAlerts = listOf(
         "Blood pressure medication reminder",

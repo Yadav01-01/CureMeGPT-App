@@ -51,6 +51,7 @@ fun RecommendedSteps(steps: List<String>) {
                 RecommendedStepItem(step)
             }
         }
+        Spacer(modifier = Modifier.height(10.dp))
     }
 
 }
@@ -59,7 +60,7 @@ fun RecommendedSteps(steps: List<String>) {
 @Composable
 fun RecommendedStepItem(text: String) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_recommended_icon),

@@ -40,17 +40,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.TopBarHeader2
+import com.bussiness.curemegptapp.ui.dialog.LogOutDialog
 
 //DeleteAccountScreen
 
 @Composable
-fun DeleteAccountScreen(navController: NavHostController) {
+fun DeleteAccountScreen(navController: NavHostController,authNavController : NavController) {
     var selectedReason by remember { mutableStateOf<String?>(null) }
     Column(
         modifier = Modifier
@@ -69,7 +71,12 @@ fun DeleteAccountScreen(navController: NavHostController) {
             )
         } else {
             // --------- IF selectedReason != null → IMAGE-2 SCREEN ---------
-            DeleteAccountFeedbackUI(selectedReason!!)
+            DeleteAccountFeedbackUI(selectedReason!!,onDeleteClick= {
+               // navController.navigate()
+                authNavController.navigate(AppDestination.Login) {
+                    popUpTo(AppDestination.MainScreen) { inclusive = true }
+                }
+            })
         }
 
     }
@@ -154,8 +161,8 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
     }
 }
 @Composable
-fun DeleteAccountFeedbackUI(selectedReason: String) {
-
+fun DeleteAccountFeedbackUI(selectedReason: String,onDeleteClick : ()-> Unit) {
+    var showDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -227,10 +234,26 @@ fun DeleteAccountFeedbackUI(selectedReason: String) {
         GradientButton(
             text = stringResource(R.string.delete_account_button)/*"Delete Account"*/,
             onClick = {
-
+                showDialog = true
             }
         )
         Spacer(modifier = Modifier.height(30.dp))
+    }
+
+    if (showDialog){
+        LogOutDialog(
+            title = "Confirm Delete"/*"Confirm Logout"*/,
+            message = "Are you sure you want to delete of your account?"/*"Are you sure you want to log out of your account?"*/,
+            cancelText = stringResource(R.string.cancel_button)/*"Cancel"*/,
+            confirmText = "Yes, Delete"/*"Yes, Logout"*/,
+            onDismiss = {
+                showDialog = false
+            },
+            onConfirm = {
+                showDialog = false
+                onDeleteClick()
+            }
+        )
     }
 }
 
@@ -300,5 +323,6 @@ fun SettingsMenuDivider() {
 @Composable
 fun DeleteAccountScreenPreview() {
     val navController = rememberNavController()
-    DeleteAccountScreen(navController)
+    val navController1 = rememberNavController()
+    DeleteAccountScreen(navController,navController1)
 }

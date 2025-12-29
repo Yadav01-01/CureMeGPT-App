@@ -20,17 +20,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.ui.theme.AppGradientColors
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -49,8 +51,8 @@ fun SummaryDialog(
     onDismiss: () -> Unit
 ) {  val context = LocalContext.current
     Dialog(onDismissRequest = onDismiss,   properties = DialogProperties(
-        dismissOnClickOutside = false, // 🔴 IMPORTANT
-        dismissOnBackPress = false       // back press se band chahiye to true
+        dismissOnClickOutside = false,
+        dismissOnBackPress = false
     )) {
         Box(
             modifier = Modifier
@@ -67,66 +69,99 @@ fun SummaryDialog(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_check),
                         contentDescription = null,
-                        tint = Color(0xFF4F46E5),
-                        modifier = Modifier.size(28.dp)
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(38.dp)
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(11.dp))
 
                     Text(
                         text = "Summary Heading",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 17.sp,
+                        fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                        fontWeight = FontWeight.Medium,
                         modifier = Modifier.weight(1f)
                     )
 
                     Icon(
                         painter = painterResource(id = R.drawable.ic_close),
                         contentDescription = "Close",
+                        tint = Color.Unspecified,
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(38.dp)
                             .clickable { onDismiss() }
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Box(
-                    modifier = Modifier
-                        .height(220.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Text(
-                        text = description,
-                        fontSize = 14.sp,
-                        color = Color(0xFF374151),
-                        lineHeight = 20.sp
                     )
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Button(
-                    onClick = {
-                        saveDescriptionToFile(
-                            context = context,
-                            description = description
-                        )
-                    },
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp),
-                    shape = RoundedCornerShape(26.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4F46E5)
-                    )
+                        .height(300.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        text = "Download",
-                        color = Color.White,
-                        fontSize = 16.sp
+                        text = description,
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                        fontWeight = FontWeight.Normal,
+                        color = Color(0xFF050505),
+                        lineHeight = 20.sp
                     )
                 }
+
+                Spacer(modifier = Modifier.height(22.dp))
+
+//                Button(
+//                    onClick = {
+//                        saveDescriptionToFile(
+//                            context = context,
+//                            description = description
+//                        )
+//                    },
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(52.dp),
+//                    shape = RoundedCornerShape(26.dp),
+//                    colors = ButtonDefaults.buttonColors(
+//                        containerColor = Color.Transparent   // 👈 important
+//                    ),
+//                    contentPadding = PaddingValues(0.dp)
+//                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp).clip(RoundedCornerShape(26.dp))
+                            .background(
+                                brush = Brush.linearGradient(AppGradientColors)
+                            ).clickable(){
+                                saveDescriptionToFile(
+                                    context = context,
+                                    description = description
+                                )
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Download",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = FontFamily(Font(R.font.urbanist_semibold))
+                        )
+                   // }
+                }
+
+//                GradientButton(
+//                    text = "Download",
+//                    onClick = {
+//                        saveDescriptionToFile(
+//                            context = context,
+//                            description = description
+//                        )
+//                    },
+//                    modifier = Modifier.height(52.dp)
+//                )
             }
         }
     }

@@ -41,7 +41,7 @@ import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
 
 @Composable
 fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
-                    onDeleteClick: () -> Unit) {
+                    onDeleteClick: () -> Unit,onViewClick: () -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
 
     var checkedState by remember { mutableStateOf(false) }
@@ -221,7 +221,7 @@ fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
                             Color(0xFF4338CA),
                             Color(0xFF211C64)
                         ),
-                        onClick = { /* Your action */ }
+                        onClick = { onViewClick() }
                     )
                 }
 

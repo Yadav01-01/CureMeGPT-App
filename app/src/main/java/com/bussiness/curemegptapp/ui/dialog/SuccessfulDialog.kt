@@ -51,7 +51,6 @@ fun SuccessfulDialog(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-               // .padding(vertical = 20.dp , horizontal = 0.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Color.White)
         ) {

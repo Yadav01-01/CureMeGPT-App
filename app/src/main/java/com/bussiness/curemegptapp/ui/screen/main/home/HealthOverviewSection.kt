@@ -236,7 +236,7 @@ fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .width(65.dp)
+                            .width(70.dp)
                             .height(70.dp)
                             .clip(RoundedCornerShape(20.dp))
 
@@ -257,7 +257,7 @@ fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()
                                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                                 fontWeight = FontWeight.Medium,
                                 maxLines = 1,
-                                modifier = Modifier.width(105.dp)
+                                modifier = Modifier.width(95.dp)
                             )
                             Spacer(modifier = Modifier.width(7.dp))
                             Surface(

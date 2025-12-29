@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.ProfileInputField
@@ -256,8 +257,11 @@ fun ScheduleNewAppointmentScreen(
 
     if (showDialogSuccessFully) {
         SuccessfulDialog(title = stringResource(R.string.schedule_success_title)/*"Appointment Scheduled \nSuccessfully"*/, description = stringResource(R.string.schedule_success_description)/*"Your appointment reminder are set."*/,
-            onDismiss = { showDialogSuccessFully = false },
-            onOkClick = { showDialogSuccessFully = false }
+            onDismiss = { showDialogSuccessFully = false
+                navController.navigate(AppDestination.HealthSchedule)},
+            onOkClick = { showDialogSuccessFully = false
+                navController.navigate(AppDestination.HealthSchedule)
+            }
         )
     }
 

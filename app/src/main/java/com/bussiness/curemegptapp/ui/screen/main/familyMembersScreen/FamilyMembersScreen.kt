@@ -119,185 +119,259 @@ fun FamilyMembersScreen(navController: NavHostController) {
         }
     }
 
-    Column(
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(Color.White)
+//            .statusBarsPadding()
+//            .padding(horizontal = 20.dp)
+//    ) {
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .statusBarsPadding()
-            .padding(horizontal = 20.dp)
     ) {
-        // Header
-        Text(
-            text = stringResource(R.string.family_members_title),
-            fontSize = 20.sp,
-            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-            fontWeight = FontWeight.Medium,
-            color = Color.Black,
-            modifier = Modifier.padding(vertical = 10.dp)
-        )
-
-        // Family Profiles Card
-        Spacer(Modifier.height(20.dp))
-        Row(
+        LazyColumn(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(bottom = 20.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_family_person_blue_icons),
-                    contentDescription = stringResource(R.string.family_profiles_icon_description),
-                    modifier = Modifier
-                        .height(63.dp)
-                        .width(48.dp)
+            // Header
+            item {
+                Text(
+                    text = stringResource(R.string.family_members_title),
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black,
+                    modifier = Modifier.padding(vertical = 10.dp)
                 )
-
-                Spacer(modifier = Modifier.width(16.dp))
-                Column {
-                    Text(
-                        text = stringResource(R.string.family_profiles_title),
-                        fontSize = 26.sp,
-                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                        fontWeight = FontWeight.Normal,
-                        color = Color.Black
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    Text(
-                        text = stringResource(R.string.members_total_format, allMembers.size),
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF909090)
-                    )
-                }
             }
 
-            Image(
-                painter = painterResource(id = R.drawable.ic_family_person_add_icon),
-                contentDescription = stringResource(R.string.add_member_description),
-                modifier = Modifier.size(67.dp).clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
+            // Family Profiles Card
+            item {
+                Spacer(Modifier.height(15.dp))
+            }
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    navController.navigate("addFamilyMember?from=main")
-                }
-            )
-        }
-
-        Spacer(Modifier.height(20.dp))
-
-        // Stats Cards Row
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            StatCard(
-                modifier = Modifier.weight(1f),
-                icons = R.drawable.ic_calender_health_icon,
-                number = "02",
-                title = stringResource(R.string.appointments_title),
-                description = stringResource(R.string.appointments_description),
-                backgroundColor = Color(0xFFD9D7F4),
-                numberColor = Color(0xFF4338CA)
-            )
-            StatCard(
-                modifier = Modifier.weight(1f),
-                icons = R.drawable.ic_medication_icon_2,
-                number = "04",
-                title = stringResource(R.string.medications_title),
-                description = stringResource(R.string.medications_description),
-                backgroundColor = Color(0xFFD1F2EB),
-                numberColor = Color(0xFF1ABC9C)
-            )
-        }
-
-        Spacer(Modifier.height(15.dp))
-
-        // Search and Filter Row
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            // Search Field
-            Surface(
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(40.dp),
-                color = Color(0xFFF4F4F4)
-            ) {
-                TextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    placeholder = {
-                        Text(
-                            text = stringResource(R.string.search_placeholder),
-                            color = Color(0xFFBCBCBC),
-                            fontSize = 16.sp,
-                            fontFamily = FontFamily(Font(R.font.urbanist_regular))
-                        )
-                    },
-                    leadingIcon = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_search_icon),
-                            contentDescription = stringResource(R.string.search_icon_description),
-                            modifier = Modifier.size(18.dp)
+                            painter = painterResource(id = R.drawable.ic_family_person_blue_icons),
+                            contentDescription = stringResource(R.string.family_profiles_icon_description),
+                            modifier = Modifier
+                                .height(63.dp)
+                                .width(48.dp)
                         )
-                    },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color(0xFFF4F4F4),
-                        unfocusedContainerColor = Color(0xFFF4F4F4),
-                        disabledContainerColor = Color(0xFFF4F4F4),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
 
-            // Filter Button with indicator
-            Box {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_filter_icon),
-                    contentDescription = stringResource(R.string.filter_icon_description),
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .clickable(
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column {
+                            Text(
+                                text = stringResource(R.string.family_profiles_title),
+                                fontSize = 24.sp,
+                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black
+                            )
+                            Spacer(Modifier.height(10.dp))
+                            Text(
+                                text = stringResource(
+                                    R.string.members_total_format,
+                                    allMembers.size
+                                ),
+                                fontSize = 15.sp,
+                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0xFF909090)
+                            )
+                        }
+                    }
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_family_person_add_icon),
+                        contentDescription = stringResource(R.string.add_member_description),
+                        modifier = Modifier.size(67.dp).clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) {
-                            showSheet = true
+                            navController.navigate("addFamilyMember?from=main")
                         }
-                )
-
-                // Show indicator if filter is applied (not "All Members")
-                if (selectedFilter != stringResource(R.string.all_members_filter)) {
-                    Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .clip(CircleShape)
-                            .background(Color.Red)
-                            .align(Alignment.TopEnd)
                     )
                 }
             }
-        }
+            item {
+                Spacer(Modifier.height(20.dp))
+            }
+            item {
+                // Stats Cards Row
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    StatCard(
+                        modifier = Modifier.weight(1f),
+                        icons = R.drawable.ic_calender_health_icon,
+                        number = "02",
+                        title = stringResource(R.string.appointments_title),
+                        description = stringResource(R.string.appointments_description),
+                        backgroundColor = Color(0xFFD9D7F4),
+                        numberColor = Color(0xFF4338CA)
+                    )
+                    StatCard(
+                        modifier = Modifier.weight(1f),
+                        icons = R.drawable.ic_medication_icon_2,
+                        number = "04",
+                        title = stringResource(R.string.medications_title),
+                        description = stringResource(R.string.medications_description),
+                        backgroundColor = Color(0xFFD1F2EB),
+                        numberColor = Color(0xFF1ABC9C)
+                    )
+                }
+            }
+            item {
+                Spacer(Modifier.height(15.dp))
+            }
 
-        // Family Members List
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = PaddingValues(vertical = 30.dp)
-        ) {
+            // Search and Filter Row
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    // Search Field
+                    Surface(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(40.dp),
+                        color = Color(0xFFF4F4F4)
+                    ) {
+                        TextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            // 🔥 single line fix
+                            singleLine = true,
+                            maxLines = 1,
+                            placeholder = {
+                                Text(
+                                    text = stringResource(R.string.search_placeholder),
+                                    color = Color(0xFFBCBCBC),
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular))
+                                )
+                            },
+                            leadingIcon = {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_search_icon),
+                                    contentDescription = stringResource(R.string.search_icon_description),
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            },
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color(0xFFF4F4F4),
+                                unfocusedContainerColor = Color(0xFFF4F4F4),
+                                disabledContainerColor = Color(0xFFF4F4F4),
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    // Filter Button with indicator
+                    Box {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_filter_icon),
+                            contentDescription = stringResource(R.string.filter_icon_description),
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    showSheet = true
+                                }
+                        )
+
+//                // Show indicator if filter is applied (not "All Members")
+//                if (selectedFilter != stringResource(R.string.all_members_filter)) {
+//                    Box(
+//                        modifier = Modifier
+//                            .size(8.dp)
+//                            .clip(CircleShape)
+//                            .background(Color.Red)
+//                            .align(Alignment.TopEnd)
+//                    )
+//                }
+                    }
+                }
+            }
+
+            // Family Members List
+         /*   item {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    contentPadding = PaddingValues(vertical = 30.dp)
+                ) {
+                    if (filteredMembers.isEmpty()) {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(40.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_search_icon),
+                                    contentDescription = stringResource(R.string.no_results_icon_description),
+                                    modifier = Modifier.size(48.dp)
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = stringResource(R.string.no_family_members_found),
+                                    fontSize = 16.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                                    color = Color(0xFF909090)
+                                )
+                                Text(
+                                    text = stringResource(R.string.try_different_search_filter),
+                                    fontSize = 14.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                    color = Color(0xFF909090)
+                                )
+                            }
+                        }
+                    } else {
+                        items(filteredMembers) { member ->
+                            FamilyMemberCard(
+                                member,
+                                onViewProfileClick = {
+                                    navController.navigate(AppDestination.FamilyPersonProfile)
+                                },
+                                onDeleteProfileClick = {
+                                    showDeleteDialog = true
+                                }
+                            )
+                        }
+                    }
+                }
+            }*/
             if (filteredMembers.isEmpty()) {
                 item {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(40.dp),
+                            .padding(vertical = 40.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
@@ -321,6 +395,19 @@ fun FamilyMembersScreen(navController: NavHostController) {
                     }
                 }
             } else {
+                // Family Members Title
+                item {
+                    Text(
+                        text = "Family Members",
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black,
+                        modifier = Modifier.padding(bottom = 10.dp)
+                    )
+                }
+
+                // Family Members Cards
                 items(filteredMembers) { member ->
                     FamilyMemberCard(
                         member,
@@ -331,11 +418,12 @@ fun FamilyMembersScreen(navController: NavHostController) {
                             showDeleteDialog = true
                         }
                     )
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
+
         }
     }
-
     // Filter Bottom Sheet
     if (showSheet) {
         BottomSheetDialog(

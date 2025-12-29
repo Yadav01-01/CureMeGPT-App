@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.ui.component.TopBarHeader2
@@ -50,7 +51,7 @@ import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.dialog.LogOutDialog
 
 @Composable
-fun SettingsScreen(navController: NavHostController) {
+fun SettingsScreen(navController: NavHostController,authNavController : NavController) {
     var showDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -209,6 +210,9 @@ fun SettingsScreen(navController: NavHostController) {
             },
             onConfirm = {
                 showDialog = false
+                authNavController.navigate(AppDestination.Login) {
+                    popUpTo(AppDestination.MainScreen) { inclusive = true }
+                }
             }
         )
     }
@@ -279,5 +283,6 @@ fun SettingsMenuDivider() {
 @Composable
 fun SettingsScreenPreview() {
     val navController = rememberNavController()
-    SettingsScreen(navController)
+    val navController1 = rememberNavController()
+    SettingsScreen(navController,navController1)
 }

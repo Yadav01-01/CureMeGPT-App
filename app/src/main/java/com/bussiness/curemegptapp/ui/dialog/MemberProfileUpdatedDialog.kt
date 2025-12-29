@@ -52,7 +52,6 @@ fun MemberProfileUpdatedDialog(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 20.dp , horizontal = 10.dp)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Color.White)
         ) {

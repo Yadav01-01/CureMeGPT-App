@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -105,6 +106,12 @@ fun ProfileInputField(
                     fontWeight = FontWeight.Normal,
                 )
             },
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 13.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            ),
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,7 +123,9 @@ fun ProfileInputField(
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color(0xFFB8B9BD),
             ),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
         )
@@ -173,6 +182,12 @@ fun ProfileInputMultipleLineField(
                     fontSize = 16.sp
                 )
             },
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 13.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(90.dp)
@@ -183,7 +198,11 @@ fun ProfileInputMultipleLineField(
                 unfocusedContainerColor = Color.White,
                 focusedContainerColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color(0xFFB8B9BD),
+                disabledTextColor = Color.Gray,
+                cursorColor = Color.Black
             ),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
         )
@@ -901,7 +920,7 @@ fun UniversalInputField(
         Row {
             Text(
                 text = title,
-                fontSize = 15.sp,
+                fontSize = 14.sp,
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
@@ -911,7 +930,7 @@ fun UniversalInputField(
             if (isImportant)
                 Text(
                     text = " *",
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     color = Color.Red,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontWeight = FontWeight.Medium,
@@ -941,8 +960,8 @@ fun UniversalInputField(
             // Placeholder or Value
             Text(
                 text = if (value.isEmpty()) placeholder else value,
-                fontSize = 15.sp,
-                color = if (value.isEmpty()) Color(0xFF697383) else Color(0xFF697383),
+                fontSize = 13.sp,
+                color = if (value.isEmpty()) Color(0xFF697383) else Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -956,7 +975,7 @@ fun UniversalInputField(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .padding(end = 16.dp)
-                        .size(20.dp)
+                        .size(19.dp)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null
@@ -1154,6 +1173,93 @@ fun ProfileInputSmallField(
     }
 }
 
+
+@Composable
+fun UniversalInputField1(
+    title: String,
+    textSize : TextUnit = 14.sp,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    rightIcon: Int? = null,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight().padding(5.dp)
+    ) {
+        // ----- Title -----
+        Row {
+            Text(
+                text = title,
+                fontSize = textSize,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(start = 5.dp, bottom = 8.dp)
+            )
+
+            if (isImportant)
+                Text(
+                    text = " *",
+                    fontSize = 13.sp,
+                    color = Color.Red,
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+        }
+
+        // ----- Clickable Input Box -----
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clip(RoundedCornerShape(28.dp))
+                .background(Color.Transparent)
+                .border(
+                    width = 1.dp,
+                    color = Color(0xFF697383),
+                    shape = RoundedCornerShape(56.dp)
+                )
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { onClick() },
+            contentAlignment = Alignment.CenterStart
+        ) {
+
+            // Placeholder or Value
+            Text(
+                text = if (value.isEmpty()) placeholder else value,
+                fontSize = 13.sp,
+                color = if (value.isEmpty()) Color(0xFF697383) else Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            // Right Icon (optional)
+            rightIcon?.let {
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 16.dp)
+                        .size(19.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onClick() }
+                )
+            }
+        }
+    }
+}
 
 
 

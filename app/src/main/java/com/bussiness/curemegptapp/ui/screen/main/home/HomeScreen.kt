@@ -148,7 +148,7 @@ fun HomeScreen(
             },
             onConfirm = {
                 showCompleteDialog = false
-                navController.navigate(AppDestination.MainScreen)
+                navController.navigate(AppDestination.EditProfileScreen)
             },
             onSkip = {
                 showCompleteDialog = false
@@ -243,6 +243,7 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
                 RecommendedSteps(steps = uiState.recommendedSteps)
+//                Spacer(modifier = Modifier.height(10.dp))
             }
             //AppDestination.EditProfileScreen
 

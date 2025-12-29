@@ -149,7 +149,7 @@ fun GradientHeader(heading: String, description: String) {
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(bottomEnd = 20.dp, bottomStart = 20.dp))
             .background(
                 brush = Brush.linearGradient(AppGradientColors)
             )

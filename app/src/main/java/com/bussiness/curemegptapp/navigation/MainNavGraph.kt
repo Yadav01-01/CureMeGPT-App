@@ -106,7 +106,7 @@ fun MainNavGraph(
             ReportScreen(navController)
         }
         composable<AppDestination.SettingsScreen> {
-            SettingsScreen(navController)
+            SettingsScreen(navController,authNavController)
         }
         composable<AppDestination.AboutScreen> {
             AboutScreen(navController)
@@ -148,7 +148,7 @@ fun MainNavGraph(
         }
         composable<AppDestination.NewPassword> { NewPasswordScreen(navController, "main") }
 
-        composable<AppDestination.DeleteAccountScreen> { DeleteAccountScreen(navController) }
+        composable<AppDestination.DeleteAccountScreen> { DeleteAccountScreen(navController,authNavController) }
 
         composable<AppDestination.HelpSupportScreen> { HelpSupportScreen(navController) }
         composable<AppDestination.EditProfileScreen> { EditProfileScreen(navController) }

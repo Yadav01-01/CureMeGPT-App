@@ -54,6 +54,7 @@ import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.CommonHeader
 import com.bussiness.curemegptapp.ui.component.GradientRedButton
 import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
+import com.bussiness.curemegptapp.ui.dialog.SummaryDialog
 import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialog
 import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialogProperties
 import com.bussiness.curemegptapp.ui.sheet.FilterAppointmentsBottomSheet
@@ -105,6 +106,7 @@ fun HealthScheduleScreen(navController: NavHostController) {
     var showSheet1 by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
+    var showViewDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showDeleteDialog1 by remember { mutableStateOf(false) }
     var members: List<String> = listOf(
@@ -336,6 +338,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
                         TextField(
                             value = searchQuery,
                             onValueChange = { searchQuery = it },
+                            singleLine = true,
+                            maxLines = 1,
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.search_placeholder),
@@ -399,7 +403,10 @@ fun HealthScheduleScreen(navController: NavHostController) {
                             onEditClick = {
                                 navController.navigate(AppDestination.RescheduleAppointmentScreen)
                             },
-                            onDeleteClick = { showDeleteDialog = true }
+                            onDeleteClick = { showDeleteDialog = true },
+                            onViewClick = {
+                                showViewDialog = true
+                            }
                         )
                     }
                 }}
@@ -420,6 +427,8 @@ fun HealthScheduleScreen(navController: NavHostController) {
                         TextField(
                             value = searchQuery,
                             onValueChange = { searchQuery = it },
+                            singleLine = true,
+                            maxLines = 1,
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.search_placeholder),
@@ -489,10 +498,10 @@ fun HealthScheduleScreen(navController: NavHostController) {
         GradientRedButton(
             text = if (selectedTab == 0) stringResource(R.string.schedule_button_text) else stringResource(R.string.add_medication_button),
             icon = R.drawable.ic_plus_normal_icon,
-            width = if (selectedTab == 0) 150.dp else 177.dp,
-            height = 55.dp,
-            fontSize = 16.sp,
-            imageSize = 22.dp,
+            width = if (selectedTab == 0) 145.dp else 170.dp,
+            height = 52.dp,
+            fontSize = 15.sp,
+            imageSize = 20.dp,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(horizontal = 15.dp, vertical = 30.dp),
@@ -571,6 +580,15 @@ fun HealthScheduleScreen(navController: NavHostController) {
             cancelText = stringResource(R.string.cancel_button),
             onDismiss = { showDeleteDialog = false },
             onConfirm = { showDeleteDialog = false }
+        )
+    }
+
+    if (showViewDialog) {
+        SummaryDialog(
+            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",   // jo text show karna hai
+            onDismiss = {
+                showViewDialog = false   // ❌ close dialog
+            }
         )
     }
 

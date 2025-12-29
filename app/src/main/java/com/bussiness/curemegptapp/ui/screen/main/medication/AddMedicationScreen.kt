@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
+import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField2
@@ -61,6 +62,7 @@ import com.bussiness.curemegptapp.ui.component.ProfilePhotoPicker
 import com.bussiness.curemegptapp.ui.component.RoundedCustomCheckbox
 import com.bussiness.curemegptapp.ui.component.TopBarHeader1
 import com.bussiness.curemegptapp.ui.component.UniversalInputField
+import com.bussiness.curemegptapp.ui.component.UniversalInputField1
 import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
 import com.bussiness.curemegptapp.ui.dialog.SuccessfulDialog
@@ -353,8 +355,8 @@ fun AddMedicationScreen(
 
             Spacer(Modifier.width(24.dp))
 
-            Row (modifier = Modifier.padding(horizontal = 5.dp, vertical = 24.dp)) {
-                UniversalInputField(
+            Row (modifier = Modifier.padding( vertical = 24.dp)) {
+                UniversalInputField1(
                     title = stringResource(R.string.start_date_label)/*"Start Date"*/,
                     isImportant = false,
                     placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
@@ -365,8 +367,9 @@ fun AddMedicationScreen(
                     showDialog = true
                 }
                 Spacer(Modifier.width(5.dp))
-                UniversalInputField(
+                UniversalInputField1(
                     title = stringResource(R.string.end_date_optional_label)/*"End Date (Optional)"*/,
+                    textSize = 13.sp,
                     isImportant = false,
                     placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
                     value = endDate,
@@ -482,8 +485,10 @@ fun AddMedicationScreen(
 
     if (showDialogSuccessFully) {
         SuccessfulDialog(title = stringResource(R.string.medication_added_success_title)/*"Medication Added \nSuccessfully"*/, description = stringResource(R.string.medication_added_success_description)/*"Your medication has been saved and reminders are set."*/,
-            onDismiss = { showDialogSuccessFully = false },
-            onOkClick = { showDialogSuccessFully = false }
+            onDismiss = { showDialogSuccessFully = false
+                navController.navigateUp()},
+            onOkClick = { showDialogSuccessFully = false
+                navController.navigateUp()}
         )
     }
 

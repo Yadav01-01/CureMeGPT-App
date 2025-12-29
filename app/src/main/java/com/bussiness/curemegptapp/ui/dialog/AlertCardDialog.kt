@@ -62,7 +62,6 @@ fun AlertCardDialog(
     ) {
         Box(
             modifier = Modifier
-                .padding(5.dp)
                 .clip(RoundedCornerShape(40.dp))
                 .background(Color.White)
         ) {
