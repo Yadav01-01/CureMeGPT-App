@@ -245,7 +245,8 @@ fun GradientViewSummaryButton(
             .height(height)
             .clip(RoundedCornerShape(31.dp))
             .background(brush = Brush.horizontalGradient(gradientColors))
-            .clickable { onClick() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
+                indication = null) { onClick() },
         contentAlignment = Alignment.Center
     ) {
 
@@ -345,14 +346,14 @@ fun AttentionItem(title: String, subtitle: String, isUrgent: Boolean) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    fontSize = 16.sp,
+                    fontSize = 15.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFFD32F2F)
                 )
                 Text(
                     text = subtitle,
-                    fontSize = 14.sp,
+                    fontSize = 13.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                     fontWeight = FontWeight.Medium,
                     color = Color(0xFF4338CA)
@@ -360,6 +361,8 @@ fun AttentionItem(title: String, subtitle: String, isUrgent: Boolean) {
             }
 
             GradientRedButton(
+                verticalPadding = 4.dp,
+                imageSize = 15.dp,
                 text = "Schedule",
                 icon = R.drawable.ic_schedule_attention_icon,
                 onClick = { /* Your action */ }

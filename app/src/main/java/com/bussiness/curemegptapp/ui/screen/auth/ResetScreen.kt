@@ -127,7 +127,7 @@ fun ResetScreen(navController: NavHostController, fromScreen: String? = "") {
                     val route = if (fromScreen == "auth") {
                         "verifyOtp?from=reset&email=$email"
                     } else {
-                        "verifyOtp?from=reset&email=$email"
+                        "verifyOtp?from=reset1&email=$email"
                     }
 
                     navController.navigate(route) {

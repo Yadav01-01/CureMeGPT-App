@@ -183,7 +183,7 @@ fun BottomMessageBar1(
         modifier = modifier
             .fillMaxWidth()
             .background(color = Color.Transparent)
-            .padding(horizontal = 5.dp).padding(bottom = 8.dp)
+            .padding(start = 1.dp, end = 5.dp/*horizontal = 5.dp*/).padding(bottom = 8.dp)
     ) {
 
 /*//        if (isVisible){
@@ -310,14 +310,14 @@ fun BottomMessageBar1(
             modifier = Modifier.fillMaxWidth().background(Color.Transparent),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.width(5.dp))
+          //  Spacer(modifier = Modifier.width(5.dp))
             // Rounded text box
             Row(
                 modifier = Modifier
                     .weight(1f)
                     .wrapContentHeight()
                     .background(Color(0xFFF5F0FF), RoundedCornerShape(28.dp))
-                    .padding(horizontal = 10.dp),
+                    .padding(start = 5.dp, end = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -326,8 +326,7 @@ fun BottomMessageBar1(
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .wrapContentSize().align(alignment = Alignment.Bottom).padding(start = 13.dp, bottom = 13.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
+                        .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) {
                             // imageLauncher.launch("image/*")
@@ -363,7 +362,8 @@ fun BottomMessageBar1(
                             Text(
                                 text = "See text",
                                 color = Color(0xFF374151),
-                                modifier = Modifier.align(Alignment.CenterHorizontally).clickable {
+                                modifier = Modifier.align(Alignment.CenterHorizontally).clickable(interactionSource = remember { MutableInteractionSource() },
+                                    indication = null) {
                                     showText = true
                                 }
                             )
@@ -376,7 +376,8 @@ fun BottomMessageBar1(
                                     painterResource(R.drawable.ic_close),
                                     contentDescription = null,
                                     tint = Color.Unspecified,
-                                    modifier = Modifier.size(23.dp).clickable {
+                                    modifier = Modifier.size(23.dp).clickable(interactionSource = remember { MutableInteractionSource() },
+                                        indication = null) {
                                         speechRecognizer.cancel()
                                         recognizedText = ""
                                         viewModel.onMessageChange("")
@@ -734,7 +735,8 @@ fun VoicePreviewCard(
             fontSize = 10.sp,
             color = Color(0xFF4338CA),
             modifier = Modifier.align(Alignment.CenterHorizontally)
-                .clickable { onSeeText() }
+                .clickable(interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { onSeeText() }
         )
 
         Spacer(Modifier.height(12.dp))
@@ -745,7 +747,8 @@ fun VoicePreviewCard(
                 painterResource(R.drawable.ic_close),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.clickable { onClose() }
+                modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { onClose() }
             )
 
             Spacer(Modifier.width(12.dp))

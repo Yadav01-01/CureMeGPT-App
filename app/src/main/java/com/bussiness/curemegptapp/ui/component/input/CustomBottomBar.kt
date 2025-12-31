@@ -124,8 +124,7 @@ fun CustomBottomBar(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .size(65.dp,77.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) {
                     onClickAIIcon()
@@ -147,8 +146,7 @@ fun BottomBarItem(
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(18.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) {
                 onClick()

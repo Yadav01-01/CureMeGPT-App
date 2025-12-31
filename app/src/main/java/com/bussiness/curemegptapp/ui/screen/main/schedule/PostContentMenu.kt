@@ -1,6 +1,8 @@
 package com.bussiness.curemegptapp.ui.screen.main.schedule
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -78,6 +80,13 @@ fun PostContentMenu(
                 }
             )
             DropdownMenuItem(
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
+                    expanded = false
+                    onEditClick()
+                },
                 text = {
                     Text(
                         text = "Reschedule",

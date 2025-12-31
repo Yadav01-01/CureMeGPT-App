@@ -11,6 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -134,7 +135,8 @@ fun VoiceInputUI() {
                     Text(
                         text = "See text",
                         color = Color.Gray,
-                        modifier = Modifier.clickable {
+                        modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() },
+                            indication = null) {
                             showText = true
                         }
                     )
@@ -147,7 +149,8 @@ fun VoiceInputUI() {
                             painterResource(R.drawable.ic_close),
                             contentDescription = null,
                             tint = Color.Unspecified,
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() },
+                                indication = null) {
                                 speechRecognizer.cancel()
                                 recognizedText = ""
                                 rmsValue = 0f

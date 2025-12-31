@@ -49,10 +49,8 @@ import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.TopBarHeader2
 import com.bussiness.curemegptapp.ui.dialog.LogOutDialog
 
-//DeleteAccountScreen
-
 @Composable
-fun DeleteAccountScreen(navController: NavHostController,authNavController : NavController) {
+fun DeleteAccountScreen(navController: NavHostController, authNavController: NavController) {
     var selectedReason by remember { mutableStateOf<String?>(null) }
     Column(
         modifier = Modifier
@@ -60,7 +58,9 @@ fun DeleteAccountScreen(navController: NavHostController,authNavController : Nav
             .background(Color(0xFFFFFFFF))
             .statusBarsPadding()
     ) {
-        TopBarHeader2(title = stringResource(R.string.delete_account)/*"Delete Account"*/, onBackClick = { navController.popBackStack() })
+        TopBarHeader2(
+            title = stringResource(R.string.delete_account)/*"Delete Account"*/,
+            onBackClick = { navController.popBackStack() })
 
         // --------- IF selectedReason == null → IMAGE-1 SCREEN ---------
         if (selectedReason == null) {
@@ -71,14 +71,13 @@ fun DeleteAccountScreen(navController: NavHostController,authNavController : Nav
             )
         } else {
             // --------- IF selectedReason != null → IMAGE-2 SCREEN ---------
-            DeleteAccountFeedbackUI(selectedReason!!,onDeleteClick= {
-               // navController.navigate()
+            DeleteAccountFeedbackUI(selectedReason!!, onDeleteClick = {
+                // navController.navigate()
                 authNavController.navigate(AppDestination.Login) {
                     popUpTo(AppDestination.MainScreen) { inclusive = true }
                 }
             })
         }
-
     }
 }
 
@@ -90,20 +89,25 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(top =20.dp, start =20.dp,end = 20.dp )
+            .padding(top = 20.dp, start = 20.dp, end = 20.dp)
     ) {
         Spacer(Modifier.height(20.dp))
-        Text(stringResource(R.string.delete_my_account)/*"Delete my account"*/, fontSize = 18.sp,
+        Text(
+            stringResource(R.string.delete_my_account)/*"Delete my account"*/, fontSize = 18.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             fontWeight = FontWeight.Medium,
-            color = Color(0xFF3C3C3C))
+            color = Color(0xFF3C3C3C)
+        )
 
         Spacer(Modifier.height(10.dp))
 
-        Text(stringResource(R.string.why_delete_account_question)/*"Why would you like to delete your account"*/, fontSize = 15.sp,
+        Text(
+            stringResource(R.string.why_delete_account_question)/*"Why would you like to delete your account"*/,
+            fontSize = 15.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal,
-            color = Color(0xFF697383))
+            color = Color(0xFF697383)
+        )
         Spacer(Modifier.height(30.dp))
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -160,8 +164,9 @@ fun DeleteAccountOptionsUI(onReasonSelected: (String) -> Unit) {
         Spacer(modifier = Modifier.height(17.dp))
     }
 }
+
 @Composable
-fun DeleteAccountFeedbackUI(selectedReason: String,onDeleteClick : ()-> Unit) {
+fun DeleteAccountFeedbackUI(selectedReason: String, onDeleteClick: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
@@ -176,11 +181,11 @@ fun DeleteAccountFeedbackUI(selectedReason: String,onDeleteClick : ()-> Unit) {
 //            color = Color.Black
 //        )
 
-                Text(
+        Text(
             text = stringResource(R.string.dont_want_use_anymore)/*"I don’t want to use CureMeGPT anymore"*/,
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
-                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+            fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             color = Color.Black
         )
 
@@ -204,7 +209,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String,onDeleteClick : ()-> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(140.dp)
-                .border(width = 1.dp, color =  Color(0xFF697383), shape = RoundedCornerShape(20.dp))
+                .border(width = 1.dp, color = Color(0xFF697383), shape = RoundedCornerShape(20.dp))
                 .background(Color(0xFFFFFFFF), RoundedCornerShape(20.dp))
                 .padding(0.dp),   // TextField ka already internal padding hota hai
             placeholder = {
@@ -225,11 +230,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String,onDeleteClick : ()-> Unit) {
             maxLines = 5
         )
 
-
-
         Spacer(modifier = Modifier.height(30.dp))
-
-
 
         GradientButton(
             text = stringResource(R.string.delete_account_button)/*"Delete Account"*/,
@@ -240,7 +241,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String,onDeleteClick : ()-> Unit) {
         Spacer(modifier = Modifier.height(30.dp))
     }
 
-    if (showDialog){
+    if (showDialog) {
         LogOutDialog(
             title = "Confirm Delete"/*"Confirm Logout"*/,
             message = "Are you sure you want to delete of your account?"/*"Are you sure you want to log out of your account?"*/,
@@ -261,7 +262,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String,onDeleteClick : ()-> Unit) {
 @Composable
 fun SettingsMenuItem(
     icon: Int,
-    iconBoolean : Boolean =true,
+    iconBoolean: Boolean = true,
     title: String,
     onClick: () -> Unit
 ) {
@@ -278,15 +279,15 @@ fun SettingsMenuItem(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             // Icon Circle Background
-if (iconBoolean){
-    Box(contentAlignment = Alignment.Center) {
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = title,
-            modifier = Modifier.size(30.dp)
-        )
-    }
-}
+            if (iconBoolean) {
+                Box(contentAlignment = Alignment.Center) {
+                    Image(
+                        painter = painterResource(id = icon),
+                        contentDescription = title,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+            }
 
 
 
@@ -301,7 +302,7 @@ if (iconBoolean){
 
         // Arrow Icon
         Image(
-            painter = painterResource(id = R.drawable.ic_next_arrow_calender) ,
+            painter = painterResource(id = R.drawable.ic_next_arrow_calender),
             contentDescription = "Navigate",
             modifier = Modifier.size(19.dp)
         )
@@ -324,5 +325,5 @@ fun SettingsMenuDivider() {
 fun DeleteAccountScreenPreview() {
     val navController = rememberNavController()
     val navController1 = rememberNavController()
-    DeleteAccountScreen(navController,navController1)
+    DeleteAccountScreen(navController, navController1)
 }

@@ -365,8 +365,7 @@ fun GenderDropdown(
                     color = Color(0xFF697383),
                     shape = RoundedCornerShape(50.dp)
                 )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) { expanded = true }
                 .padding(horizontal = 20.dp, vertical = 16.dp)
@@ -592,8 +591,8 @@ fun StepTabs(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                modifier = Modifier
+                    .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) { onStepClick(index) }
             ) {
@@ -665,8 +664,7 @@ fun TopBarHeader(
                 contentDescription = "Back Icon",
                 modifier = Modifier
                     .size(42.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
+                    .clickable(interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) { onBackClick() }
             )
@@ -688,8 +686,7 @@ fun TopBarHeader(
                         fontSize = 14.sp,
                         fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                         fontWeight = FontWeight.Medium,
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
+                        modifier = Modifier.clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { }
                     )
@@ -803,8 +800,7 @@ fun BloodGroupDropdown(
                     color = Color(0xFFBFC5D2),
                     shape = RoundedCornerShape(50.dp)
                 )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) { expanded = true }
                 .padding(horizontal = 20.dp, vertical = 16.dp)
@@ -891,8 +887,7 @@ fun FileAttachment(
             contentDescription = "Delete",
             modifier = Modifier
                 .size(48.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) { onDeleteClick() }
         )
@@ -950,8 +945,7 @@ fun UniversalInputField(
                     color = Color(0xFF697383),
                     shape = RoundedCornerShape(56.dp)
                 )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) { onClick() },
             contentAlignment = Alignment.CenterStart
@@ -976,8 +970,7 @@ fun UniversalInputField(
                         .align(Alignment.CenterEnd)
                         .padding(end = 16.dp)
                         .size(19.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
+                        .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onClick() }
                 )
@@ -1006,8 +999,7 @@ fun CancelButton(
                 Color(0xFF181B1A),
                 RoundedCornerShape(28.dp)
             )
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) { onClick() }
             .padding(horizontal = paddingHorizontal),
@@ -1045,8 +1037,7 @@ fun TopBarHeader1(title: String, onBackClick: () -> Unit) {
                 contentDescription = "Back Icon",
                 modifier = Modifier
                     .size(42.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
+                    .clickable(interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) { onBackClick() }
             )
@@ -1087,8 +1078,7 @@ fun TopBarHeader2(title: String, onBackClick: () -> Unit) {
                 contentDescription = "Back Icon",
                 modifier = Modifier
                     .size(42.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
+                    .clickable(interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) { onBackClick() }
             )
@@ -1225,8 +1215,7 @@ fun UniversalInputField1(
                     color = Color(0xFF697383),
                     shape = RoundedCornerShape(56.dp)
                 )
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
+                .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) { onClick() },
             contentAlignment = Alignment.CenterStart
@@ -1251,8 +1240,7 @@ fun UniversalInputField1(
                         .align(Alignment.CenterEnd)
                         .padding(end = 16.dp)
                         .size(19.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
+                        .clickable(interactionSource = remember { MutableInteractionSource() },
                             indication = null
                         ) { onClick() }
                 )

@@ -165,6 +165,9 @@ fun AddFamilyMemberScreen(
                 onNext = {
                     viewModel.submitProfile()
                     showAlertDialog = true  // Dialog show करें
+                },
+                onBack = {
+                    viewModel.goToPreviousStep()
                 }
             )
         }
@@ -180,9 +183,11 @@ fun AddFamilyMemberScreen(
             confirmText = "Done",
             onDismiss = {
                 showAlertDialog = false
+                navController.navigateUp()
             },
             onConfirm = {
                 showAlertDialog = false
+                navController.navigateUp()
             }
         )
 

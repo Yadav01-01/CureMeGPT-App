@@ -94,4 +94,6 @@ dependencies {
     // OR latest version
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.1.0")
     implementation ("com.jakewharton.timber:timber:5.0.1")
+
+    implementation("com.github.canopas:composable-cropper:0.4.0")
 }

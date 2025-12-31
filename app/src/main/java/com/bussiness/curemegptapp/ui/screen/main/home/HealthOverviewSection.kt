@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
@@ -79,7 +80,13 @@ val profiles = listOf(
 
 
 @Composable
-fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit,onEditClick: () -> Unit,onSchedule: ()-> Unit,onAskAi: () -> Unit) {
+fun HealthOverviewSection(
+    alerts: List<String>,
+    onAddClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onSchedule: () -> Unit,
+    onAskAi: () -> Unit
+) {
     val profiles = remember { profiles }
     var selectedProfile by remember {
         mutableStateOf(profiles.first())
@@ -112,7 +119,7 @@ fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit,onEditClic
             onClick = { onAddClick() }
         )
     }
-    Spacer(modifier = Modifier.height(12.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 
 //    val profiles = listOf(
 //        "James (Myself)",
@@ -136,7 +143,8 @@ fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit,onEditClic
 //        }
         profiles.forEach { profile ->
             ProfileTab(
-                name = profile.name.substringBefore(" "),
+                //   name = profile.name.substringBefore(" "),
+                name = profile.name,
                 isSelected = profile.id == selectedProfile.id,
                 modifier = Modifier.weight(1f),
                 onClick = {
@@ -149,9 +157,9 @@ fun HealthOverviewSection(alerts: List<String>,onAddClick: () -> Unit,onEditClic
 
 
     Spacer(modifier = Modifier.height(42.dp))
-    UserHealthCard(profile = selectedProfile, onEditClick={
+    UserHealthCard(profile = selectedProfile, onEditClick = {
         onEditClick()
-    }, onSchedule = {onSchedule()}, onAskAi = {onAskAi()})
+    }, onSchedule = { onSchedule() }, onAskAi = { onAskAi() })
 
     Spacer(modifier = Modifier.height(71.dp))
 }
@@ -195,13 +203,16 @@ fun ProfileTab(
 ) {
     Surface(
         modifier = modifier
-            .clickable { onClick() },
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick() },
         shape = RoundedCornerShape(50.dp),
-        color = if (isSelected) Color.Black else Color.White,
-        border = if (!isSelected) BorderStroke(1.dp, Color(0xFF697383)) else null
+        color = if (isSelected) Color(0xFF3C3C3C) else Color.White,
+        border = if (!isSelected) BorderStroke(1.dp, Color(0xFF3C3C3C)) else null
     ) {
         Box(
-            modifier = Modifier.padding(horizontal = 5.dp, vertical = 3.dp),
+            modifier = Modifier.padding(horizontal = 5.dp, vertical = 10.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -214,9 +225,13 @@ fun ProfileTab(
 }
 
 
-
 @Composable
-fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()-> Unit,onAskAi : ()-> Unit) {
+fun UserHealthCard(
+    profile: HealthProfile,
+    onEditClick: () -> Unit,
+    onSchedule: () -> Unit,
+    onAskAi: () -> Unit
+) {
     val alerts = listOf(
         "Blood pressure medication reminder",
         "Annual checkup due"
@@ -250,6 +265,7 @@ fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()
                     }
                     Spacer(modifier = Modifier.width(7.dp))
                     Column {
+
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = profile.name,
@@ -257,9 +273,10 @@ fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()
                                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                                 fontWeight = FontWeight.Medium,
                                 maxLines = 1,
-                                modifier = Modifier.width(95.dp)
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.width(100.dp)
                             )
-                            Spacer(modifier = Modifier.width(7.dp))
+                            Spacer(modifier = Modifier.width(5.dp))
                             Surface(
                                 modifier = Modifier.width(46.dp),
                                 shape = RoundedCornerShape(20.dp),
@@ -267,9 +284,9 @@ fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()
                             ) {
                                 Text(
                                     text = profile.age,
-                                    fontSize = 10.sp,
+                                    fontSize = 9.sp,
                                     color = Color(0xFF211C64),
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                                    modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                                     fontWeight = FontWeight.Medium
                                 )
@@ -296,10 +313,12 @@ fun UserHealthCard(profile: HealthProfile,onEditClick : ()->Unit,onSchedule : ()
                     painter = painterResource(id = R.drawable.ic_edit_icon_cirlcular),
                     contentDescription = "Edit",
                     modifier = Modifier
-                        .size(45.dp)
-                        .clickable( interactionSource = remember { MutableInteractionSource() },
-                            indication = null) {
-onEditClick()
+                        .size(43.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            onEditClick()
                         }
                 )
 
@@ -345,7 +364,7 @@ onEditClick()
                     fontSize = 12.sp,
                     horizontalPadding = 12.dp,
                     modifier = Modifier.alignByBaseline(),
-                    onClick = { onSchedule()}
+                    onClick = { onSchedule() }
                 )
 
                 GradientRedButton(
@@ -361,7 +380,7 @@ onEditClick()
                         Color(0xFF4338CA),
                         Color(0xFF211C64)
                     ),
-                    onClick = { onAskAi()}
+                    onClick = { onAskAi() }
                 )
 
                 AppointmentBox(

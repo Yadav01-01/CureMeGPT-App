@@ -765,6 +765,8 @@ Shared from CureMeGPT App 🚀</string>
     <string name="help_content_2">Visit our FAQ section to explore answers about AI consultations, profile setup, medication reminders, and privacy settings.</string>
     <string name="help_content_3">Help us improve CureMeGPT by sharing your feedback or new feature ideas. Your input helps us build a smarter, more caring health assistant.</string>
 
+    <string name="update">Update</string>
+
     <!--    stringResource(R.string.known_allergies_label),-->
 
 </resources>

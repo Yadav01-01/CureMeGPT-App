@@ -114,8 +114,7 @@ fun HistoryStep(
                             .background(
                                 if (isSelected) Color(0x205B4FFF) else Color.Transparent
                             )
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
+                            .clickable(interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
                                 selectedConditions =
@@ -213,8 +212,7 @@ fun HistoryStep(
                             contentDescription = "Add",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
+                                .clickable(interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
 
@@ -240,8 +238,7 @@ fun HistoryStep(
                             contentDescription = "Remove",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
+                                .clickable(interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
                                     val updated = currentMedications.toMutableList()
@@ -317,8 +314,7 @@ fun HistoryStep(
                             contentDescription = "Add",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
+                                .clickable(interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
 
@@ -343,8 +339,7 @@ fun HistoryStep(
                             contentDescription = "Remove",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
+                                .clickable(interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
                                     val updated = currentSupplements.toMutableList()

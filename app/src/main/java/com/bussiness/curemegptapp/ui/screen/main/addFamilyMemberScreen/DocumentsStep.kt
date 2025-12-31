@@ -1,5 +1,6 @@
 package com.bussiness.curemegptapp.ui.screen.main.addFamilyMemberScreen
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -7,9 +8,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -24,10 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.data.model.ProfileData
+import com.bussiness.curemegptapp.ui.component.CancelButton
+import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.DisclaimerBox
 import com.bussiness.curemegptapp.ui.component.FileAttachment
 import com.bussiness.curemegptapp.ui.component.GradientButton
@@ -39,7 +46,8 @@ import com.bussiness.curemegptapp.ui.viewModel.main.AddFamilyMemberViewModel
 fun DocumentsStep(
     viewModel: AddFamilyMemberViewModel,
     profileData: ProfileData,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    onBack: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -119,7 +127,7 @@ fun DocumentsStep(
 
                 if (profileData.uploadedFiles.isEmpty()) {
                     Text(
-                        text =  stringResource(R.string.no_files_uploaded),//"No files uploaded",
+                        text = stringResource(R.string.no_files_uploaded),//"No files uploaded",
                         color = Color.Gray,
                         fontSize = 13.sp
                     )
@@ -135,17 +143,9 @@ fun DocumentsStep(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-
-            DisclaimerBox(
-                title = stringResource(R.string.disclaimer_title), //"You're almost ready!",
-                description = stringResource(R.string.disclaimer_description),//"You can always add more details, upload documents, or update your profile later from the settings menu.",
-                titleColor = Color(0xFF4338CA),
-                backColor = Color(0x084338CA)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
         }
-        GradientButton(
+
+/*        GradientButton(
             text = stringResource(R.string.button_get_started),//"Get Started",
             onClick = {
                 viewModel.submitProfile()
@@ -168,10 +168,60 @@ fun DocumentsStep(
                 onNext()
 
             }
-        )
+        )*/
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            CancelButton(title = "Back"/*"Cancel"*/) {
+                onBack()
+            }
+
+            ContinueButton(text = "Save Member"/*"Schedule"*/) {
+                viewModel.submitProfile()
+
+                // Toast show karein summary
+                val summary = """
+                    Profile Completed!
+                    Name: ${profileData.fullName}
+                    Contact: ${profileData.contactNumber}
+                    Email: ${profileData.email}
+                    Files: ${profileData.uploadedFiles.size}
+                """.trimIndent()
+                // Create toast message
+                val toastMessage = context.getString(R.string.profile_completed_toast)
+                Toast.makeText(
+                    context,
+                    toastMessage,
+                    Toast.LENGTH_LONG
+                ).show()
+                onNext()
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
 
     }
+}
+
+private fun fakeProfileData() = ProfileData(
+    fullName = "Vipin Khatri",
+    contactNumber = "9876543210",
+    email = "vipin@gmail.com",
+    uploadedFiles = listOf(
+        Uri.parse("file://xray_report.pdf"),
+        Uri.parse("file://blood_test.png")
+    )
+)
+@Preview(showBackground = true)
+@Composable
+fun DocumentsStepPreview() {
+    DocumentsStep(
+        viewModel = AddFamilyMemberViewModel(),
+        profileData = fakeProfileData(),
+        onNext = {},
+        onBack = {}
+    )
 }

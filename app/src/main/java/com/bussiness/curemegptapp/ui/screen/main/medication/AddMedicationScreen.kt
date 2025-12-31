@@ -39,21 +39,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
-import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField2
@@ -61,7 +56,6 @@ import com.bussiness.curemegptapp.ui.component.ProfileInputSmallField
 import com.bussiness.curemegptapp.ui.component.ProfilePhotoPicker
 import com.bussiness.curemegptapp.ui.component.RoundedCustomCheckbox
 import com.bussiness.curemegptapp.ui.component.TopBarHeader1
-import com.bussiness.curemegptapp.ui.component.UniversalInputField
 import com.bussiness.curemegptapp.ui.component.UniversalInputField1
 import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
@@ -140,14 +134,13 @@ fun AddMedicationScreen(
             .background(Color(0xFFFFFFFF))
     ) {
 
-        TopBarHeader1(title = stringResource(R.string.add_medication_title)/*"Add Medication"*/, onBackClick = {})
+        TopBarHeader1(title = stringResource(R.string.add_medication_title)/*"Add Medication"*/, onBackClick = {navController.navigateUp()})
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 19.dp, vertical = 30.dp)
         ) {
-
 
             Text(
                 text = stringResource(R.string.for_family_member_label)/*"For Family Member"*/,

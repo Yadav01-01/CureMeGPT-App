@@ -71,8 +71,7 @@ fun GradientShadowButton(
     Box(
         modifier = modifier
             .height(52.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = enabled,
                 onClick = onClick
@@ -112,8 +111,7 @@ fun GradientShadowRedButton(
     Box(
         modifier = modifier
             .height(52.dp).clip(RoundedCornerShape(45.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = enabled,
                 onClick = onClick
@@ -396,8 +394,7 @@ fun LayerShadowButton(
 ) {
     Box(
         modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onClick
             )
@@ -435,8 +432,7 @@ fun LayerShadowBlueButton(
 ) {
     Box(
         modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onClick
             )
@@ -477,8 +473,7 @@ fun CurvedTopShadowButton(
 
     Box(
         modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
+            .clickable(interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onClick
             )

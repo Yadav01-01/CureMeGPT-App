@@ -3,7 +3,6 @@ package com.bussiness.curemegptapp.ui.screen.main.editFamilyMemberDetails
 //EditFamilyMemberDetailsScreen
 
 
-
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -105,7 +104,13 @@ fun EditFamilyMemberDetailsScreen(
         // Top Bar
         TopBarHeader(
             currentStep = currentStep,
-            onBackClick = { viewModel.goToPreviousStep() },
+            onBackClick = {
+                if (currentStep == 0) {
+                    navController.navigateUp()
+                } else {
+                    viewModel.goToPreviousStep()
+                }
+            },
             title = stringResource(R.string.edit_family_member_details_title)/*"Edit Family Member Details"*/,
             skipDisplay = false
         )
@@ -116,16 +121,19 @@ fun EditFamilyMemberDetailsScreen(
                 profileData = profileData,
                 onNext = { viewModel.goToNextStep() }
             )
+
             1 -> GeneralInfoStep(
                 viewModel = viewModel,
                 profileData = profileData,
                 onNext = { viewModel.goToNextStep() }
             )
+
             2 -> HistoryStep(
                 viewModel = viewModel,
                 profileData = profileData,
                 onNext = { viewModel.goToNextStep() }
             )
+
             3 -> DocumentsStep(
                 viewModel = viewModel,
                 profileData = profileData,
@@ -139,7 +147,8 @@ fun EditFamilyMemberDetailsScreen(
 
     if (showAlertDialog) {
 
-        MemberProfileUpdatedDialog(title = stringResource(R.string.member_profile_updated_title)/*"Member’s Profile Updated Successfully"*/,
+        MemberProfileUpdatedDialog(
+            title = stringResource(R.string.member_profile_updated_title)/*"Member’s Profile Updated Successfully"*/,
             description = stringResource(R.string.member_profile_updated_description)/*"Member’s Profile has been updated."*/,
             onDismiss = { showAlertDialog = false },
             onOkClick = { showAlertDialog = false }
@@ -148,8 +157,6 @@ fun EditFamilyMemberDetailsScreen(
     }
 
 }
-
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)

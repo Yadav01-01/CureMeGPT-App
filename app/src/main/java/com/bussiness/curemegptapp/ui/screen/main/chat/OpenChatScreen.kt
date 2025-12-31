@@ -283,7 +283,8 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                             Surface(
                                 modifier = Modifier
                                     .fillMaxWidth().padding(horizontal = 18.dp)
-                                    .clickable { showUserDropdown = !showUserDropdown },
+                                    .clickable(interactionSource = remember { MutableInteractionSource() },
+                                        indication = null) { showUserDropdown = !showUserDropdown },
                                 shape = RoundedCornerShape(30.dp),
                                 color = Color(0xFFF0EDFF),
 
@@ -344,8 +345,7 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .height(44.dp)
-                                                    .clickable(
-                                                        interactionSource = remember { MutableInteractionSource() },
+                                                    .clickable(interactionSource = remember { MutableInteractionSource() },
                                                         indication = null
                                                     ) {
 
@@ -465,7 +465,8 @@ fun QuestionCard(question: String, isHealthQuestion: Boolean) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { }
+                .clickable(interactionSource = remember { MutableInteractionSource() },
+                    indication = null) { }
                 .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.Top

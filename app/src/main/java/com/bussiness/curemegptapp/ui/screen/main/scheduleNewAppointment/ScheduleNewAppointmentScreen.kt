@@ -91,7 +91,10 @@ fun ScheduleNewAppointmentScreen(
             .background(Color(0xFFFFFFFF))
     ) {
 
-        TopBarHeader1(title = stringResource(R.string.schedule_new_appointment_title), onBackClick = {})
+        TopBarHeader1(
+            title = stringResource(R.string.schedule_new_appointment_title),
+            onBackClick = {navController.navigateUp()}
+        )
 
         Column(
             modifier = Modifier

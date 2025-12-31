@@ -2,6 +2,7 @@ package com.bussiness.curemegptapp.ui.screen.main.chat
 
 //ChatDataScreen
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +48,7 @@ import com.bussiness.curemegptapp.ui.component.input.RightSideDrawer
 import com.bussiness.curemegptapp.ui.dialog.DeleteChatDialog
 import com.bussiness.curemegptapp.ui.dialog.SwitchToDialog
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun ChatDataScreen(navController: NavHostController) {
     val viewModel: ChatDataViewModel = hiltViewModel()
@@ -59,7 +61,7 @@ fun ChatDataScreen(navController: NavHostController) {
     var showDrawer by remember { mutableStateOf(false) }
     var selectedUser by remember { mutableStateOf("James (Myself)") }
     var showCaseDialog by remember { mutableStateOf(false) }
-
+    var shareChatMessage = stringResource(R.string.share_chat_message)
     RightSideDrawer(
         drawerState = showDrawer,
         onClose = { showDrawer = false },
@@ -100,7 +102,7 @@ fun ChatDataScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-  var shareChatMessage = stringResource(R.string.share_chat_message)
+
                 ChatHeader(
                     logoRes = R.drawable.ic_logo,
                     sideArrow = R.drawable.ic_cross_icon,

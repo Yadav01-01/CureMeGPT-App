@@ -49,7 +49,7 @@ fun FilterHealthReportsBottomSheet(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(430.dp)
+//            .height(430.dp)
             .clip(RoundedCornerShape(topEnd = 30.dp, topStart = 30.dp))
             .background(Color.White)
             .padding(24.dp)

@@ -2,6 +2,10 @@ package com.bussiness.curemegptapp.ui.screen.main.myProfile
 
 //MyProfileScreen
 
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -50,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.DocumentItem
@@ -64,11 +70,30 @@ fun MyProfileScreen(
     navController: NavHostController,
     viewModel: MyProfileViewModel = viewModel()
 ) {
+    var showPhotoSheet by remember { mutableStateOf(false) }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var showCropper by remember { mutableStateOf(false) }
 
+    var selectedProfilePhotoUri by remember { mutableStateOf<Uri?>(null) }
     val familyMember by viewModel.familyMember.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val context = LocalContext.current
 
+    val profilePhotoPickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                context.contentResolver.takePersistableUriPermission(
+                    it,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                selectedProfilePhotoUri = it
+            }
+        }
+
+    fun openProfilePhotoPicker() {
+        profilePhotoPickerLauncher.launch(arrayOf("image/*"))
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -96,6 +121,7 @@ fun MyProfileScreen(
             ProfileContent(
                 member = member,
                 navController = navController,
+                selectedProfilePhotoUri = selectedProfilePhotoUri,
                 onEditClick = {
                     // Handle edit click
                     navController.navigate(AppDestination.EditProfileScreen)
@@ -107,6 +133,9 @@ fun MyProfileScreen(
                 },
                 onDownloadClick = { documentId ->
                     // Handle download
+                },
+                openProfilePhotoPicker = {
+                    openProfilePhotoPicker()
                 }
             )
         } ?: run {
@@ -124,9 +153,11 @@ fun MyProfileScreen(
 fun ProfileContent(
     member: FamilyMember,
     navController: NavHostController,
+    selectedProfilePhotoUri: Uri?,
     onEditClick: () -> Unit,
     onSettingClick: () -> Unit,
-    onDownloadClick: (String) -> Unit
+    onDownloadClick: (String) -> Unit,
+    openProfilePhotoPicker: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -217,19 +248,38 @@ fun ProfileContent(
                             .padding(13.dp)
                     ) {
                         // यहाँ आप Glide या Coil का use करके network image load कर सकते हैं
-                        Image(
+      /*                  Image(
                             painter = painterResource(id = R.drawable.ic_profile_image),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(CircleShape),
                             contentScale = ContentScale.Crop
-                        )
+                        )*/
+                        if (selectedProfilePhotoUri != null) {
+                            AsyncImage(
+                                model = selectedProfilePhotoUri,
+                                contentDescription = stringResource(R.string.profile_photo_description, member.name),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_profile_image),
+                                contentDescription = stringResource(R.string.profile_photo_description, member.name),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
 
                     // Upload button
                     IconButton(
-                        onClick = { /* Handle upload */ },
+                        onClick = { openProfilePhotoPicker() },
                         modifier = Modifier
                             .size(39.dp)
                             .align(Alignment.BottomEnd)
@@ -341,7 +391,6 @@ fun PersonalInformationSection(member: FamilyMember) {
                 modifier = Modifier.weight(1f)
             )
 
-
             SelectableInfoBox(
                 icon = R.drawable.ic_dob,
                 value = member.dateOfBirth,
@@ -438,7 +487,6 @@ fun SelectableInfoBox(
                 indication = null) { onClick() }
             .padding(15.dp)
     ) {
-
         // Icon circle
         Box(
             modifier = Modifier
@@ -453,7 +501,6 @@ fun SelectableInfoBox(
                 modifier = Modifier.fillMaxSize()
             )
         }
-
         // Value
         Text(
             text = value,
@@ -465,9 +512,6 @@ fun SelectableInfoBox(
         )
     }
 }
-
-
-
 
 
 @Composable

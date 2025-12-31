@@ -134,20 +134,20 @@ fun DocumentsStep(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            DisclaimerBox(
-                title = stringResource(R.string.disclaimer_title), //"You're almost ready!",
-                description = stringResource(R.string.disclaimer_description),//"You can always add more details, upload documents, or update your profile later from the settings menu.",
-                titleColor = Color(0xFF4338CA),
-                backColor = Color(0x084338CA)
-            )
+//
+//            Spacer(modifier = Modifier.height(24.dp))
+//
+//            DisclaimerBox(
+//                title = stringResource(R.string.disclaimer_title), //"You're almost ready!",
+//                description = stringResource(R.string.disclaimer_description),//"You can always add more details, upload documents, or update your profile later from the settings menu.",
+//                titleColor = Color(0xFF4338CA),
+//                backColor = Color(0x084338CA)
+//            )
 
             Spacer(modifier = Modifier.height(24.dp))
         }
         GradientButton(
-            text = stringResource(R.string.button_get_started),//"Get Started",
+            text = stringResource(R.string.update),//"Get Started",
             onClick = {
                 viewModel.submitProfile()
 

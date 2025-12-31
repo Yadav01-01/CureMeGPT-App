@@ -78,7 +78,8 @@ fun ThingsNeedingAttention(
                 AttentionItem(
                     title = attention.first,
                     subtitle = attention.second,
-                    isUrgent = attention.third
+                    isUrgent = attention.third,
+
                 )
             }
         }

@@ -1,6 +1,10 @@
 package com.bussiness.curemegptapp.ui.screen.main.familyPersonProfile
 
 
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -49,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.dialog.AlertCardDialog
@@ -62,11 +68,28 @@ fun FamilyPersonProfileScreen(
     navController: NavHostController,
     viewModel: FamilyProfileViewModel = viewModel()
 ) {
+    var selectedProfilePhotoUri by remember { mutableStateOf<Uri?>(null) }
+
     val familyMember by viewModel.familyMember.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     var showDeleteDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
+    val profilePhotoPickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                context.contentResolver.takePersistableUriPermission(
+                    it,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                selectedProfilePhotoUri = it
+            }
+        }
+
+    fun openProfilePhotoPicker() {
+        profilePhotoPickerLauncher.launch(arrayOf("image/*"))
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -93,6 +116,7 @@ fun FamilyPersonProfileScreen(
             FamilyMemberProfileContent(
                 member = member,
                 navController = navController,
+                selectedProfilePhotoUri = selectedProfilePhotoUri,
                 onEditClick = {
                     // Handle edit click
                 },
@@ -101,8 +125,22 @@ fun FamilyPersonProfileScreen(
                 },
                 onDownloadClick = { documentId ->
                     // Handle download
+                },
+                openProfilePhotoPicker = {
+                    openProfilePhotoPicker()
                 }
             )
+            /*
+            FamilyMemberProfileContent(
+    member = member,
+    navController = navController,
+    selectedProfilePhotoUri = selectedProfilePhotoUri,
+    onEditClick = { },
+    onDeleteClick = { showDeleteDialog = true },
+    onDownloadClick = { },
+    openProfilePhotoPicker = { openProfilePhotoPicker() }
+)
+             */
         } ?: run {
             if (!isLoading && errorMessage == null) {
                 Text(
@@ -134,9 +172,11 @@ fun FamilyPersonProfileScreen(
 fun FamilyMemberProfileContent(
     member: FamilyMember,
     navController: NavHostController,
+    selectedProfilePhotoUri: Uri?,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onDownloadClick: (String) -> Unit
+    onDownloadClick: (String) -> Unit,
+    openProfilePhotoPicker: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -232,19 +272,39 @@ fun FamilyMemberProfileContent(
                             .background(Color.White)
                             .padding(13.dp)
                     ) {
-                        Image(
+           /*             Image(
                             painter = painterResource(id = R.drawable.ic_profile_image),
                             contentDescription = stringResource(R.string.profile_photo_description, member.name),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(CircleShape),
                             contentScale = ContentScale.Crop
-                        )
+                        )*/
+                        if (selectedProfilePhotoUri != null) {
+                            AsyncImage(
+                                model = selectedProfilePhotoUri,
+                                contentDescription = stringResource(R.string.profile_photo_description, member.name),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_profile_image),
+                                contentDescription = stringResource(R.string.profile_photo_description, member.name),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
                     }
 
                     // Upload button
                     IconButton(
-                        onClick = { /* Handle upload */ },
+                        onClick = { openProfilePhotoPicker() },
                         modifier = Modifier
                             .size(39.dp)
                             .align(Alignment.BottomEnd)

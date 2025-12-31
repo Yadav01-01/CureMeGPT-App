@@ -49,7 +49,7 @@ fun ReportScreen(navController: NavHostController) {
             "prescription_2025.pdf"*/
         )
         var priority = "Attention"
-        TopBarHeader2(title = stringResource(R.string.back_to_reports)/*"Back to Reports"*/, onBackClick = {})
+        TopBarHeader2(title = stringResource(R.string.back_to_reports)/*"Back to Reports"*/, onBackClick = {navController.navigateUp()})
         Spacer(modifier = Modifier.height(8.dp))
 
         Column(

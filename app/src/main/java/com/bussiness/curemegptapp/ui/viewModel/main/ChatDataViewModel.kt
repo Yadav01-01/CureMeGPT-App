@@ -239,7 +239,7 @@ class ChatDataViewModel @Inject constructor(
                 _messages.update {
                     it.toMutableList().apply {
                         this[index] = current.copy(
-                            rating = newRating!!,
+                            rating = newRating?:0,
                             isRated = newRating != null
                         )
                     }

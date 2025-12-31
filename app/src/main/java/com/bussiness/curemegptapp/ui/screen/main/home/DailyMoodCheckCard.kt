@@ -57,7 +57,7 @@ fun DailyMoodCheckCard(
     ) {
 
         Column(
-            modifier = Modifier.padding(horizontal = 13.dp, vertical = 14.dp)
+            modifier = Modifier.padding(horizontal = 13.dp).padding(top = 14.dp, bottom = 1.dp)
         ) {
 
             // ---------- TOP ROW ----------

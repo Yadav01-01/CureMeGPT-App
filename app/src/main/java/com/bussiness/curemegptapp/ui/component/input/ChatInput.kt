@@ -1233,7 +1233,8 @@ private fun ActionButton(
             )
             .clip(CircleShape)               // content ko round banata hai
             .background(Color.White)         // bg required for shadow visibility
-            .clickable(onClick = onClick)
+            .clickable(onClick = onClick,interactionSource = remember { MutableInteractionSource() },
+                indication = null)
             .padding(horizontal = 5.dp, vertical = 5.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -1317,7 +1318,8 @@ fun RightSideDrawer(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.4f))
-                    .clickable { onClose() }
+                    .clickable(interactionSource = remember { MutableInteractionSource() },
+                        indication = null) { onClose() }
             )
         }
 

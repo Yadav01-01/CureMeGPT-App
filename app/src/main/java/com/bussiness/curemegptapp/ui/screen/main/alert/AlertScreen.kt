@@ -51,7 +51,7 @@ import com.bussiness.curemegptapp.ui.screen.main.scheduleNewAppointment.Schedule
 @Composable
 fun AlertScreen(
     navController: NavHostController
-) {
+) {  var backPressedTime by remember { mutableStateOf(0L) }
     val alertList = listOf(
         AlertModel(
             id = 1,
@@ -89,7 +89,14 @@ fun AlertScreen(
             .background(Color(0xFFFFFFFF)) .statusBarsPadding()
     ) {
 
-        TopBarHeader1(title = stringResource(R.string.alerts_title), onBackClick = {})
+        TopBarHeader1(title = stringResource(R.string.alerts_title), onBackClick = {
+//            val currentTime = System.currentTimeMillis()
+//            if (currentTime - backPressedTime > 1000) { // 1 second threshold
+//                backPressedTime = currentTime
+//                navController.popBackStack()
+//            }
+            navController.navigateUp()
+        })
 
         Column(
             modifier = Modifier

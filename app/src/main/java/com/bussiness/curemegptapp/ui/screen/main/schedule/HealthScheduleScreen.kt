@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -360,6 +361,12 @@ fun HealthScheduleScreen(navController: NavHostController) {
                                 }
 
                             },
+                            textStyle = TextStyle(
+                                color = Color.Black,
+                                fontSize = 13.sp,
+                                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                fontWeight = FontWeight.Normal
+                            ),
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = Color(0xFFF4F4F4),
                                 unfocusedContainerColor = Color(0xFFF4F4F4),

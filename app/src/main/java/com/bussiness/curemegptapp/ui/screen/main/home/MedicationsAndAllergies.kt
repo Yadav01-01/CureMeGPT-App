@@ -48,6 +48,9 @@ fun MedicationsAndAllergies(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Column(modifier = Modifier.weight(1f)) {
+
+
             Text(
                 text = stringResource(R.string.current_medications_label1)/*"Current Medications"*/,
                 fontSize = 14.sp,
@@ -55,6 +58,15 @@ fun MedicationsAndAllergies(
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium
             )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // ------- Medications LazyRow -------
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(medications) { item ->
+                        MedicationChip(item, Color(0xFFD5D2F3))
+                    }
+                }
+            }
             Image(
                 painter = painterResource(id = R.drawable.ic_edit_icon_cirlcular),
                 contentDescription = "Edit",
@@ -66,14 +78,7 @@ fun MedicationsAndAllergies(
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        // ------- Medications LazyRow -------
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(medications) { item ->
-                MedicationChip(item, Color(0xFFD5D2F3))
-            }
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -108,7 +113,7 @@ fun MedicationChip(text: String, backgroundColor: Color) {
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp),
             fontSize = 12.sp,
             color = if (backgroundColor == Color(0xFFD5D2F3)) Color(0xFF211C64) else Color(
                 0xFFF31D1D

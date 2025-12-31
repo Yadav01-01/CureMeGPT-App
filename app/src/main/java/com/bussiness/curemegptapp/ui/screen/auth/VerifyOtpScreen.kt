@@ -79,7 +79,7 @@ fun VerifyOtpScreen(
             },
             onGoToAskAI = {
                 showDialog = false
-             //   navController.navigate(AppDestination.OpenChatScreen)
+                //   navController.navigate(AppDestination.OpenChatScreen)
                 navController.navigate("openChat?from=auth")
             }
         )
@@ -101,7 +101,10 @@ fun VerifyOtpScreen(
 
         GradientHeader(
             heading = stringResource(R.string.verify_your_account),//"Verify Your Account",
-            description = stringResource(R.string.otp_sent_description, email ?: "")//"We’ve sent a 5-digit code to your $email."
+            description = stringResource(
+                R.string.otp_sent_description,
+                email ?: ""
+            )//"We’ve sent a 5-digit code to your $email."
         )
 
         Spacer(Modifier.height(55.dp))
@@ -122,8 +125,8 @@ fun VerifyOtpScreen(
 
 
         Spacer(Modifier.height(20.dp))
-var pleaseEnterOtp = stringResource(R.string.please_enter_otp)
-var enterCompleteOtp = stringResource(R.string.enter_complete_otp)
+        var pleaseEnterOtp = stringResource(R.string.please_enter_otp)
+        var enterCompleteOtp = stringResource(R.string.enter_complete_otp)
         GradientButton(
             text = stringResource(R.string.verify_and_continue),//"Verify & Continue",
             onClick = {
@@ -230,7 +233,8 @@ var enterCompleteOtp = stringResource(R.string.enter_complete_otp)
                 )
 
             }
-        } else {
+        } else if(fromScreen == "reset")
+        {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -257,6 +261,26 @@ var enterCompleteOtp = stringResource(R.string.enter_complete_otp)
                         navController.navigate(AppDestination.Login)
                     }
                 )
+            }
+        }else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 42.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.back),//"Back",
+                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                    fontSize = 17.sp,
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        navController.navigateUp()
+                    }
+                )
+
             }
         }
 

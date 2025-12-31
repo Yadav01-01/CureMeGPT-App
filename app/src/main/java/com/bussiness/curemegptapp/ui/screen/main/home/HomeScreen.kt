@@ -259,7 +259,7 @@ fun HomeScreen(
 
             )
             //
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             HealthOverviewSection(alerts = uiState.alerts, onAddClick = {
                 navController.navigate("addFamilyMember?from=main")
             },onEditClick = {
