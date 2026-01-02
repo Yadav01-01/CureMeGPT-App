@@ -95,5 +95,7 @@ dependencies {
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.1.0")
     implementation ("com.jakewharton.timber:timber:5.0.1")
 
-    implementation("com.github.canopas:composable-cropper:0.4.0")
+ //   implementation("com.github.canopas:composable-cropper:0.4.0")
+   // implementation("com.github.CanHub:Android-Image-Cropper:4.0.0")
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 }

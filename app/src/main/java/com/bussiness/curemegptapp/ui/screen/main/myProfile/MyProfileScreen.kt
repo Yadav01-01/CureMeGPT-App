@@ -2,8 +2,15 @@ package com.bussiness.curemegptapp.ui.screen.main.myProfile
 
 //MyProfileScreen
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -52,6 +59,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -59,41 +67,81 @@ import coil.compose.AsyncImage
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.DocumentItem
+import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialog
+import com.bussiness.curemegptapp.ui.sheet.BottomSheetDialogProperties
+import com.bussiness.curemegptapp.ui.sheet.FilterAppointmentsBottomSheet
+import com.bussiness.curemegptapp.ui.sheet.ProfilePhotoBottomSheet
 import com.bussiness.curemegptapp.ui.theme.AppGradientColors
 import com.bussiness.curemegptapp.ui.viewModel.main.Document
 import com.bussiness.curemegptapp.ui.viewModel.main.FamilyMember
 import com.bussiness.curemegptapp.ui.viewModel.main.MyProfileViewModel
-
+import com.canhub.cropper.CropImage.CancelledResult.uriContent
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 
 @Composable
 fun MyProfileScreen(
     navController: NavHostController,
     viewModel: MyProfileViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    var bitmap: Bitmap? by remember { mutableStateOf(null) }
     var showPhotoSheet by remember { mutableStateOf(false) }
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    var showCropper by remember { mutableStateOf(false) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
+    // यह state profile photo के लिए है
     var selectedProfilePhotoUri by remember { mutableStateOf<Uri?>(null) }
+
+    // Image crop launcher
+    val imageCropLauncher = rememberLauncherForActivityResult(
+        contract = CropImageContract()
+    ) { result ->
+        if (result.isSuccessful) {
+            result.uriContent?.let { uri ->
+                // Process the cropped image
+                imageUri = uri
+                selectedProfilePhotoUri = uri // यहाँ हम selected photo URI set कर रहे हैं
+
+                // Bitmap process करें (अगर जरूरी हो)
+                if (Build.VERSION.SDK_INT < 28) {
+                    bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                } else {
+                    val source = ImageDecoder.createSource(context.contentResolver, uri)
+                    bitmap = ImageDecoder.decodeBitmap(source)
+                }
+
+                // यहाँ आप viewModel में save कर सकते हैं (अगर चाहें)
+                // viewModel.saveProfilePhoto(uri.toString())
+            }
+        } else {
+            // Handle error
+            println("ImageCropping error: ${result.error}")
+        }
+    }
+
+    // Permission launcher for camera
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            // Permission granted, launch camera
+            val cropOptions = CropImageContractOptions(
+                null,
+                CropImageOptions(imageSourceIncludeGallery = false)
+            )
+            imageCropLauncher.launch(cropOptions)
+            showPhotoSheet = false
+        } else {
+            // Permission denied
+            Toast.makeText(context, "Camera permission is required to take photos", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     val familyMember by viewModel.familyMember.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
-    val context = LocalContext.current
 
-    val profilePhotoPickerLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            uri?.let {
-                context.contentResolver.takePersistableUriPermission(
-                    it,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                )
-                selectedProfilePhotoUri = it
-            }
-        }
-
-    fun openProfilePhotoPicker() {
-        profilePhotoPickerLauncher.launch(arrayOf("image/*"))
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -121,22 +169,27 @@ fun MyProfileScreen(
             ProfileContent(
                 member = member,
                 navController = navController,
-                selectedProfilePhotoUri = selectedProfilePhotoUri,
+                selectedProfilePhotoUri = selectedProfilePhotoUri, // यहाँ हम URI पास कर रहे हैं
                 onEditClick = {
                     // Handle edit click
                     navController.navigate(AppDestination.EditProfileScreen)
                 },
                 onSettingClick = {
-//                    viewModel.deleteFamilyMember()
-//                    navController.popBackStack()
                     navController.navigate(AppDestination.SettingsScreen)
                 },
                 onDownloadClick = { documentId ->
                     // Handle download
                 },
                 openProfilePhotoPicker = {
-                    openProfilePhotoPicker()
-                }
+                    showPhotoSheet = true
+                },
+//                onDeletePhoto = {
+//                    // Delete photo logic
+//                    selectedProfilePhotoUri = null
+//                    imageUri = null
+//                    bitmap = null
+//                    // viewModel.deleteProfilePhoto()
+//                }
             )
         } ?: run {
             if (!isLoading && errorMessage == null) {
@@ -145,6 +198,56 @@ fun MyProfileScreen(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
+        }
+    }
+
+    // Update the camera click handler in the BottomSheet
+    if (showPhotoSheet) {
+        BottomSheetDialog(
+            onDismissRequest = { showPhotoSheet = false },
+            properties = BottomSheetDialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = false,
+                dismissWithAnimation = true,
+                enableEdgeToEdge = false,
+            )
+        ) {
+            ProfilePhotoBottomSheet(
+                onDismiss = { showPhotoSheet = false },
+                onCameraClick = {
+                    // Check and request permission before launching camera
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                        // Permission already granted
+                        val cropOptions = CropImageContractOptions(
+                            null,
+                            CropImageOptions(imageSourceIncludeGallery = false)
+                        )
+                        imageCropLauncher.launch(cropOptions)
+                        showPhotoSheet = false
+                    } else {
+                        // Request permission
+                        permissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+                },
+                onGalleryClick = {
+                    // Gallery doesn't need camera permission
+                    val cropOptions = CropImageContractOptions(
+                        null,
+                        CropImageOptions(imageSourceIncludeCamera = false)
+                    )
+                    imageCropLauncher.launch(cropOptions)
+                    showPhotoSheet = false
+                },
+                onDeleteClick = {
+                    showPhotoSheet = false
+                    // Delete photo logic को trigger करें
+                    selectedProfilePhotoUri = null
+                    imageUri = null
+                    bitmap = null
+                    // viewModel.deleteProfilePhoto()
+                }
+            )
         }
     }
 }
