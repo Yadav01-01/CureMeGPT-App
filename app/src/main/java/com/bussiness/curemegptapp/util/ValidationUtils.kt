@@ -104,4 +104,55 @@ object ValidationUtils {
         val isValid: Boolean,
         val errorMessage: String
     )
+
+
+    // ValidationUtils.kt में नई methods जोड़ें
+    fun validateDateOfBirth(dob: String): ValidationResult {
+        return when {
+            dob.isBlank() -> ValidationResult(false, "Date of birth is required")
+            else -> {
+                try {
+                    // आप अपने date format के according validation कर सकते हैं
+                    ValidationResult(true, "")
+                } catch (e: Exception) {
+                    ValidationResult(false, "Enter a valid date")
+                }
+            }
+        }
+    }
+
+    fun validateHeight(height: String): ValidationResult {
+        return when {
+            height.isBlank() -> ValidationResult(false, "Height is required")
+            else -> ValidationResult(true, "")
+        }
+    }
+
+    fun validateWeight(weight: String): ValidationResult {
+        return when {
+            weight.isBlank() -> ValidationResult(false, "Weight is required")
+            else -> ValidationResult(true, "")
+        }
+    }
+
+    fun validateBloodGroup(bloodGroup: String): ValidationResult {
+        return when {
+            bloodGroup.isBlank() -> ValidationResult(false, "Blood group is required")
+            else -> ValidationResult(true, "")
+        }
+    }
+
+    fun validateAllergies(allergies: List<String>): ValidationResult {
+        return when {
+            allergies.isEmpty() -> ValidationResult(false, "Please select at least one allergy or choose 'None'")
+            else -> ValidationResult(true, "")
+        }
+    }
+
+    fun validateChronicConditions(conditions: List<String>): ValidationResult {
+        return when {
+            conditions.isEmpty() -> ValidationResult(false, "Please select at least one condition or choose 'None'")
+            else -> ValidationResult(true, "")
+        }
+    }
 }

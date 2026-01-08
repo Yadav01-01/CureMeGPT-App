@@ -51,6 +51,49 @@ fun DocumentsStep(
             viewModel.addUploadedFile(uri)
         }
     }
+    fun validateFields(): Boolean {
+        // Check if at least one file is uploaded
+        if (profileData.uploadedFiles.isEmpty()) {
+            Toast.makeText(context, "Please upload at least one document", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate file types
+        val invalidFiles = mutableListOf<String>()
+
+        profileData.uploadedFiles.forEach { fileUri ->
+            val fileName = fileUri.lastPathSegment ?: ""
+
+            // Check for valid file extensions
+            val isValidFile = fileName.endsWith(".pdf", ignoreCase = true) ||
+                    fileName.endsWith(".jpg", ignoreCase = true) ||
+                    fileName.endsWith(".jpeg", ignoreCase = true) ||
+                    fileName.endsWith(".png", ignoreCase = true) ||
+                    fileName.endsWith(".dcm", ignoreCase = true) ||
+                    fileName.endsWith(".dicom", ignoreCase = true) ||
+                    fileName.contains("image/", ignoreCase = true) ||
+                    fileName.contains("application/pdf", ignoreCase = true)
+
+            if (!isValidFile) {
+                val displayName = if (fileName.length > 20) "${fileName.take(17)}..." else fileName
+                invalidFiles.add(displayName)
+            }
+        }
+
+        if (invalidFiles.isNotEmpty()) {
+            val errorMsg = if (invalidFiles.size == 1) {
+                "Invalid file format: ${invalidFiles[0]}. Please upload PDF, JPG, PNG, or DICOM files."
+            } else {
+                "Invalid file formats: ${invalidFiles.take(3).joinToString(", ")}${if (invalidFiles.size > 3) ", ..." else ""}"
+            }
+
+            Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
+            return false
+        }
+
+        // All validations passed
+        return true
+    }
 
     Column(
         modifier = Modifier
@@ -146,7 +189,7 @@ fun DocumentsStep(
 
             Spacer(modifier = Modifier.height(24.dp))
         }
-        GradientButton(
+       /* GradientButton(
             text = stringResource(R.string.update),//"Get Started",
             onClick = {
                 viewModel.submitProfile()
@@ -168,6 +211,27 @@ fun DocumentsStep(
                 ).show()
                 onNext()
 
+            }
+        )*/
+        GradientButton(
+            text = stringResource(R.string.update),
+            onClick = {
+             //   if (validateFields()) {
+                    viewModel.submitProfile()
+
+                    // Show success message with file count
+                    val fileCount = profileData.uploadedFiles.size
+                    val fileWord = if (fileCount == 1) "file" else "files"
+                    val successMessage = "✅ Profile updated successfully with $fileCount $fileWord!"
+
+                    Toast.makeText(
+                        context,
+                        successMessage,
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    onNext()
+                //}
             }
         )
 

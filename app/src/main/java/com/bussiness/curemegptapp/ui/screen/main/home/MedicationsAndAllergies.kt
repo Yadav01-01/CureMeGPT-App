@@ -115,7 +115,7 @@ fun MedicationChip(text: String, backgroundColor: Color) {
             text = text,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp),
             fontSize = 12.sp,
-            color = if (backgroundColor == Color(0xFFD5D2F3)) Color(0xFF211C64) else Color(
+            color = if (backgroundColor == Color(0xFFD5D2F3)) Color(0xFF4338CA) else Color(
                 0xFFF31D1D
             )
         )

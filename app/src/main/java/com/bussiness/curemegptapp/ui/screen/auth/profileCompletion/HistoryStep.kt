@@ -1,5 +1,6 @@
 package com.bussiness.curemegptapp.ui.screen.auth.profileCompletion
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,8 +34,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +48,7 @@ import com.bussiness.curemegptapp.data.model.ProfileData
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField
 import com.bussiness.curemegptapp.ui.component.ProfileInputWithoutLabelField
+import com.bussiness.curemegptapp.ui.component.buildLabelWithOptional
 import com.bussiness.curemegptapp.ui.viewModel.auth.ProfileCompletionViewModel
 
 @Composable
@@ -58,10 +62,25 @@ fun HistoryStep(
     var currentMedications by remember { mutableStateOf(listOf("")) }
     var currentSupplements by remember { mutableStateOf(listOf("")) }
     var customCondition by remember { mutableStateOf("") }
+    val context = LocalContext.current
     val conditions = listOf(
         "Diabetes", "Asthma", "Hypertension", "Thyroid",
         "Arthritis", "Heart Disease", "Anxiety", "Depression", "Others"
     )
+    fun validateFields(): Boolean {
+        if (selectedConditions.isEmpty()) {
+            Toast.makeText(context, "Please select at least one chronic condition", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Check if "Others" is selected but custom field is empty
+        if ("Others" in selectedConditions && customCondition.isBlank()) {
+            Toast.makeText(context, "Please specify your condition", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
+    }
 
     Column(
         modifier = Modifier
@@ -75,7 +94,9 @@ fun HistoryStep(
                 Text(
                     text = stringResource(R.string.chronic_conditions_label),//"Chronic Conditions",
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular))
                 )
                 Text(
                     text = "*",
@@ -114,7 +135,8 @@ fun HistoryStep(
                             .background(
                                 if (isSelected) Color(0x205B4FFF) else Color.Transparent
                             )
-                            .clickable(interactionSource = remember { MutableInteractionSource() },
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
                                 selectedConditions =
@@ -127,7 +149,7 @@ fun HistoryStep(
                     ) {
                         Text(
                             text = condition,
-                            fontSize = 13.sp,
+                            fontSize = 11.sp,
                             color = if (isSelected) Color(0xFF5B4FFF) else Color.Black
                         )
                     }
@@ -146,24 +168,26 @@ fun HistoryStep(
 
                 Spacer(modifier = Modifier.height(16.dp))
             }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+        ProfileInputMultipleLineField(
+            label = stringResource(R.string.surgical_history_label),//"Surgical History (Optional)",
+            isImportant = false,
+            placeholder = stringResource(R.string.surgical_history_placeholder),//"Any previous surgeries or major medical procedures...",
+            value = surgicalHistory,
+            onValueChange = { surgicalHistory = it }
+        )
 
-            ProfileInputMultipleLineField(
-                label = stringResource(R.string.surgical_history_label),//"Surgical History (Optional)",
-                isImportant = false,
-                placeholder = stringResource(R.string.surgical_history_placeholder),//"Any previous surgeries or major medical procedures...",
-                value = surgicalHistory,
-                onValueChange = { surgicalHistory = it }
-            )
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-
+        Column(modifier = Modifier.padding(horizontal = 9.dp)) {
             Text(
-                text = stringResource(R.string.current_medications_label),//"Current Medications (Optional)",
+                text = buildLabelWithOptional(stringResource(R.string.current_medications_label)),//"Current Medications (Optional)",
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Normal,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular))
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -185,11 +209,34 @@ fun HistoryStep(
                             }
                         },
                         placeholder = {
+                       //     if (index == 0)
+                          //      Text(stringResource(R.string.medications_placeholder),/*"Any medications you're currently taking..."*/)
+                        //    else
+                         //       Text(stringResource(R.string.added_item_placeholder),/*"Added item"*/)  // non editable item placeholder
                             if (index == 0)
-                                Text(stringResource(R.string.medications_placeholder),/*"Any medications you're currently taking..."*/)
+                                Text(
+                                    text = stringResource(R.string.medications_placeholder),
+                                    color = Color.Black,   // ✅ placeholder black
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                    fontWeight = FontWeight.Normal
+                                )
                             else
-                                Text(stringResource(R.string.added_item_placeholder),/*"Added item"*/)  // non editable item placeholder
+                                Text(
+                                    text = stringResource(R.string.added_item_placeholder),
+                                    color = Color.Black,   // ✅ non-editable placeholder bhi black
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                    fontWeight = FontWeight.Normal
+                                )
+
                         },
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                            fontWeight = FontWeight.Normal
+                        ),
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(30.dp))
@@ -212,7 +259,8 @@ fun HistoryStep(
                             contentDescription = "Add",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(interactionSource = remember { MutableInteractionSource() },
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
 
@@ -238,7 +286,8 @@ fun HistoryStep(
                             contentDescription = "Remove",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(interactionSource = remember { MutableInteractionSource() },
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
                                     val updated = currentMedications.toMutableList()
@@ -259,9 +308,11 @@ fun HistoryStep(
 
             // ⭐ Current Supplements
             Text(
-                text = stringResource(R.string.current_supplements_label)/*"Current Supplements (Optional)"*/,
+                text = buildLabelWithOptional(stringResource(R.string.current_supplements_label))/*"Current Supplements (Optional)"*/,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Normal,
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular))
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -283,10 +334,26 @@ fun HistoryStep(
                             }
                         },
                         placeholder = {
+                         //   if (index == 0)
+                          //      Text(stringResource(R.string.supplements_placeholder)/*"Any supplements you're currently taking..."*/)
+                           // else
+                             //   Text(stringResource(R.string.added_item_placeholder)/*"Added item"*/)
                             if (index == 0)
-                                Text(stringResource(R.string.supplements_placeholder)/*"Any supplements you're currently taking..."*/)
+                                Text(
+                                    text = stringResource(R.string.supplements_placeholder),
+                                    color = Color.Black,   // ✅ placeholder black
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                    fontWeight = FontWeight.Normal
+                                )
                             else
-                                Text(stringResource(R.string.added_item_placeholder)/*"Added item"*/)
+                                Text(
+                                    text = stringResource(R.string.added_item_placeholder),
+                                    color = Color.Black,   // ✅ non-editable placeholder bhi black
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                                    fontWeight = FontWeight.Normal
+                                )
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -296,6 +363,12 @@ fun HistoryStep(
                                 Color(0xFFC3C6CB),
                                 RoundedCornerShape(30.dp)
                             ),
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontSize = 13.sp,
+                            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                            fontWeight = FontWeight.Normal
+                        ),
                         enabled = index == 0,   // ⭐ only first item editable
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.White,
@@ -314,7 +387,8 @@ fun HistoryStep(
                             contentDescription = "Add",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(interactionSource = remember { MutableInteractionSource() },
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
 
@@ -339,7 +413,8 @@ fun HistoryStep(
                             contentDescription = "Remove",
                             modifier = Modifier
                                 .padding(start = 8.dp)
-                                .clickable(interactionSource = remember { MutableInteractionSource() },
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
                                     val updated = currentSupplements.toMutableList()
@@ -359,18 +434,20 @@ fun HistoryStep(
         GradientButton(
             text = stringResource(R.string.save_and_continue),//"Save & Continue",
             onClick = {
-                val conditionsList = selectedConditions.toMutableList()
-                if ("Others" in selectedConditions && customCondition.isNotEmpty()) {
-                    conditionsList.add(customCondition)
-                }
+                if (validateFields()) {
+                    val conditionsList = selectedConditions.toMutableList()
+                    if ("Others" in selectedConditions && customCondition.isNotEmpty()) {
+                        conditionsList.add(customCondition)
+                    }
 
-                viewModel.updateMedicalHistory(
-                    chronicConditions = conditionsList,
-                    surgicalHistory = surgicalHistory,
-                    currentMedications = currentMedications.filter { it.isNotBlank() },
-                    currentSupplements = currentSupplements.filter { it.isNotBlank() }
-                )
-                onNext()
+                    viewModel.updateMedicalHistory(
+                        chronicConditions = conditionsList,
+                        surgicalHistory = surgicalHistory,
+                        currentMedications = currentMedications.filter { it.isNotBlank() },
+                        currentSupplements = currentSupplements.filter { it.isNotBlank() }
+                    )
+                    onNext()
+                }
             }
         )
 

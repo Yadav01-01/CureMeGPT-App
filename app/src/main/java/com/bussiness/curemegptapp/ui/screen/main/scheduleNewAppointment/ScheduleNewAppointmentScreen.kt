@@ -1,6 +1,7 @@
 package com.bussiness.curemegptapp.ui.screen.main.scheduleNewAppointment
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -23,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -44,6 +47,7 @@ import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
 import com.bussiness.curemegptapp.ui.dialog.SuccessfulDialog
 import com.bussiness.curemegptapp.ui.dialog.TimePickerDialog
+import java.time.format.DateTimeFormatter
 
 //ScheduleNewAppointmentScreen
 
@@ -67,6 +71,7 @@ fun ScheduleNewAppointmentScreen(
     var showDialog by remember { mutableStateOf(false) }
     var showDialog1 by remember { mutableStateOf(false) }
     var showDialogSuccessFully by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     val appointmentOptions = listOf(
         "Normal Check-up",
         "Dental Check-up",
@@ -84,10 +89,157 @@ fun ScheduleNewAppointmentScreen(
         "Hand Check-up",
         "ENT Check-up"
     )
+    // Time formatter for 12-hour format with AM/PM
+
+    val timeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
+
+    fun validateFields(): Boolean {
+        // Validate Member Selection
+        if (selectedMember == "Select Member" || selectedMember.isBlank()) {
+            Toast.makeText(context, "Please select a member", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Appointment Type Selection
+        if (selectedAppointment == "Select Appointment Type" || selectedAppointment.isBlank()) {
+            Toast.makeText(context, "Please select an appointment type", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Description (Optional but with minimum length if provided)
+
+        if (description.isBlank()) {
+            Toast.makeText(context, "Description is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (description.isNotBlank()) {
+            // Trim whitespace and check actual content length
+            val trimmedDescription = description.trim()
+            println("DEBUG - Trimmed description: '$trimmedDescription', Length: ${trimmedDescription.length}")
+
+            if (trimmedDescription.length < 10) {
+                Toast.makeText(context, "Description should be at least 10 characters", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        // Validate Date
+        if (dateOfBirth.isBlank()) {
+            Toast.makeText(context, "Please select a date", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Date format (basic check)
+        val dateRegex = Regex("^\\d{2}-\\d{2}-\\d{4}\$")
+        if (dateOfBirth.isNotBlank() && !dateRegex.matches(dateOfBirth)) {
+            Toast.makeText(context, "Please enter date in MM-DD-YYYY format", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Time
+        if (time.isBlank()) {
+            Toast.makeText(context, "Please select a time", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Time format - HH:MM AM/PM format
+        val timeRegex = Regex("^(0?[1-9]|1[0-2]):[0-5][0-9]\\s?(AM|PM|am|pm)\$", RegexOption.IGNORE_CASE)
+        if (time.isNotBlank() && !timeRegex.matches(time)) {
+            Toast.makeText(context, "Please enter time in HH:MM AM/PM format (e.g., 03:01 AM)", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (preferredDoctor.isBlank()) {
+            Toast.makeText(context, "Doctor name is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Preferred Doctor (Optional but with validation if provided)
+        if (preferredDoctor.isNotBlank()) {
+            if (preferredDoctor.length < 3) {
+                Toast.makeText(context, "Doctor name should be at least 3 characters", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            // Check if it starts with Dr. or similar prefix
+            if (!preferredDoctor.contains("Dr.", ignoreCase = true) &&
+                !preferredDoctor.contains("Doctor", ignoreCase = true)) {
+                // Warning only, not blocking
+                // Toast.makeText(context, "Consider adding 'Dr.' before the name", Toast.LENGTH_SHORT).show()
+            }
+        }
+        if (preferredClinic.isBlank()) {
+            Toast.makeText(context, "Clinic name is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Preferred Clinic (Optional but with validation if provided)
+        if (preferredClinic.isNotBlank()) {
+            if (preferredClinic.length < 3) {
+                Toast.makeText(context, "Clinic name should be at least 3 characters", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        // Validate Appointment Reminder
+        if (selectedAppointmentReminder == "Select Member" || selectedAppointmentReminder.isBlank()) {
+            Toast.makeText(context, "Please select an appointment reminder", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate future date and time
+        try {
+            val currentDate = java.time.LocalDate.now()
+            val selectedDateParts = dateOfBirth.split("-")
+            if (selectedDateParts.size == 3) {
+                val selectedDate = java.time.LocalDate.of(
+                    selectedDateParts[2].toInt(),
+                    selectedDateParts[0].toInt(),
+                    selectedDateParts[1].toInt()
+                )
+
+                if (selectedDate.isBefore(currentDate)) {
+                    Toast.makeText(context, "Please select a future date", Toast.LENGTH_SHORT).show()
+                    return false
+                }
+
+                // If date is today, check time (convert 12-hour format to 24-hour for comparison)
+                if (selectedDate.isEqual(currentDate) && time.isNotBlank()) {
+                    val currentTime = java.time.LocalTime.now()
+
+                    // Convert 12-hour format time to LocalTime for comparison
+                    val formattedTime = time.uppercase().replace(" ", "")
+                    val hourMinutePart = formattedTime.substring(0, 5)
+                    val amPmPart = formattedTime.substring(5)
+
+                    val timeParts = hourMinutePart.split(":")
+                    val hour = timeParts[0].toInt()
+                    val minute = timeParts[1].toInt()
+
+                    var selectedHour = hour
+                    if (amPmPart == "PM" && hour != 12) {
+                        selectedHour += 12
+                    } else if (amPmPart == "AM" && hour == 12) {
+                        selectedHour = 0
+                    }
+
+                    val selectedTime = java.time.LocalTime.of(selectedHour, minute)
+
+                    if (selectedTime.isBefore(currentTime)) {
+                        Toast.makeText(context, "Please select a future time", Toast.LENGTH_SHORT).show()
+                        return false
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Date parsing failed, but we already validated format
+        }
+
+        return true
+    }
 
     Column(
         modifier = Modifier
-            .fillMaxSize() .statusBarsPadding().verticalScroll(rememberScrollState())
+            .fillMaxSize() .statusBarsPadding().imePadding().verticalScroll(rememberScrollState())
             .background(Color(0xFFFFFFFF))
     ) {
 
@@ -141,6 +293,7 @@ fun ScheduleNewAppointmentScreen(
             )
 
             Spacer(Modifier.height(24.dp))
+
             ProfileInputMultipleLineField2(
                 label = stringResource(R.string.description_label)/*"Description"*/,
                 isImportant = false,
@@ -148,14 +301,15 @@ fun ScheduleNewAppointmentScreen(
                 value = description,
                 onValueChange = { description = it },
                 heightOfEditText = 135.dp,
-                paddingHorizontal = 0.dp,
+                paddingHorizontal = 5.dp,
                 borderColor = Color(0xFF697383),
-                textColor = Color(0xFF697383)
+                textColor = Color(0xFF697383),
+                textStartPadding = 5.dp
             )
 
-            Spacer(Modifier.width(24.dp))
+            Spacer(Modifier.height(20.dp))
 
-            Row (modifier = Modifier.padding(horizontal = 5.dp)) {
+            Row (modifier = Modifier.padding(horizontal = 0.dp)) {
                 UniversalInputField(
                     title = stringResource(R.string.date_label)/*"Date"*/,
                     isImportant = false,
@@ -166,7 +320,7 @@ fun ScheduleNewAppointmentScreen(
                 ) {
                     showDialog = true
                 }
-                Spacer(Modifier.width(5.dp))
+                Spacer(Modifier.height(20.dp))
                 UniversalInputField(
                     title = stringResource(R.string.time_label)/*"Time"*/,
                     isImportant = false,
@@ -179,7 +333,7 @@ fun ScheduleNewAppointmentScreen(
                 }
 
             }
-            Spacer(Modifier.width(24.dp))
+            Spacer(Modifier.height(20.dp))
 
             ProfileInputField(
                 label = stringResource(R.string.preferred_doctor_label)/*"Preferred Doctor"*/,
@@ -189,7 +343,7 @@ fun ScheduleNewAppointmentScreen(
                 onValueChange = { preferredDoctor = it }
             )
 
-            Spacer(Modifier.width(24.dp))
+            Spacer(Modifier.height(20.dp))
 
             ProfileInputField(
                 label = stringResource(R.string.preferred_clinic_label)/*"Preferred Clinic"*/,
@@ -200,38 +354,44 @@ fun ScheduleNewAppointmentScreen(
             )
 
             Spacer(Modifier.height(24.dp))
+            Row (modifier = Modifier.padding(horizontal = 5.dp)) {
+                Column {
 
-            Text(
-                text = stringResource(R.string.appointment_reminder_label)/*"Appointment Reminder"*/,
-                fontSize = 15.sp,
-                color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                fontWeight = FontWeight.Normal
-            )
 
-            Spacer(Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.appointment_reminder_label)/*"Appointment Reminder"*/,
+                    fontSize = 15.sp,
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal
+                )
 
-            CustomPowerSpinner(
-                selectedText = selectedAppointmentReminder,
-                onSelectionChanged = { reason ->
-                    selectedAppointmentReminder = reason
-                },
-                horizontalPadding = 24.dp,
-                reasons = selectedAppointmentReminderOptions // Pass the list of options here
-            )
+                Spacer(Modifier.height(8.dp))
 
+                CustomPowerSpinner(
+                    selectedText = selectedAppointmentReminder,
+                    onSelectionChanged = { reason ->
+                        selectedAppointmentReminder = reason
+                    },
+                    horizontalPadding = 24.dp,
+                    reasons = selectedAppointmentReminderOptions // Pass the list of options here
+                )
+                }
+            }
             Spacer(Modifier.height(30.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
 
                 CancelButton(title = stringResource(R.string.cancel_button)/*"Cancel"*/) {
-
+navController.navigateUp()
                 }
 
                 ContinueButton(text = stringResource(R.string.schedule_button)/*"Schedule"*/) {
-                    showDialogSuccessFully = true
+                    if (validateFields()) {
+                        showDialogSuccessFully = true
+                    }
                 }
             }
             Spacer(Modifier.height(37.dp))
@@ -261,9 +421,9 @@ fun ScheduleNewAppointmentScreen(
     if (showDialogSuccessFully) {
         SuccessfulDialog(title = stringResource(R.string.schedule_success_title)/*"Appointment Scheduled \nSuccessfully"*/, description = stringResource(R.string.schedule_success_description)/*"Your appointment reminder are set."*/,
             onDismiss = { showDialogSuccessFully = false
-                navController.navigate(AppDestination.HealthSchedule)},
+                navController.popBackStack()},
             onOkClick = { showDialogSuccessFully = false
-                navController.navigate(AppDestination.HealthSchedule)
+                navController.popBackStack()
             }
         )
     }

@@ -98,7 +98,7 @@ fun FilterAppointmentsBottomSheet(
                 fontSize = 16.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                color = if (selectedFilter == "Upcoming") Color(0xFF211C64) else Color(0xFF374151)
+                color = if (selectedFilter == "Upcoming") Color(0xFF4338CA) else Color(0xFF374151)
             )
 
             if (selectedFilter == "Upcoming") {
@@ -130,7 +130,7 @@ fun FilterAppointmentsBottomSheet(
                 fontSize = 16.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                color = if (selectedFilter == "Past") Color(0xFF211C64) else Color(0xFF374151)
+                color = if (selectedFilter == "Past") Color(0xFF4338CA) else Color(0xFF374151)
             )
 
             if (selectedFilter == "Past") {
@@ -179,7 +179,7 @@ fun FilterAppointmentsBottomSheet(
                 onDismiss()
             }
 
-            ContinueButton(text = "Continue") {
+            ContinueButton(text = "Apply") {
                 onApply(selectedFilter, selectedMember)
             }
         }

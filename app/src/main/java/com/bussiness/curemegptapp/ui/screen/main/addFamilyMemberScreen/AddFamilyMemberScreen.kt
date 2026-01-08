@@ -4,6 +4,7 @@ package com.bussiness.curemegptapp.ui.screen.main.addFamilyMemberScreen
 
 
 import android.os.Build
+import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -93,9 +95,6 @@ fun AddFamilyMemberScreen(
     var showAlertDialog3 by remember { mutableStateOf(false) }
     var showCompleteDialog by remember { mutableStateOf(false) }
 
-    BackHandler {
-
-    }
 
 
     BackHandler {
@@ -116,7 +115,7 @@ fun AddFamilyMemberScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
+            .statusBarsPadding().imePadding()
             .background(Color(0xFFFFFFFF))
     ) {
         // Top Bar

@@ -42,11 +42,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -75,7 +80,7 @@ fun ProfileInputField(
 
         Row {
             Text(
-                text = label,
+                text = buildLabelWithOptional(label),
                 fontSize = 15.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
@@ -151,11 +156,11 @@ fun ProfileInputMultipleLineField(
 
         Row {
             Text(
-                text = label,
+                text = buildLabelWithOptional(label),
                 fontSize = 15.sp,
                 color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(start = 12.dp, bottom = 6.dp)
             )
             if (isImportant) {
@@ -222,6 +227,7 @@ fun ProfileInputMultipleLineField2(
     keyboardType: KeyboardType = KeyboardType.Text,
     borderColor: Color = Color(0xFFC3C6CB),
     textColor: Color = Color(0xFFB8B9BD),
+    textStartPadding : Dp = 12.dp
 ) {
 
     val shape = RoundedCornerShape(30.dp)
@@ -237,7 +243,7 @@ fun ProfileInputMultipleLineField2(
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(start = 12.dp, bottom = 6.dp)
+                modifier = Modifier.padding(start = textStartPadding, bottom = 6.dp)
             )
             if (isImportant) {
                 Text(
@@ -260,9 +266,15 @@ fun ProfileInputMultipleLineField2(
                     color = textColor,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
+                    fontSize = 15.sp
                 )
             },
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 13.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(heightOfEditText)
@@ -447,7 +459,7 @@ fun Dropdown1(
         // 🔹 Label Row
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = label,
+                text = buildLabelWithOptional(label),
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
@@ -484,6 +496,12 @@ fun Dropdown1(
                         fontSize = 15.sp
                     )
                 },
+                textStyle = TextStyle(
+                    color = Color.Black,
+                    fontSize = 13.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal
+                ),
                 singleLine = true,
                 modifier = Modifier
                     .weight(1f)
@@ -724,7 +742,7 @@ fun ProfilePhotoPicker(
     Column {
 
         Text(
-            text = label,
+            text = buildLabelWithOptional1(label),
             fontSize = 14.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal
@@ -1146,6 +1164,12 @@ fun ProfileInputSmallField(
                     fontWeight = FontWeight.Normal,
                 )
             },
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 13.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            ),
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -1250,4 +1274,65 @@ fun UniversalInputField1(
 }
 
 
+fun buildLabelWithOptional(label: String): AnnotatedString {
+    return buildAnnotatedString {
+        val optionalText = "(Optional)"
+
+        if (label.contains(optionalText)) {
+            val start = label.indexOf(optionalText)
+            val end = start + optionalText.length
+
+            // Normal text before Optional
+            append(label.substring(0, start))
+
+            // Italic Optional
+            withStyle(
+                SpanStyle(
+                    fontStyle = FontStyle.Italic,
+                    color = Color(0xFF000000)   // optional ko thoda light bhi kar diya
+                )
+            ) {
+                append(optionalText)
+            }
+
+            // Text after Optional (if any)
+            if (end < label.length) {
+                append(label.substring(end))
+            }
+        } else {
+            append(label)
+        }
+    }
+}
+
+fun buildLabelWithOptional1(label: String): AnnotatedString {
+    return buildAnnotatedString {
+        val optionalText = "(X-Rays, Dental Scans, Prescriptions, Lab Reports)"
+
+        if (label.contains(optionalText)) {
+            val start = label.indexOf(optionalText)
+            val end = start + optionalText.length
+
+            // Normal text before Optional
+            append(label.substring(0, start))
+
+            // Italic Optional
+            withStyle(
+                SpanStyle(
+                    fontStyle = FontStyle.Italic,
+                    color = Color(0xFF000000)   // optional ko thoda light bhi kar diya
+                )
+            ) {
+                append(optionalText)
+            }
+
+            // Text after Optional (if any)
+            if (end < label.length) {
+                append(label.substring(end))
+            }
+        } else {
+            append(label)
+        }
+    }
+}
 

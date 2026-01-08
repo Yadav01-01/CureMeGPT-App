@@ -1,5 +1,7 @@
 package com.bussiness.curemegptapp.ui.screen.main.schedule
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -19,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -37,19 +40,25 @@ fun PostContentMenu(
     onDeleteClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-
+    // 🔥 Rotation animation
+    val rotation by animateFloatAsState(
+        targetValue = if (expanded) 90f else 0f,
+        animationSpec = tween(durationMillis = 300),
+        label = "menu_rotation"
+    )
     Box(
         modifier = modifier.wrapContentSize(Alignment.TopEnd)
     ) {
 
 
         IconButton(
-            onClick = {  expanded = true},
+            onClick = {  expanded = !expanded},
             modifier = Modifier.size(45.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_menu_icon),
                 contentDescription = "More options",
+                modifier = Modifier.rotate(rotation)
             )
         }
 

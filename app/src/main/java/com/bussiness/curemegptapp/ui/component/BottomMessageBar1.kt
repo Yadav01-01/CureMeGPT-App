@@ -339,11 +339,11 @@ fun BottomMessageBar1(
                         }
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(5.dp))
 
                 Column {
                     if (state.images.isNotEmpty() || state.pdfs.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(5.dp))
                         InlineAttachmentPreview(
                             images = state.images,
                             pdfs = state.pdfs,
@@ -357,7 +357,7 @@ fun BottomMessageBar1(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color(0xFFF4EFFF), RoundedCornerShape(20.dp))
-                                .padding(10.dp)
+                                .padding(8.dp)
                         ) {
                             Text(
                                 text = "See text",
@@ -435,7 +435,7 @@ fun BottomMessageBar1(
                             ),
                             placeholder = {
                                 Text(
-                                    "Ask anything…",
+                                    "Ask anything",
                                     fontSize = 12.sp,
                                     color = Color(0xFF949494),
                                     fontFamily = FontFamily(Font(R.font.urbanist_regular))

@@ -1,7 +1,5 @@
 package com.bussiness.curemegptapp.ui.screen.main.schedule
 
-//import com.bussiness.curemegptapp.ui.component.AppointmentMenuPopup
-
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -115,6 +113,11 @@ fun HealthScheduleScreen(navController: NavHostController) {
         stringResource(R.string.rose_logan_spouse_user),
         stringResource(R.string.peter_logan_son_user)
     )
+    // Get the user names from resources
+    val jamesUser = stringResource(R.string.james_myself_user)
+    val roseUser = stringResource(R.string.rose_logan_spouse_user)
+    val peterUser = stringResource(R.string.peter_logan_son_user)
+
     val appointments = listOf(
         Appointment(
             title = stringResource(R.string.normal_checkup),
@@ -181,11 +184,11 @@ fun HealthScheduleScreen(navController: NavHostController) {
         )
     )
 
-    val medication = listOf(
+   /* val medication = listOf(
         Medication(
             icon = R.drawable.ic_medication_icon,
             title = stringResource(R.string.albuterol_inhaler_2_puffs),
-            patientName = "Peter Logan",
+            patientName = "James",
             medicationType = stringResource(R.string.medication_type_label1),
             frequency = stringResource(R.string.weekly_frequency),
             days = stringResource(R.string.monday_tuesday_days),
@@ -240,11 +243,109 @@ fun HealthScheduleScreen(navController: NavHostController) {
             instructions = stringResource(R.string.asthma_symptoms_instructions),
             isVisibleItem = true
         )
+    )*/
+    val medication = listOf(
+        // James (Myself) की medications
+        Medication(
+            icon = R.drawable.ic_medication_icon,
+            title = stringResource(R.string.albuterol_inhaler_2_puffs),
+            patientName = jamesUser.split(" ")[0], // "James"
+            medicationType = stringResource(R.string.medication_type_label1),
+            frequency = stringResource(R.string.weekly_frequency),
+            days = stringResource(R.string.monday_tuesday_days),
+            times = listOf(
+                MedicationTime(stringResource(R.string.time_900_am), false),
+                MedicationTime(stringResource(R.string.time_900_pm), false),
+                MedicationTime(stringResource(R.string.time_1000_am), false),
+                MedicationTime(stringResource(R.string.time_400_pm), false)
+            ),
+            startDate = stringResource(R.string.schedule_date_aug_28),
+            endDate = stringResource(R.string.schedule_date_oct_28),
+            instructions = stringResource(R.string.asthma_symptoms_instructions),
+            isVisibleItem = true
+        ),
+        // Rose Logan (Spouse) की medications
+        Medication(
+            icon = R.drawable.ic_medication_icon,
+            title = stringResource(R.string.albuterol_inhaler),
+            patientName = roseUser.split(" ")[0], // "Rose"
+            medicationType = stringResource(R.string.medication_type_label1),
+            frequency = stringResource(R.string.weekly_frequency),
+            days = stringResource(R.string.monday_tuesday_days),
+            times = listOf(
+                MedicationTime(stringResource(R.string.time_900_am), false),
+                MedicationTime(stringResource(R.string.time_900_pm), false),
+                MedicationTime(stringResource(R.string.time_1000_am), false),
+                MedicationTime(stringResource(R.string.time_400_pm), false)
+            ),
+            startDate = stringResource(R.string.schedule_date_aug_28),
+            endDate = stringResource(R.string.schedule_date_oct_28),
+            instructions = stringResource(R.string.asthma_symptoms_instructions),
+            isVisibleItem = true
+        ),
+        // James (Myself) की दूसरी medication
+        Medication(
+            icon = R.drawable.ic_medication_icon,
+            title = "Vitamin D3 1000 IU",
+            patientName = jamesUser.split(" ")[0], // "James"
+            medicationType = "Supplements",
+            frequency = "Daily",
+            days = "Everyday",
+            times = listOf(
+                MedicationTime("08:00 AM", false)
+            ),
+            startDate = "01/01/2025",
+            endDate = "12/31/2025",
+            instructions = "Take with breakfast",
+            isVisibleItem = true
+        ),
+        // Rose Logan (Spouse) की दूसरी medication
+        Medication(
+            icon = R.drawable.ic_medication_icon,
+            title = "Thyroid Medication 50mg",
+            patientName = roseUser.split(" ")[0], // "Rose"
+            medicationType = "Medicine",
+            frequency = "Daily",
+            days = "Everyday",
+            times = listOf(
+                MedicationTime("07:00 AM", false),
+                MedicationTime("07:00 PM", false)
+            ),
+            startDate = "03/15/2025",
+            endDate = "03/15/2026",
+            instructions = "Take on empty stomach",
+            isVisibleItem = true
+        ),
+/*        Medication(
+            icon = R.drawable.ic_medication_icon,
+            title = stringResource(R.string.supplements_name),
+            patientName = peterUser.split(" ")[0], // "Peter"
+            medicationType = stringResource(R.string.medication_type_label1),
+            frequency = stringResource(R.string.weekly_frequency),
+            days = stringResource(R.string.monday_tuesday_days),
+            times = listOf(
+                MedicationTime(stringResource(R.string.time_900_am), false),
+                MedicationTime(stringResource(R.string.time_900_pm), false),
+                MedicationTime(stringResource(R.string.time_1000_am), false),
+                MedicationTime(stringResource(R.string.time_400_pm), false),
+                MedicationTime(stringResource(R.string.time_1100_am), false),
+                MedicationTime(stringResource(R.string.time_1200_pm), false),
+                MedicationTime(stringResource(R.string.time_100_pm), false),
+                MedicationTime(stringResource(R.string.time_200_pm), false)
+            ),
+            startDate = stringResource(R.string.schedule_date_aug_28),
+            endDate = stringResource(R.string.schedule_date_oct_28),
+            instructions = stringResource(R.string.asthma_symptoms_instructions),
+            isVisibleItem = true
+        )*/
     )
 
     var selectedFilter by remember { mutableStateOf("All") }   // Today, Upcoming, Past, All
     var selectedMember by remember { mutableStateOf<String?>(null) }
-    var selectedMemberMed by remember { mutableStateOf<String?>(null) }
+  /*  var selectedMemberMed by remember { mutableStateOf<String?>(null) }*/
+    var selectedMemberMed by remember {
+        mutableStateOf<String?>(jamesUser)
+    }
 
 //    val filteredList = appointments.filter { item ->
 //        item.title.contains(searchQuery, ignoreCase = true)
@@ -273,13 +374,24 @@ fun HealthScheduleScreen(navController: NavHostController) {
 //        item.title.contains(searchQuery, ignoreCase = true)
 //    }
 
-    val filteredList1 = medication.filter { item ->
+/*    val filteredList1 = medication.filter { item ->
         val searchMatch =
             item.title.contains(searchQuery, true) ||
                     item.patientName.contains(searchQuery, true)
 
         val memberMatch =
             selectedMemberMed == null || item.patientName == selectedMemberMed
+
+        searchMatch && memberMatch
+    }*/
+    val filteredList1 = medication.filter { item ->
+        val searchMatch =
+            item.title.contains(searchQuery, true) ||
+                    item.patientName.contains(searchQuery, true)
+
+        val memberMatch =
+            selectedMemberMed == null ||
+                    item.patientName == selectedMemberMed?.split(" ")?.get(0) // Compare first name only
 
         searchMatch && memberMatch
     }
@@ -680,509 +792,6 @@ fun NoDataFound(text: String) {
 }
 
 
-
-//fun isUpcoming(date: String): Boolean {
-//    return date.contains("Sep") // demo logic
-//}
-//
-//fun isPast(date: String): Boolean {
-//    return date.contains("Aug") // demo logic
-//}
-
-/*
-data class Appointment(
-    val title: String,
-    val doctor: String,
-    val patientName: String,
-    val date: String,
-    val time: String,
-    val location: String,
-    val description: String,
-    val icon: Int,
-    val isVisibleItem: Boolean = true
-)
-
-data class Medication(
-    val id: Int = 0,
-    val icon: Int,
-    val title: String,
-
-    val patientName: String,
-    val medicationType: String,
-    val frequency: String,
-    val days: String,
-    val times: List<MedicationTime>,
-    val startDate: String,
-    val endDate: String,
-    val instructions: String,
-    val isVisibleItem: Boolean = false
-)
-
-data class MedicationTime(
-    val time: String,
-    val isChecked: Boolean = false
-)
-
-@Composable
-fun HealthScheduleScreen(navController: NavHostController) {
-    var showSheet by remember { mutableStateOf(false) }
-    var showSheet1 by remember { mutableStateOf(false) }
-    var selectedTab by remember { mutableStateOf(0) }
-    var searchQuery by remember { mutableStateOf("") }
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var showDeleteDialog1 by remember { mutableStateOf(false) }
-    var members: List<String> = listOf(
-        "James (Myself)",
-        "Rose Logan (Spouse)",
-        "Peter Logan (Son)"
-    )
-    val appointments = listOf(
-        Appointment(
-            title = "Normal Check-up",
-            doctor = "Dr. Emily Rodriguez",
-            patientName = "Peter Logan",
-            date = "09/01/2025",
-            time = "10:30 AM",
-            location = "Health Care Hub, 20 Cooper Square, New York, NY 10003, USA",
-            description = "Regular 6-month check-up with cleaning",
-            icon = R.drawable.ic_medical_bag_icon
-        ),
-        Appointment(
-            title = "Dental Check-up",
-            doctor = "Dr. Sarah Johnson",
-            patientName = "James Logan",
-            date = "08/26/2025",
-            time = "10:30 AM",
-            location = "20 Cooper Square, New York, NY 10003, USA",
-            description = "Regular 6-month check-up with cleaning",
-            icon = R.drawable.ic_dental_icon
-        ),
-        Appointment(
-            title = "Root Canal",
-            doctor = "Dr. Sarah Johnson",
-            patientName = "James Logan",
-            date = "08/26/2025",
-            time = "10:30 AM",
-            location = "20 Cooper Square, New York, NY 10003, USA",
-            description = "Regular 6-month check-up with cleaning",
-            icon = R.drawable.ic_tooth_light,
-            isVisibleItem = false
-        ),
-        Appointment(
-            title = "Root Canal",
-            doctor = "Dr. Sarah Johnson",
-            patientName = "James Logan",
-            date = "08/26/2025",
-            time = "10:30 AM",
-            location = "20 Cooper Square, New York, NY 10003, USA",
-            description = "Regular 6-month check-up with cleaning",
-            icon = R.drawable.ic_tooth_light,
-            isVisibleItem = false
-        ),
-        Appointment(
-            title = "Root Canal",
-            doctor = "Dr. Sarah Johnson",
-            patientName = "James Logan",
-            date = "08/26/2025",
-            time = "10:30 AM",
-            location = "20 Cooper Square, New York, NY 10003, USA",
-            description = "Regular 6-month check-up with cleaning",
-            icon = R.drawable.ic_tooth_light,
-            isVisibleItem = false
-        )
-    )
-
-    val medication = listOf(
-        Medication(
-            icon = R.drawable.ic_medication_icon, // You'll need to add this icon
-            title = "Albuterol Inhaler 2 puffs",
-            patientName = "Peter Logan",
-            medicationType = "Medication",
-            frequency = "Weekly",
-            days = "Monday, Tuesday",
-            times = listOf(
-                MedicationTime("09:00 AM", false),
-                MedicationTime("09:00 PM", false),
-                MedicationTime("10:00 AM", false),
-                MedicationTime("04:00 PM", false)
-            ),
-            startDate = "08/28/2025",
-            endDate = "10/28/2025",
-            instructions = "For asthma symptoms",
-            isVisibleItem = true
-        ),
-        Medication(
-            icon = R.drawable.ic_medication_icon, // You'll need to add this icon
-            title = "Albuterol Inhaler",
-            patientName = "Peter Logan",
-            medicationType = "Medication",
-            frequency = "Weekly",
-            days = "Monday, Tuesday",
-            times = listOf(
-                MedicationTime("09:00 AM", false),
-                MedicationTime("09:00 PM", false),
-                MedicationTime("10:00 AM", false),
-                MedicationTime("04:00 PM", false)
-            ),
-            startDate = "08/28/2025",
-            endDate = "10/28/2025",
-            instructions = "For asthma symptoms",
-            isVisibleItem = true
-        ),
-        Medication(
-            icon = R.drawable.ic_medication_icon, // You'll need to add this icon
-            title = "Supplements Name",
-            patientName = "Peter Logan",
-            medicationType = "Medication",
-            frequency = "Weekly",
-            days = "Monday, Tuesday",
-            times = listOf(
-                MedicationTime("09:00 AM", false),
-                MedicationTime("09:00 PM", false),
-                MedicationTime("10:00 AM", false),
-                MedicationTime("04:00 PM", false),
-                MedicationTime("11:00 AM", false),
-                MedicationTime("12:00 PM", false),
-                MedicationTime("13:00 AM", false),
-                MedicationTime("14:00 PM", false)
-            ),
-            startDate = "08/28/2025",
-            endDate = "10/28/2025",
-            instructions = "For asthma symptoms",
-            isVisibleItem = true
-        )
-    )
-
-    val filteredList = appointments.filter { item ->
-        item.title.contains(searchQuery, ignoreCase = true)
-    }
-    val filteredList1 = medication.filter { item ->
-        item.title.contains(searchQuery, ignoreCase = true)
-    }
-
-
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFFFFFFF)) .statusBarsPadding()
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-
-            CommonHeader("Health Schedule")
-
-            // ---------- TABS ----------
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                TabButton(
-                    text = "Appointments",
-                    selected = selectedTab == 0,
-                    onClick = { selectedTab = 0 },
-                    modifier = Modifier.weight(1f)
-                )
-                TabButton(
-                    text = "Medications",
-                    selected = selectedTab == 1,
-                    onClick = { selectedTab = 1 },
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            if (selectedTab == 0) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-
-                    Surface(
-                        modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(40.dp),
-                        color = Color(0xFFF4F4F4)
-                    ) {
-                        TextField(
-                            value = searchQuery,
-                            onValueChange = { searchQuery = it },
-                            placeholder = {
-                                Text(
-                                    text = "Search",
-                                    color = Color(0xFFBCBCBC),
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily(Font(R.font.urbanist_regular))
-                                )
-                            },
-                            leadingIcon = {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_search_icon),
-                                    contentDescription = "Search",
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            },
-//                        colors = TextFieldDefaults.textFieldColors(
-//                            containerColor = Color(0xFFF4F4F4),
-//                            unfocusedIndicatorColor = Color.Transparent,
-//                            focusedIndicatorColor = Color.Transparent
-//                        )
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = Color(0xFFF4F4F4),
-                                unfocusedContainerColor = Color(0xFFF4F4F4),
-                                disabledContainerColor = Color(0xFFF4F4F4),
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_filter_icon),
-                        contentDescription = "Filter",
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .clickable( interactionSource = remember { MutableInteractionSource() },
-                                indication = null) {
-                                showSheet = true
-                            }
-                    )
-
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // ---------- LIST ----------
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(bottom = 100.dp, start = 16.dp, end = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(filteredList) { appointment ->
-                        AppointmentCard(appointment = appointment, onEditClick = {
-                            navController.navigate(AppDestination.RescheduleAppointmentScreen)},
-                            onDeleteClick = {showDeleteDialog = true})
-                    }
-                }
-            } else {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-
-                    Surface(
-                        modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(40.dp),
-                        color = Color(0xFFF4F4F4)
-                    ) {
-                        TextField(
-                            value = searchQuery,
-                            onValueChange = { searchQuery = it },
-                            placeholder = {
-                                Text(
-                                    text = "Search",
-                                    color = Color(0xFFBCBCBC),
-                                    fontSize = 16.sp,
-                                    fontFamily = FontFamily(Font(R.font.urbanist_regular))
-                                )
-                            },
-                            leadingIcon = {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_search_icon),
-                                    contentDescription = "Search",
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            },
-//                        colors = TextFieldDefaults.textFieldColors(
-//                            containerColor = Color(0xFFF4F4F4),
-//                            unfocusedIndicatorColor = Color.Transparent,
-//                            focusedIndicatorColor = Color.Transparent
-//                        )
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = Color(0xFFF4F4F4),
-                                unfocusedContainerColor = Color(0xFFF4F4F4),
-                                disabledContainerColor = Color(0xFFF4F4F4),
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                disabledIndicatorColor = Color.Transparent
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_filter_icon),
-                        contentDescription = "Filter",
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .clickable( interactionSource = remember { MutableInteractionSource() },
-                                indication = null) {
-                                showSheet1 = true
-                            }
-                    )
-
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // ---------- LIST ----------
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(bottom = 100.dp, start = 16.dp, end = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(filteredList1) { medication ->
-                        MedicationsCard(medication = medication,
-                            onEditClick = {navController.navigate(AppDestination.EditMedicationScreen)},
-                            onDeleteClick = {showDeleteDialog1 = true})
-                    }
-                }
-
-            }
-
-        }
-
-
-        GradientRedButton(
-            text = if (selectedTab == 0) "Schedule" else "Add Medication",
-            icon = R.drawable.ic_plus_normal_icon,
-            width = if (selectedTab == 0) 150.dp else 177.dp,
-            height = 55.dp,
-            fontSize = 16.sp,
-            imageSize = 22.dp,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(horizontal = 15.dp, vertical = 30.dp),
-            gradientColors = listOf(
-                Color(0xFF4338CA),
-                Color(0xFF211C64)
-            ),
-            onClick = {  if (selectedTab == 0) navController.navigate(AppDestination.ScheduleNewAppointment) else navController.navigate(AppDestination.AddMedication) /* Your action */ }
-        )
-
-    }
-
-
-    if (showSheet) {
-        BottomSheetDialog(
-            onDismissRequest = {
-
-                showSheet = false
-            },
-            properties = BottomSheetDialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = false,
-                dismissWithAnimation = true,
-                enableEdgeToEdge = false,
-            )
-        ) {
-            FilterAppointmentsBottomSheet(
-                onDismiss = { showSheet = false },
-                onApply = { filter, member ->
-                    // Apply filter logic here
-                    println("Applied filter: $filter, member: $member")
-                    showSheet = false
-                }
-            )
-
-        }
-    }
-
-    if (showSheet1) {
-        BottomSheetDialog(
-            onDismissRequest = {
-
-                showSheet1 = false
-            },
-            properties = BottomSheetDialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = false,
-                dismissWithAnimation = true,
-                enableEdgeToEdge = false,
-            )
-        ) {
-
-            FilterFamilyMembersSheet(
-                members = members
-            )
-
-        }
-    }
-
-
-    if (showDeleteDialog) {
-        AlertCardDialog(
-            icon = R.drawable.ic_delete_icon_new,
-            title = "Delete Appointment?",
-            message = "Are you sure you want to delete Peter’s appointment? This action cannot be undone.",
-            confirmText = "Delete",
-            cancelText = "Cancel",
-            onDismiss = { showDeleteDialog = false},
-            onConfirm = {  showDeleteDialog = false
-            }
-        )
-
-    }
-
-    if (showDeleteDialog1) {
-        AlertCardDialog(
-            icon = R.drawable.ic_delete_icon_new,
-            title = "Delete Medication?",
-            message = "Are you sure you want to delete Rosy’s medication? This action cannot be undone.",
-            confirmText = "Delete",
-            cancelText = "Cancel",
-            onDismiss = { showDeleteDialog1 = false},
-            onConfirm = {  showDeleteDialog1 = false
-            }
-        )
-
-    }
-}
-
-
-@Composable
-fun TabButton(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.height(42.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (selected) Color(0xFF2C2C2C) else Color.White,
-            contentColor = if (selected) Color.White else Color(0xFF697383)
-        ),
-        shape = RoundedCornerShape(50.dp),
-        border = if (!selected) BorderStroke(1.dp, Color(0xFF697383)) else null
-    ) {
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-            fontWeight = FontWeight.Normal
-        )
-    }
-}
-
-
- */
 
 
 

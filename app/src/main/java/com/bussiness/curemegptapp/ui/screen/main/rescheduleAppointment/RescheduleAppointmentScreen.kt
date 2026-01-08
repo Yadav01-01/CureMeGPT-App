@@ -4,6 +4,7 @@ package com.bussiness.curemegptapp.ui.screen.main.rescheduleAppointment
 
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -54,11 +56,12 @@ fun RescheduleAppointmentScreen(
 ) {
     // DUMMY DATA FOR RESCHEDULING APPOINTMENT
     var dateOfBirth by remember { mutableStateOf("06-20-2024") } // DUMMY: Next week Thursday
-    var time by remember { mutableStateOf("14:30:00") } // DUMMY: Afternoon appointment
+    var time by remember { mutableStateOf("01:00 PM") } // DUMMY: Afternoon appointment
     var preferredDoctor by remember { mutableStateOf("Dr. Sarah Miller") } // DUMMY: Cardiologist
     var preferredClinic by remember { mutableStateOf("Heart Care Specialists") } // DUMMY: Clinic name
     var selectedMember by remember { mutableStateOf("Myself") } // DUMMY: For myself
     var selectedAppointmentReminder by remember { mutableStateOf("30 Min Before") } // DUMMY: Standard reminder
+    val context = LocalContext.current
     val memberOptions = listOf(
         stringResource(R.string.reschedule_for_myself),
         stringResource(R.string.member_jane_smith),
@@ -93,6 +96,149 @@ fun RescheduleAppointmentScreen(
         stringResource(R.string.appointment_hand_checkup),
         stringResource(R.string.appointment_ent_checkup)
     )
+    fun validateFields(): Boolean {
+        // Validate Member Selection
+        if (selectedMember == "Select Member" || selectedMember.isBlank()) {
+            Toast.makeText(context, "Please select a member", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Appointment Type Selection
+        if (selectedAppointment == "Select Appointment Type" || selectedAppointment.isBlank()) {
+            Toast.makeText(context, "Please select an appointment type", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Description (Optional but with minimum length if provided)
+
+        if (description.isBlank()) {
+            Toast.makeText(context, "Description is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (description.isNotBlank()) {
+            // Trim whitespace and check actual content length
+            val trimmedDescription = description.trim()
+            println("DEBUG - Trimmed description: '$trimmedDescription', Length: ${trimmedDescription.length}")
+
+            if (trimmedDescription.length < 10) {
+                Toast.makeText(context, "Description should be at least 10 characters", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        // Validate Date
+        if (dateOfBirth.isBlank()) {
+            Toast.makeText(context, "Please select a date", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Date format (basic check)
+        val dateRegex = Regex("^\\d{2}-\\d{2}-\\d{4}\$")
+        if (dateOfBirth.isNotBlank() && !dateRegex.matches(dateOfBirth)) {
+            Toast.makeText(context, "Please enter date in MM-DD-YYYY format", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Time
+        if (time.isBlank()) {
+            Toast.makeText(context, "Please select a time", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Time format - HH:MM AM/PM format
+        val timeRegex = Regex("^(0?[1-9]|1[0-2]):[0-5][0-9]\\s?(AM|PM|am|pm)\$", RegexOption.IGNORE_CASE)
+        if (time.isNotBlank() && !timeRegex.matches(time)) {
+            Toast.makeText(context, "Please enter time in HH:MM AM/PM format (e.g., 03:01 AM)", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (preferredDoctor.isBlank()) {
+            Toast.makeText(context, "Doctor name is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Preferred Doctor (Optional but with validation if provided)
+        if (preferredDoctor.isNotBlank()) {
+            if (preferredDoctor.length < 3) {
+                Toast.makeText(context, "Doctor name should be at least 3 characters", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            // Check if it starts with Dr. or similar prefix
+            if (!preferredDoctor.contains("Dr.", ignoreCase = true) &&
+                !preferredDoctor.contains("Doctor", ignoreCase = true)) {
+                // Warning only, not blocking
+                // Toast.makeText(context, "Consider adding 'Dr.' before the name", Toast.LENGTH_SHORT).show()
+            }
+        }
+        if (preferredClinic.isBlank()) {
+            Toast.makeText(context, "Clinic name is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate Preferred Clinic (Optional but with validation if provided)
+        if (preferredClinic.isNotBlank()) {
+            if (preferredClinic.length < 3) {
+                Toast.makeText(context, "Clinic name should be at least 3 characters", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        // Validate Appointment Reminder
+        if (selectedAppointmentReminder == "Select Member" || selectedAppointmentReminder.isBlank()) {
+            Toast.makeText(context, "Please select an appointment reminder", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Validate future date and time
+        try {
+            val currentDate = java.time.LocalDate.now()
+            val selectedDateParts = dateOfBirth.split("-")
+            if (selectedDateParts.size == 3) {
+                val selectedDate = java.time.LocalDate.of(
+                    selectedDateParts[2].toInt(),
+                    selectedDateParts[0].toInt(),
+                    selectedDateParts[1].toInt()
+                )
+
+                if (selectedDate.isBefore(currentDate)) {
+                    Toast.makeText(context, "Please select a future date", Toast.LENGTH_SHORT).show()
+                    return false
+                }
+
+                // If date is today, check time (convert 12-hour format to 24-hour for comparison)
+                if (selectedDate.isEqual(currentDate) && time.isNotBlank()) {
+                    val currentTime = java.time.LocalTime.now()
+
+                    // Convert 12-hour format time to LocalTime for comparison
+                    val formattedTime = time.uppercase().replace(" ", "")
+                    val hourMinutePart = formattedTime.substring(0, 5)
+                    val amPmPart = formattedTime.substring(5)
+
+                    val timeParts = hourMinutePart.split(":")
+                    val hour = timeParts[0].toInt()
+                    val minute = timeParts[1].toInt()
+
+                    var selectedHour = hour
+                    if (amPmPart == "PM" && hour != 12) {
+                        selectedHour += 12
+                    } else if (amPmPart == "AM" && hour == 12) {
+                        selectedHour = 0
+                    }
+
+                    val selectedTime = java.time.LocalTime.of(selectedHour, minute)
+
+                    if (selectedTime.isBefore(currentTime)) {
+                        Toast.makeText(context, "Please select a future time", Toast.LENGTH_SHORT).show()
+                        return false
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Date parsing failed, but we already validated format
+        }
+
+        return true
+    }
 
     Column(
         modifier = Modifier
@@ -251,7 +397,9 @@ fun RescheduleAppointmentScreen(
                     text = stringResource(R.string.reschedule_button)
                 ) {
                     // In real app, this would update appointment in database
-                    showDialogSuccessFully = true
+                   if (validateFields()){
+                       showDialogSuccessFully = true
+                   }
                 }
             }
 

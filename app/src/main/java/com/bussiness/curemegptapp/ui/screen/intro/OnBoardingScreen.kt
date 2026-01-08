@@ -112,8 +112,9 @@ fun OnboardingScreen(navController: NavHostController) {
                             pagerState.animateScrollToPage(onboardingPages.lastIndex)
                         }
                     })
+                    Spacer(modifier = Modifier.width(16.dp))
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+
                 ContinueButton(text = if (isLastPage) stringResource(R.string.get_started)/*"Get Started"*/ else if (isFirstPage ) stringResource(R.string.next_button)/*"Next"*/  else stringResource(R.string.continue_button)/*"Continue"*/, onClick = {
                     if (isLastPage) {
                         navController.navigate(AppDestination.Login)

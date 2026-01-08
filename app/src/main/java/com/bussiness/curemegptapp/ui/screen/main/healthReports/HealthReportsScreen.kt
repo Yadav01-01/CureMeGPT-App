@@ -1,5 +1,6 @@
 package com.bussiness.curemegptapp.ui.screen.main.healthReports
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -64,12 +66,12 @@ data class ReportData(
 @Composable
 fun HealthReportsScreen(navController: NavHostController) {
     var showSheet by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
     var selectedTab by remember { mutableStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showDeleteDialog1 by remember { mutableStateOf(false) }
-
+    var shareChatMessage = stringResource(R.string.share_chat_message)
     var selectedFilter by remember { mutableStateOf<String?>(null) }
     var selectedMember by remember { mutableStateOf<String?>(null) }
     var members: List<String> = listOf(
@@ -217,6 +219,17 @@ fun HealthReportsScreen(navController: NavHostController) {
                             },
                             onShareClick = {
                                 showDeleteDialog1 = true
+                                // Share logic
+                                val shareText = shareChatMessage
+
+                                val intent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, shareText)
+                                }
+
+                                context.startActivity(
+                                    Intent.createChooser(intent, "Share chat via")
+                                )
                             }
                         )
 

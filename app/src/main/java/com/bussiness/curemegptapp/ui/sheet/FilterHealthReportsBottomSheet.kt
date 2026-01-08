@@ -66,7 +66,7 @@ fun FilterHealthReportsBottomSheet(
         Spacer(modifier = Modifier.height(19.dp))
 
         Text(
-            text = "Filter Appointments",
+            text = "Filter Health Reports",
             fontSize = 18.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             fontWeight = FontWeight.Medium,
@@ -116,7 +116,7 @@ fun FilterHealthReportsBottomSheet(
                 onDismiss()
             }
 
-            ContinueButton(text = "Continue") {
+            ContinueButton(text = "Apply") {
                 onApply(selectedFilter, selectedMember)
             }
         }

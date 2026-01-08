@@ -285,7 +285,7 @@ fun UserHealthCard(
                                 Text(
                                     text = profile.age,
                                     fontSize = 9.sp,
-                                    color = Color(0xFF211C64),
+                                    color = Color(0xFF4338CA),
                                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                                     fontWeight = FontWeight.Medium

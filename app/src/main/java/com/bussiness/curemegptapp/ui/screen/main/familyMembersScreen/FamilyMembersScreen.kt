@@ -581,7 +581,7 @@ fun FamilyMemberCard(
                                 Text(
                                     text = stringResource(R.string.age_format, member.age),
                                     fontSize = 10.sp,
-                                    color = Color(0xFF211C64),
+                                    color = Color(0xFF4338CA),
                                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                                     fontWeight = FontWeight.Medium,
                                     modifier = Modifier.padding(horizontal = 9.dp)

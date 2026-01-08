@@ -1,6 +1,8 @@
 package com.bussiness.curemegptapp.ui.screen.main.editProfile
 
 import android.os.Build
+import android.util.Patterns
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -20,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -52,6 +55,7 @@ fun PersonalInfoStep(
     var dateOfBirth by remember { mutableStateOf(profileData.dateOfBirth) }
     var gender by remember { mutableStateOf(profileData.gender) }
     var showDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     val genderOptions = listOf(
         stringResource(R.string.gender_male),
         stringResource(R.string.gender_female),
@@ -99,6 +103,74 @@ fun PersonalInfoStep(
 
     fun openProfilePhotoPicker() {
         profilePhotoPickerLauncher.launch(arrayOf("image/*"))
+    }
+
+    fun validateFields(): Boolean {
+        if (fullName.isBlank()) {
+            Toast.makeText(context, "Full name is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (fullName.length < 2) {
+            Toast.makeText(context, "Name must be at least 2 characters", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (contactNumber.isBlank()) {
+            Toast.makeText(context, "Contact number is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        val phonePattern = Regex("^[0-9]+\$")
+        if (!phonePattern.matches(contactNumber)) {
+            Toast.makeText(context, "Phone number must contain only digits", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (contactNumber.length < 10) {
+            Toast.makeText(context, "Phone number must be at least 10 digits", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (email.isBlank()) {
+            Toast.makeText(context, "Email is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        val emailPattern = Patterns.EMAIL_ADDRESS
+        if (!emailPattern.matcher(email).matches()) {
+            Toast.makeText(context, "Enter a valid email address", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (dateOfBirth.isBlank()) {
+            Toast.makeText(context, "Date of birth is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Gender Validation - Detailed
+        if (gender.isBlank()) {
+            Toast.makeText(context, "Gender is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        // Check if selected gender is valid (from the options)
+        if (gender !in genderOptions) {
+            Toast.makeText(context, "Gender is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (heightValue.isBlank()) {
+            Toast.makeText(context, "Height is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        if (weightValue.isBlank()) {
+            Toast.makeText(context, "Weight is required", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
     }
 
     Column(
@@ -226,7 +298,7 @@ fun PersonalInfoStep(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        GradientButton(
+  /*      GradientButton(
             horizontalPadding = 2.dp,
             text = stringResource(R.string.save_and_continue),
             onClick = {
@@ -244,6 +316,28 @@ fun PersonalInfoStep(
                     profilePhotoUri = selectedProfilePhotoUri
                 )
                 onNext()
+            }
+        )*/
+        GradientButton(
+            horizontalPadding = 2.dp,
+            text = stringResource(R.string.save_and_continue),
+            onClick = {
+                if (validateFields()) {
+                    val height = if (heightValue.isNotBlank()) "$heightValue $heightUnit" else ""
+                    val weight = if (weightValue.isNotBlank()) "$weightValue $weightUnit" else ""
+
+                    viewModel.updatePersonalInfo(
+                        fullName = fullName,
+                        contactNumber = contactNumber,
+                        email = email,
+                        dateOfBirth = dateOfBirth,
+                        gender = gender,
+                        height = height,
+                        weight = weight,
+                        profilePhotoUri = selectedProfilePhotoUri
+                    )
+                    onNext()
+                }
             }
         )
 

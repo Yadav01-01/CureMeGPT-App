@@ -266,12 +266,14 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                             Row {
                                 Text(
                                     text = "Good afternoon, ",
-                                    fontSize = 24.sp,
+                                    fontSize = 21.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                                     fontWeight = FontWeight.Medium
                                 )
                                 Text(
                                     text = "James",
-                                    fontSize = 24.sp,
+                                    fontSize = 21.sp,
+                                    fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                                     fontWeight = FontWeight.Medium,
                                     color = Color(0xFF4338CA)
                                 )
@@ -282,7 +284,7 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                             // User Selector
                             Surface(
                                 modifier = Modifier
-                                    .fillMaxWidth().padding(horizontal = 18.dp)
+                                    .fillMaxWidth().padding(horizontal = 10.dp)
                                     .clickable(interactionSource = remember { MutableInteractionSource() },
                                         indication = null) { showUserDropdown = !showUserDropdown },
                                 shape = RoundedCornerShape(30.dp),
@@ -330,7 +332,7 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                             if (showUserDropdown) {
                                 Card(
                                     modifier = Modifier
-                                        .fillMaxWidth()
+                                        .fillMaxWidth().padding(horizontal = 5.dp)
                                         .wrapContentHeight(),
                                     shape = RoundedCornerShape(16.dp),
                                     colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -425,7 +427,7 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                     BottomMessageBar1(
                         modifier = Modifier
                             .fillMaxWidth().background(color = Color.Transparent)
-                            .padding(horizontal = 5.dp).padding(bottom = 10.dp),
+                            .padding(horizontal = 0.dp).padding(bottom = 10.dp),
                         state = chatInputState,
                         viewModel = chatViewModel,
                         onSendClicked = {

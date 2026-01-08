@@ -103,7 +103,7 @@ fun VerifyOtpScreen(
             heading = stringResource(R.string.verify_your_account),//"Verify Your Account",
             description = stringResource(
                 R.string.otp_sent_description,
-                email ?: ""
+               /* email ?: ""*/"email/Phone number."
             )//"We’ve sent a 5-digit code to your $email."
         )
 

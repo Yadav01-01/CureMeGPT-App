@@ -8,10 +8,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -51,7 +54,9 @@ fun CustomPowerSpinner(
     var expanded by remember { mutableStateOf(false) }
     var selectedReason by remember { mutableStateOf(selectedText) }
 
-    Box(modifier = modifier.background(Color.White) ) {
+    /*Box(modifier = modifier.background(Color.White) ) {*/
+    BoxWithConstraints(modifier = modifier.background(Color.White)) {
+        val dropdownWidth = maxWidth - 0.dp
         // Main button
         Card(
             modifier = Modifier
@@ -132,10 +137,14 @@ fun CustomPowerSpinner(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = modifierDropDown.fillMaxWidth().heightIn(max = 300.dp)
+            modifier = modifierDropDown
+                .width(dropdownWidth)
+               // .widthIn(min = 310.dp, max = 380.dp)
+               // .fillMaxWidth()
+                .heightIn(max = 300.dp)
                 .padding(horizontal = 15.dp, vertical = 5.dp)
                // .border(1.dp, Color(0xFF808080), RoundedCornerShape(12.dp))
-                .background(Color.White, RoundedCornerShape(12.dp)),
+                .background(Color.White, RoundedCornerShape(20.dp)),
             containerColor = Color.White,
            // elevation = MenuDefaults.DropdownMenuElevation(0.dp)   // 🔥 NO SHADOW
             shape = RoundedCornerShape(12.dp),
@@ -169,7 +178,7 @@ fun CustomPowerSpinner(
                             expanded = false
                             onSelectionChanged(reason)
                         }
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .padding(horizontal = 14.dp, vertical = 6.dp)
                 ) {
 
                     Text(

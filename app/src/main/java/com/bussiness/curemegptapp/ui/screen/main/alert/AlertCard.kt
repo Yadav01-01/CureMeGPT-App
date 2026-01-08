@@ -67,7 +67,7 @@ fun AlertCard(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(
                 text = "For: $name",
-                color = Color(0xFF211C64),
+                color = Color(0xFF4338CA),
                 fontSize = 12.sp,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium
@@ -115,6 +115,8 @@ fun AlertCard(
                     label = priority,
                     color = if (priority == "High") Color(0xFFEB5757) else Color(0xFFFFA24C),
                     borderColor = if (priority == "High") Color(0xFFF31D1D) else Color(0xFFF36F1D),
+                    backGroundColor = if (priority == "High") Color(0xFFF8E3E7) else Color(0xFFF8EBE7),
+
                 )
 
                 if (actionRequired) {
@@ -167,11 +169,12 @@ fun AlertCard(
 }
 
 @Composable
-fun PriorityTag(label: String, color: Color,borderColor : Color) {
+fun PriorityTag(label: String, color: Color,borderColor : Color,backGroundColor: Color) {
     Box(
         modifier = Modifier
             .border(1.dp, borderColor, RoundedCornerShape(50.dp))
-            .padding(vertical = 8.dp, horizontal = 8.dp)
+            .background(backGroundColor,RoundedCornerShape(50.dp))
+            .padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Text(
             text = label,

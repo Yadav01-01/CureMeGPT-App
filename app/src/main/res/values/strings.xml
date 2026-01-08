@@ -56,11 +56,11 @@
     <string name="height_label">Height (Cm/Ft)</string>
     <string name="height_placeholder">e.g., 172 Cm</string>
     <string name="height_unit_cm">Cm</string>
-    <string name="height_unit_ft">Ft</string>
+    <string name="height_unit_ft">Feet</string>
     <string name="weight_label">Weight (Kg/Lb)</string>
     <string name="weight_placeholder">e.g., 78 Kg</string>
     <string name="weight_unit_kg">Kg</string>
-    <string name="weight_unit_lb">Lb</string>
+    <string name="weight_unit_lb">Lbs</string>
     <string name="profile_photo_label">Profile Photo (Optional)</string>
     <string name="selected_file">selected_file</string>
 
@@ -241,7 +241,9 @@
     <string name="add_medication_button">Add Medication</string>
     <string name="update_medication_button">Update</string>
     <string name="medication_added_success_title">Medication Added \nSuccessfully</string>
+    <string name="medication_update_success_title">Medications Updated \nSuccessfully</string>
     <string name="medication_added_success_description">Your medication has been saved and reminders are set.</string>
+    <string name="medication_update_success_description">Your changes have been saved.</string>
     <string name="file_default_name">File</string>
 
     <!-- Appointment Type Options -->

@@ -43,7 +43,7 @@ fun WelcomeSection(userGreating: String, userName: String) {
         Spacer(modifier = Modifier.height(7.dp))
         Text(
             text = stringResource(R.string.here_your_health_overview_for_today)/*"Here's your health overview for today"*/,
-            fontSize = 14.sp,
+            fontSize = 17.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_regular)),
             fontWeight = FontWeight.Normal,
             color = Color.Black

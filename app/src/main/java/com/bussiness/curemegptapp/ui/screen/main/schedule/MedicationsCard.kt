@@ -65,12 +65,12 @@ fun MedicationsCard(medication: Medication,onEditClick: () -> Unit,
             // Icon Column
             Box(
                 modifier = Modifier
-                    .width(60.dp)
+                    .width(54.dp)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(30.dp))
                     .border(
                         color = Color(0xFF181818),
-                        width = 2.dp,
+                        width = 1.dp,
                         shape = RoundedCornerShape(40.dp)
                     ),
                 contentAlignment = Alignment.Center
@@ -78,7 +78,7 @@ fun MedicationsCard(medication: Medication,onEditClick: () -> Unit,
                 Image(
                     painter = painterResource(id = medication.icon),
                     contentDescription = null,
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(24.dp),
                 )
             }
 
@@ -424,7 +424,7 @@ fun TimeSlotItem(
             .clip(RoundedCornerShape(50.dp))
             .border(
                 width = 1.dp,
-                color = Color(0xFF211C64),
+                color = Color(0xFF4338CA),
                 shape = RoundedCornerShape(50.dp)
             )
             .padding(horizontal = 8.dp, vertical = 6.dp),

@@ -57,16 +57,16 @@ fun AppointmentCard(appointment: Appointment,onEditClick: () -> Unit,
             // Icon Column
             Box(
                 modifier = Modifier
-                    .width(60.dp)
+                    .width(54.dp)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(30.dp))
-                    .border(color = Color(0xFF181818), width = 2.dp, shape = RoundedCornerShape(40.dp)),
+                    .border(color = Color(0xFF181818), width = 1.dp, shape = RoundedCornerShape(40.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(id = appointment.icon),
                     contentDescription = null,
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(24.dp),
                 )
             }
 

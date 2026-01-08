@@ -3,6 +3,7 @@ package com.bussiness.curemegptapp.ui.screen.main.editProfile
 //EditProfileScreen
 
 import android.os.Build
+import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -76,6 +78,7 @@ import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
 import com.bussiness.curemegptapp.ui.dialog.CompleteProfileDialog
 import com.bussiness.curemegptapp.ui.dialog.MemberProfileUpdatedDialog
 import com.bussiness.curemegptapp.ui.viewModel.main.EditProfileViewModel
+import com.bussiness.curemegptapp.util.ValidationUtils
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -96,6 +99,71 @@ fun EditProfileScreen(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .imePadding()
+            .background(Color(0xFFFFFFFF))
+    ) {
+        // Top Bar
+        TopBarHeader(
+            currentStep = currentStep,
+            onBackClick = {
+                if (currentStep == 0) {
+                    navController.navigateUp()
+                } else {
+                    viewModel.goToPreviousStep()
+                }
+            },
+            title = stringResource(R.string.edit_profile),
+            skipDisplay = false
+        )
+
+        when (currentStep) {
+            0 -> PersonalInfoStep(
+                viewModel = viewModel,
+                profileData = profileData,
+                onNext = {
+
+                        viewModel.goToNextStep()
+
+                }
+            )
+
+            1 -> GeneralInfoStep(
+                viewModel = viewModel,
+                profileData = profileData,
+                onNext = {
+
+                        viewModel.goToNextStep()
+
+                }
+            )
+
+            2 -> HistoryStep(
+                viewModel = viewModel,
+                profileData = profileData,
+                onNext = {
+
+                        viewModel.goToNextStep()
+
+                }
+            )
+
+            3 -> DocumentsStep(
+                viewModel = viewModel,
+                profileData = profileData,
+                onNext = {
+
+                        viewModel.submitProfile()
+                        showAlertDialog = true
+
+                }
+            )
+        }
+    }
+
+/*    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding() .imePadding()
             .background(Color(0xFFFFFFFF))
     ) {
         // Top Bar
@@ -106,7 +174,7 @@ fun EditProfileScreen(
             } else {
                 viewModel.goToPreviousStep()
             } },
-            title = stringResource(R.string.edit_profile)/*"Edit Profile"*/,
+            title = stringResource(R.string.edit_profile)*//*"Edit Profile"*//*,
             skipDisplay = false
         )
 
@@ -138,7 +206,8 @@ fun EditProfileScreen(
                 }
             )
         }
-    }
+    }*/
+
 
     if (showAlertDialog) {
         /*       AlertCardDialog(
