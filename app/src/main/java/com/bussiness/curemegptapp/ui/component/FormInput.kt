@@ -404,7 +404,7 @@ fun LayerShadowButton(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(y = 2.dp) // same as android:top="8dp"
+                .offset(y = 3.dp) // same as android:top="8dp"
                 .clip(RoundedCornerShape(45.dp))
                 .background(Color(0xFFD60E0E))
         )
@@ -413,7 +413,7 @@ fun LayerShadowButton(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(y = (-2).dp) // same as android:bottom="8dp"
+                .offset(y = (-3).dp) // same as android:bottom="8dp"
                 .clip(RoundedCornerShape(55.dp))
                 //.background( brush = Brush.linearGradient(AppGradientColors2)),
                 .background( Color(0xFFF31D1D)),

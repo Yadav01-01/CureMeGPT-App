@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -243,7 +244,7 @@ fun RescheduleAppointmentScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
+            .statusBarsPadding().imePadding()
             .verticalScroll(rememberScrollState())
             .background(Color(0xFFFFFFFF))
     ) {

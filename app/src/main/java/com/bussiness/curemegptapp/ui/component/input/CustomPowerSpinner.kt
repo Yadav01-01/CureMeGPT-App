@@ -54,7 +54,6 @@ fun CustomPowerSpinner(
     var expanded by remember { mutableStateOf(false) }
     var selectedReason by remember { mutableStateOf(selectedText) }
 
-    /*Box(modifier = modifier.background(Color.White) ) {*/
     BoxWithConstraints(modifier = modifier.background(Color.White)) {
         val dropdownWidth = maxWidth - 0.dp
         // Main button
@@ -77,10 +76,9 @@ fun CustomPowerSpinner(
             ) {
                 Text(
                     text = selectedReason,
-                    color = if (selectedReason == "Select") Color(0xFF697383) else Color(0xFF697383),
-                    fontSize = 15.sp,
+                    color = if (selectedReason == "Select") Color(0xFF697383) else  Color.Black,
+                    fontSize = 13.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-
                     )
 
                 Image(
@@ -90,67 +88,18 @@ fun CustomPowerSpinner(
             }
         }
 
- /*       // Dropdown Menu
-//        DropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false },
-//            modifier = Modifier
-//                .padding(horizontal = 15.dp, vertical = 5.dp)
-//                .fillMaxWidth()
-//                .border(width = (1).dp, color = Color(0xFF808080), shape = RoundedCornerShape(8.dp))
-//                .background(color = Color.White , shape = RoundedCornerShape(8.dp)),
-//
-//            containerColor = Color.Unspecified
-//        ) {
-//            reasons.forEachIndexed { index, reason ->
-//                DropdownMenuItem(
-//
-//                    text = {
-//                        if (reason == selectedReason) {
-//                            Text(
-//                                text = reason,
-//                                color = Color.White,
-//                                fontSize = 16.sp
-//                            )
-//                        } else {
-//                            Text(
-//                                text = reason,
-//                                color = Color.Black,
-//                                fontSize = 16.sp
-//                            )
-//                        }
-//                    },
-//                    onClick = {
-//                        selectedReason = reason
-//                        expanded = false
-//                        onSelectionChanged(reason)
-//                    }
-//                )
-////                if (index != reasons.lastIndex) {
-////                    Divider(
-////                        color = Color(0xFF4A4A4A),
-////                        thickness = 1.dp
-////                    )
-////                }
-//            }
-//        }*/
+
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = modifierDropDown
                 .width(dropdownWidth)
-               // .widthIn(min = 310.dp, max = 380.dp)
-               // .fillMaxWidth()
                 .heightIn(max = 300.dp)
                 .padding(horizontal = 15.dp, vertical = 5.dp)
-               // .border(1.dp, Color(0xFF808080), RoundedCornerShape(12.dp))
                 .background(Color.White, RoundedCornerShape(20.dp)),
             containerColor = Color.White,
-           // elevation = MenuDefaults.DropdownMenuElevation(0.dp)   // 🔥 NO SHADOW
             shape = RoundedCornerShape(12.dp),
-
         ) {
-
             reasons.forEachIndexed { index, reason ->
 
                 val isSelected = reason == selectedReason

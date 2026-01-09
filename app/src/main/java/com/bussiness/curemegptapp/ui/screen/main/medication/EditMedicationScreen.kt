@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -293,7 +294,7 @@ fun EditMedicationScreen(
         }
 
         // Validate File Upload (Optional)
-        if (uploadedFiles != null) {
+      /*  if (uploadedFiles != null) {
             val fileName = uploadedFiles?.lastPathSegment ?: ""
             val allowedExtensions = listOf(".pdf", ".jpg", ".jpeg", ".png", ".dcm", ".dicom")
             val extension = fileName.substringAfterLast(".", "").lowercase()
@@ -310,7 +311,7 @@ fun EditMedicationScreen(
                 return false
             }
         }
-
+*/
         // Validate that reminder checkbox is checked if reminder times are set
         if (validReminderTimes.isNotEmpty() && !checked) {
             Toast.makeText(context, "Please enable reminders for the set times", Toast.LENGTH_SHORT).show()
@@ -323,7 +324,7 @@ fun EditMedicationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
+            .statusBarsPadding().imePadding()
             .verticalScroll(rememberScrollState())
             .background(Color(0xFFFFFFFF))
     ) {

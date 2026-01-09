@@ -307,7 +307,7 @@ fun AddMedicationScreen(
             }
         }
 
-        // Validate File Upload (Optional)
+  /*      // Validate File Upload (Optional)
         if (uploadedFiles != null) {
             val fileName = uploadedFiles?.lastPathSegment ?: ""
             val allowedExtensions = listOf(".pdf", ".jpg", ".jpeg", ".png", ".dcm", ".dicom")
@@ -324,7 +324,7 @@ fun AddMedicationScreen(
                 Toast.makeText(context, "Please upload only PDF, JPG, PNG, or DICOM files", Toast.LENGTH_SHORT).show()
                 return false
             }
-        }
+        }*/
 
         // Validate that reminder checkbox is checked if reminder times are set
         if (validReminderTimes.isNotEmpty() && !checked) {

@@ -245,7 +245,7 @@ fun DropdownField(
         androidx.compose.material3.DropdownMenu(
             expanded = expanded.value,
             onDismissRequest = { expanded.value = false },
-            modifier = Modifier.height(220.dp),
+            modifier = Modifier.height(110.dp),
             containerColor = Color.White,
         ) {
             items.forEach { item ->
@@ -253,7 +253,8 @@ fun DropdownField(
                     text = {
                         Text(
                             text = item,
-                            fontSize = 18.sp
+                            fontSize = 18.sp,
+                            color = Color.Black
                         )
                     },
                     onClick = {

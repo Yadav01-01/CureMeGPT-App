@@ -89,7 +89,7 @@ fun AccountCreatedDialog(
                             fontSize = 17.sp,
                             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                             color = Color.Black,
-                            lineHeight = 26.sp
+                            lineHeight = 20.sp
                         )
                     }
 

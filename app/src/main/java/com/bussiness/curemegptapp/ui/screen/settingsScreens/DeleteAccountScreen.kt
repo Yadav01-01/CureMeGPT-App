@@ -171,7 +171,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String, onDeleteClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(vertical = 20.dp)
     ) {
 
 //        Text(
@@ -180,7 +180,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String, onDeleteClick: () -> Unit) {
 //            fontWeight = FontWeight.Bold,
 //            color = Color.Black
 //        )
-
+        Column(Modifier.padding(horizontal = 20.dp)) {
         Text(
             text = stringResource(R.string.dont_want_use_anymore)/*"I don’t want to use CureMeGPT anymore"*/,
             fontSize = 18.sp,
@@ -202,6 +202,9 @@ fun DeleteAccountFeedbackUI(selectedReason: String, onDeleteClick: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         var feedback by remember { mutableStateOf("") }
+
+
+
 
         TextField(
             value = feedback,
@@ -230,6 +233,7 @@ fun DeleteAccountFeedbackUI(selectedReason: String, onDeleteClick: () -> Unit) {
             maxLines = 5
         )
 
+        }
         Spacer(modifier = Modifier.height(30.dp))
 
         GradientButton(
