@@ -501,7 +501,8 @@ fun EditMedicationScreen(
                         },
 
                         placeholder = {
-                            Text("00:00:00", color = Color(0xFF697383))
+                            Text("00:00:00", color = Color(0xFF697383),fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                                fontWeight = FontWeight.Medium, fontSize = 13.sp)
                         },
 
                         textStyle = TextStyle(
@@ -728,19 +729,23 @@ fun EditMedicationScreen(
                 Spacer(Modifier.height(8.dp))
             }
 
-            Row(modifier = Modifier.padding(horizontal = 5.dp, vertical = 24.dp)) {
+            Row(modifier = Modifier.padding( vertical = 24.dp)) {
                 UniversalInputField(
+                    wholePadding = 0.dp,
+                    textStartPadding = 0.dp,
                     title = stringResource(R.string.start_date_label),
                     isImportant = false,
                     placeholder = stringResource(R.string.date_format_placeholder),
                     value = startDate,
                     modifier = Modifier.weight(1f),
-                    rightIcon = R.drawable.ic_calender_icon
+                    rightIcon = R.drawable.ic_calender_icon,
                 ) {
                     showDialog = true
                 }
                 Spacer(Modifier.width(5.dp))
                 UniversalInputField(
+                    wholePadding = 0.dp,
+                    textStartPadding = 0.dp,
                     title = stringResource(R.string.end_date_optional_label),
                     isImportant = false,
                     placeholder = stringResource(R.string.date_format_placeholder),
@@ -785,7 +790,8 @@ fun EditMedicationScreen(
                 heightOfEditText = 135.dp,
                 paddingHorizontal = 0.dp,
                 borderColor = Color(0xFF697383),
-                textColor = Color(0xFF697383)
+                textColor = Color(0xFF697383),
+                textStartPadding = 0.dp
             )
 
             Spacer(Modifier.height(30.dp))

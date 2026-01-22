@@ -218,7 +218,7 @@ fun HistoryStep(
                             if (index == 0)
                                 Text(
                                     text = stringResource(R.string.medications_placeholder),
-                                    color = Color.Black,   // ✅ placeholder black
+                                    color = Color(0xFF697383),   // ✅ placeholder black
                                     fontSize = 13.sp,
                                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                                     fontWeight = FontWeight.Normal
@@ -226,7 +226,7 @@ fun HistoryStep(
                             else
                                 Text(
                                     text = stringResource(R.string.added_item_placeholder),
-                                    color = Color.Black,   // ✅ non-editable placeholder bhi black
+                                    color = Color(0xFF697383),   // ✅ non-editable placeholder bhi black
                                     fontSize = 13.sp,
                                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                                     fontWeight = FontWeight.Normal
@@ -342,7 +342,7 @@ fun HistoryStep(
                             if (index == 0)
                                 Text(
                                     text = stringResource(R.string.supplements_placeholder),
-                                    color = Color.Black,   // ✅ placeholder black
+                                    color = Color(0xFF697383),   // ✅ placeholder black
                                     fontSize = 13.sp,
                                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                                     fontWeight = FontWeight.Normal
@@ -350,7 +350,7 @@ fun HistoryStep(
                             else
                                 Text(
                                     text = stringResource(R.string.added_item_placeholder),
-                                    color = Color.Black,   // ✅ non-editable placeholder bhi black
+                                    color = Color(0xFF697383),   // ✅ non-editable placeholder bhi black
                                     fontSize = 13.sp,
                                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                                     fontWeight = FontWeight.Normal

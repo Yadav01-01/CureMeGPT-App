@@ -76,7 +76,11 @@ fun CustomPowerSpinner(
             ) {
                 Text(
                     text = selectedReason,
-                    color = if (selectedReason == "Select") Color(0xFF697383) else  Color.Black,
+//                    color = if (selectedReason == "Select") Color(0xFF697383) else  Color.Black,
+                    color = if (selectedReason.trim().startsWith("Select", ignoreCase = true))
+                        Color(0xFF697383)
+                    else
+                        Color.Black,
                     fontSize = 13.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                     )

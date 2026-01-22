@@ -183,7 +183,7 @@ fun BottomMessageBar1(
         modifier = modifier
             .fillMaxWidth()
             .background(color = Color.Transparent)
-            .padding(start = 1.dp, end = 5.dp/*horizontal = 5.dp*/).padding(bottom = 8.dp)
+            .padding( end = 5.dp/*horizontal = 5.dp*/).padding(bottom = 8.dp)
     ) {
 
 /*//        if (isVisible){

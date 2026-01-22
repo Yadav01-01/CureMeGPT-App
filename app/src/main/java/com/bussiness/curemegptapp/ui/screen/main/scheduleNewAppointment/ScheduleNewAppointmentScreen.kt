@@ -40,6 +40,7 @@ import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.ProfileInputField
+import com.bussiness.curemegptapp.ui.component.ProfileInputField2
 import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField2
 import com.bussiness.curemegptapp.ui.component.TopBarHeader1
 import com.bussiness.curemegptapp.ui.component.UniversalInputField
@@ -335,7 +336,7 @@ fun ScheduleNewAppointmentScreen(
             }
             Spacer(Modifier.height(20.dp))
 
-            ProfileInputField(
+            ProfileInputField2(
                 label = stringResource(R.string.preferred_doctor_label)/*"Preferred Doctor"*/,
                 isImportant = false,
                 placeholder = stringResource(R.string.doctor_placeholder)/*"e.g., Dr. John Deo"*/,
@@ -345,7 +346,7 @@ fun ScheduleNewAppointmentScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            ProfileInputField(
+            ProfileInputField2(
                 label = stringResource(R.string.preferred_clinic_label)/*"Preferred Clinic"*/,
                 isImportant = false,
                 placeholder = stringResource(R.string.clinic_placeholder)/*"e.g., Bright Smile Dental"*/,

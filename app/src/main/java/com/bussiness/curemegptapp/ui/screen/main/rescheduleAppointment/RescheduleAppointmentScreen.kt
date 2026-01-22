@@ -42,6 +42,7 @@ import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.CancelButton
 import com.bussiness.curemegptapp.ui.component.ContinueButton
 import com.bussiness.curemegptapp.ui.component.ProfileInputField
+import com.bussiness.curemegptapp.ui.component.ProfileInputField2
 import com.bussiness.curemegptapp.ui.component.ProfileInputMultipleLineField2
 import com.bussiness.curemegptapp.ui.component.TopBarHeader1
 import com.bussiness.curemegptapp.ui.component.UniversalInputField
@@ -342,7 +343,7 @@ fun RescheduleAppointmentScreen(
 
             Spacer(Modifier.width(24.dp))
 
-            ProfileInputField(
+            ProfileInputField2(
                 label = stringResource(R.string.preferred_doctor_label),
                 isImportant = false,
                 placeholder = stringResource(R.string.doctor_placeholder),
@@ -352,7 +353,7 @@ fun RescheduleAppointmentScreen(
 
             Spacer(Modifier.width(24.dp))
 
-            ProfileInputField(
+            ProfileInputField2(
                 label = stringResource(R.string.preferred_clinic_label),
                 isImportant = false,
                 placeholder = stringResource(R.string.clinic_placeholder),

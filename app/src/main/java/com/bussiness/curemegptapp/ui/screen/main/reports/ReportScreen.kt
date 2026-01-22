@@ -2,9 +2,12 @@ package com.bussiness.curemegptapp.ui.screen.main.reports
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,9 +15,11 @@ import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -37,7 +42,8 @@ fun ReportScreen(navController: NavHostController) {
             .fillMaxSize()
             .background(Color(0xFFFFFFFF)).statusBarsPadding()
     ) {
-
+        var shareChatMessage = stringResource(R.string.share_chat_message)
+        val context = LocalContext.current
         val attachmentList = listOf(
             stringResource(R.string.attachment_xray),
             stringResource(R.string.attachment_analysis_report),
@@ -164,7 +170,20 @@ fun ReportScreen(navController: NavHostController) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_share_icon),
                                 contentDescription = null,
-                                modifier = Modifier.size(45.dp),
+                                modifier = Modifier.size(45.dp).clickable(interactionSource = remember { MutableInteractionSource() },
+                                    indication = null,){
+                                    // Share logic
+                                    val shareText = shareChatMessage
+
+                                    val intent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(Intent.EXTRA_TEXT, shareText)
+                                    }
+
+                                    context.startActivity(
+                                        Intent.createChooser(intent, "Share chat via")
+                                    )
+                                },
                             )
                     Spacer(modifier = Modifier.height(20.dp))
 

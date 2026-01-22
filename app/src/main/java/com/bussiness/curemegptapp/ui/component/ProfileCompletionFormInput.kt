@@ -137,6 +137,84 @@ fun ProfileInputField(
     }
 }
 
+
+
+@Composable
+fun ProfileInputField2(
+    label: String,
+    isImportant: Boolean = false,
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+
+    val shape = RoundedCornerShape(30.dp)
+
+    Column(modifier = modifier.fillMaxWidth()) {
+
+        // 🔹 Label Text (top of field)
+
+        Row {
+            Text(
+                text = buildLabelWithOptional(label),
+                fontSize = 15.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
+                color = Color.Black,
+                modifier = Modifier.padding(start = 12.dp, bottom = 6.dp)
+            )
+            if (isImportant) {
+                Text(
+                    text = "*",
+                    fontSize = 15.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
+
+        }
+
+        // 🔹 TextField
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    color = Color(0xFF697383),
+                    fontSize = 15.sp,
+                    fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                    fontWeight = FontWeight.Normal,
+                )
+            },
+            textStyle = TextStyle(
+                color = Color.Black,
+                fontSize = 13.sp,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal
+            ),
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .padding(horizontal = 8.dp)
+                .clip(shape)
+                .border(1.dp, Color(0xFF697383), shape),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.White,
+                focusedContainerColor = Color.White,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color(0xFFB8B9BD),
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+    }
+}
+
 @Composable
 fun ProfileInputMultipleLineField(
     label: String,
@@ -241,8 +319,8 @@ fun ProfileInputMultipleLineField2(
                 text = label,
                 fontSize = 15.sp,
                 color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium,
+                fontFamily = FontFamily(Font(R.font.urbanist_regular)),
+                fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(start = textStartPadding, bottom = 6.dp)
             )
             if (isImportant) {
@@ -915,19 +993,21 @@ fun FileAttachment(
 
 @Composable
 fun UniversalInputField(
+    wholePadding : Dp = 5.dp,
+    textStartPadding: Dp =  5.dp,
     title: String,
     isImportant: Boolean = false,
     placeholder: String,
     value: String,
     rightIcon: Int? = null,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight().padding(5.dp)
+            .wrapContentHeight().padding(wholePadding)
     ) {
         // ----- Title -----
         Row {
@@ -937,7 +1017,7 @@ fun UniversalInputField(
                 color = Color.Black,
                 fontFamily = FontFamily(Font(R.font.urbanist_regular)),
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(start = 5.dp, bottom = 8.dp)
+                modifier = Modifier.padding(start = textStartPadding, bottom = 8.dp)
             )
 
             if (isImportant)
@@ -1158,10 +1238,9 @@ fun ProfileInputSmallField(
             placeholder = {
                 Text(
                     text = placeholder,
-                    color = Color(0xFFB8B9BD),
-                    fontSize = 15.sp,
+                    color = Color(0xFF697383),
                     fontFamily = FontFamily(Font(R.font.urbanist_regular)),
-                    fontWeight = FontWeight.Normal,
+                    fontWeight = FontWeight.Normal, fontSize = 13.sp
                 )
             },
             textStyle = TextStyle(

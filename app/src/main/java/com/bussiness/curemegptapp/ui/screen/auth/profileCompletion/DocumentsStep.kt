@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +35,7 @@ import com.bussiness.curemegptapp.ui.component.FileAttachment
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.ProfilePhotoPicker
 import com.bussiness.curemegptapp.ui.viewModel.auth.ProfileCompletionViewModel
+import com.bussiness.curemegptapp.util.ValidationUtils.getFileNameWithExtension
 
 
 @Composable
@@ -112,7 +115,9 @@ fun DocumentsStep(
                 Text(
                     text = stringResource(R.string.attached_files_title), //"Attached Files",
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
+                    color = Color(0xFF4338CA),
+                    fontFamily = FontFamily(Font(R.font.urbanist_semibold)),
+                    fontWeight = FontWeight.SemiBold
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -125,8 +130,9 @@ fun DocumentsStep(
                     )
                 } else {
                     profileData.uploadedFiles.forEach { fileUri ->
+                        val fileName = getFileNameWithExtension(context, fileUri)
                         FileAttachment(
-                            fileName = fileUri.lastPathSegment ?: "file",
+                            fileName = fileName,
                             onDeleteClick = { viewModel.removeUploadedFile(fileUri) }
                         )
                         Spacer(modifier = Modifier.height(8.dp))

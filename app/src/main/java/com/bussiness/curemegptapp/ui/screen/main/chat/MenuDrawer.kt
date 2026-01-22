@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.component.GradientRedButton
+import com.bussiness.curemegptapp.ui.screen.main.schedule.EditDeleteMenu
 import com.bussiness.curemegptapp.ui.theme.gradientBrush
 
 @Composable
@@ -423,7 +424,7 @@ fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (Strin
                                 )
                                 Text(caseHistory[index], fontSize = 14.sp)
                             }
-                            IconButton(
+                       /*     IconButton(
                                 onClick = { },
                                 modifier = Modifier.size(26.dp)
                             ) {
@@ -433,7 +434,12 @@ fun MenuDrawer(onDismiss: () -> Unit, selectedUser: String, onUserChange: (Strin
                                     tint = Color.Unspecified,
 
                                     )
-                            }
+                            }*/
+                            RenameDeleteShareMenu(
+                                modifier = Modifier,
+                                onEditClick = { /*onEditClick()*/ },
+                                onShareClick = { /*onEditClick()*/ },
+                                onDeleteClick = {  /*onDeleteClick()*/ })
                         }
                     }
                 }

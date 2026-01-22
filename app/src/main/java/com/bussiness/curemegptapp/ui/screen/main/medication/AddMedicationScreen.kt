@@ -60,6 +60,7 @@ import com.bussiness.curemegptapp.ui.component.ProfileInputSmallField
 import com.bussiness.curemegptapp.ui.component.ProfilePhotoPicker
 import com.bussiness.curemegptapp.ui.component.RoundedCustomCheckbox
 import com.bussiness.curemegptapp.ui.component.TopBarHeader1
+import com.bussiness.curemegptapp.ui.component.UniversalInputField
 import com.bussiness.curemegptapp.ui.component.UniversalInputField1
 import com.bussiness.curemegptapp.ui.component.input.CustomPowerSpinner
 import com.bussiness.curemegptapp.ui.dialog.CalendarDialog
@@ -81,7 +82,7 @@ fun AddMedicationScreen(
     var currentReminder by remember { mutableStateOf("") }
     var medicationName by remember { mutableStateOf("") }
     var dosage by remember { mutableStateOf("") }
-    var selectedMyself by remember { mutableStateOf("Myself") }
+    var selectedMyself by remember { mutableStateOf("Select Member") }
     var selectFrequency by remember { mutableStateOf("Select Frequency") }
     var selectDayName by remember { mutableStateOf("Select Frequency") }
     val myselfOptions =
@@ -535,7 +536,8 @@ fun AddMedicationScreen(
                             fontWeight = FontWeight.Normal
                         ),
                         placeholder = {
-                            Text("00:00:00", color = Color(0xFF697383))
+                            Text("00:00:00", color = Color(0xFF697383) ,fontFamily = FontFamily(Font(R.font.urbanist_medium)),
+                                fontWeight = FontWeight.Medium, fontSize = 13.sp)
                         },
                         trailingIcon = {
                             Image(
@@ -606,7 +608,9 @@ fun AddMedicationScreen(
             Spacer(Modifier.width(24.dp))
 
             Row (modifier = Modifier.padding( vertical = 24.dp)) {
-                UniversalInputField1(
+                UniversalInputField(
+                    wholePadding = 0.dp,
+                    textStartPadding = 0.dp,
                     title = stringResource(R.string.start_date_label)/*"Start Date"*/,
                     isImportant = false,
                     placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
@@ -618,9 +622,10 @@ fun AddMedicationScreen(
                     showDialog = true
                 }
                 Spacer(Modifier.width(5.dp))
-                UniversalInputField1(
+                UniversalInputField(
+                    wholePadding = 0.dp,
+                    textStartPadding = 0.dp,
                     title = stringResource(R.string.end_date_optional_label)/*"End Date (Optional)"*/,
-                    textSize = 13.sp,
                     isImportant = false,
                     placeholder = stringResource(R.string.date_format_placeholder)/*"MM-DD-YYYY"*/,
                     value = endDate,
@@ -663,7 +668,8 @@ fun AddMedicationScreen(
                 heightOfEditText = 135.dp,
                 paddingHorizontal = 0.dp,
                 borderColor = Color(0xFF697383),
-                textColor = Color(0xFF697383)
+                textColor = Color(0xFF697383),
+                textStartPadding = 0.dp
             )
 
             Spacer(Modifier.height(30.dp))
