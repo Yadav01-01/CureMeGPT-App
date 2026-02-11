@@ -56,6 +56,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -184,10 +185,11 @@ fun BottomMessageBar2(
         // .padding(horizontal = 5.dp).padding(bottom = 8.dp)
     ) {
         ConstraintLayout(
-            modifier = Modifier
-                .height(290.dp)
+            modifier = Modifier.wrapContentHeight()
+                //.height(290.dp)
                 .fillMaxWidth().padding(horizontal = 10.dp)
-        ) {
+        )
+        {
             val (chatSection, messageBar, image) = createRefs()
 
             if (showUserDropdown) {
@@ -196,7 +198,7 @@ fun BottomMessageBar2(
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth().wrapContentHeight().constrainAs(image) {
-                            top.linkTo(parent.top)
+                            top.linkTo(parent.top, )
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
@@ -225,6 +227,7 @@ fun BottomMessageBar2(
 
                     //   .padding(horizontal = 5.dp).padding(bottom = 8.dp)
                 ) {
+                   // Spacer(Modifier.height(25.dp))
                     Surface(
                         modifier = Modifier
                             .wrapContentWidth()
@@ -238,7 +241,7 @@ fun BottomMessageBar2(
 
                         Surface(
                             modifier = Modifier
-                                .wrapContentWidth().padding(horizontal = 10.dp).padding(top = 3.dp)
+                                .wrapContentWidth().padding(horizontal = 10.dp).padding(top = 30.dp)
                                 .clickable(interactionSource = remember { MutableInteractionSource() },
                                     indication = null) { showUserDropdown = !showUserDropdown },
                             shape = RoundedCornerShape(30.dp),

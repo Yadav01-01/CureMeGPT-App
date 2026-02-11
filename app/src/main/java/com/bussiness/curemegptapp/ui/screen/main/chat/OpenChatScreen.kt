@@ -398,7 +398,10 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                                     Color(0xFF4338CA),
                                     Color(0xFF211C64)
                                 ),
-                                onClick = {  showCaseDialog = true }
+                                onClick = {
+
+                                    showCaseDialog = true
+                                }
                             )
 
                             Spacer(modifier = Modifier.height(24.dp))
@@ -406,13 +409,25 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
 
                         // Suggested Questions
                         items(suggestedQuestions) { question ->
-                            QuestionCard(question = question, isHealthQuestion = true)
+                            QuestionCard(question = question, isHealthQuestion = true, onClick = {
+                                navController.navigate(AppDestination.ChatDataScreen) {
+                                    popUpTo("openChatScreen") { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            })
                             Spacer(modifier = Modifier.height(12.dp))
                         }
 
                         // Fitness Questions
                         items(fitnessQuestions) { question ->
-                            QuestionCard(question = question, isHealthQuestion = false)
+                            QuestionCard(question = question, isHealthQuestion = false, onClick = {
+                                navController.navigate(AppDestination.ChatDataScreen) {
+                                    popUpTo("openChatScreen") { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            })
                             Spacer(modifier = Modifier.height(12.dp))
                         }
 
@@ -446,6 +461,11 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
                     CaseDialog(
                         onDismiss = { showCaseDialog = false },
                         onConfirm = {
+                            navController.navigate(AppDestination.ChatDataScreen) {
+                                popUpTo("openChatScreen") { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                             selectedUser = "Rose Logan (Spouse)"
                             showCaseDialog = false
                         }
@@ -458,9 +478,11 @@ fun OpenChatScreen(navController: NavHostController,from: String ?= "",) {
 
 
 @Composable
-fun QuestionCard(question: String, isHealthQuestion: Boolean) {
+fun QuestionCard(question: String, isHealthQuestion: Boolean,onClick:()->Unit) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable(){
+            onClick()
+        },
         shape = RoundedCornerShape(30.dp),
         color = Color(0xFFF5F5F5)
     ) {

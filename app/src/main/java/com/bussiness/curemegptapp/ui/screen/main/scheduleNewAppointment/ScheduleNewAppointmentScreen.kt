@@ -240,7 +240,7 @@ fun ScheduleNewAppointmentScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize() .statusBarsPadding().imePadding().verticalScroll(rememberScrollState())
+            .fillMaxSize().statusBarsPadding().imePadding().verticalScroll(rememberScrollState())
             .background(Color(0xFFFFFFFF))
     ) {
 
