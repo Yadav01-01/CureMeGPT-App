@@ -7,12 +7,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.navigation.AppNavGraph
+import com.bussiness.curemegptapp.navigation.MainNavGraph
 import com.bussiness.curemegptapp.ui.theme.CureMeGPTAppTheme
 import com.bussiness.curemegptapp.ui.utils.TransparentStatusBar
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +49,11 @@ fun MyApp() {
     val navController = rememberNavController()
    TransparentStatusBar(darkIcons = true)
     MaterialTheme {
-        AppNavGraph(navController)
+       // AppNavGraph(navController)
+       // AppNavGraph(navController)
+        MainNavGraph(
+            authNavController = navController,
+            navController = navController,
+            )
     }
 }

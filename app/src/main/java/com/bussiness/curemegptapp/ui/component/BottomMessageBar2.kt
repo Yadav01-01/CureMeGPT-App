@@ -67,6 +67,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.ui.viewModel.main.ChatDataViewModel
 import com.bussiness.curemegptapp.ui.viewModel.main.ChatInputState1
+import com.bussiness.curemegptapp.ui.viewModel.main.FakeChatDataViewModel
 import com.bussiness.curemegptapp.util.SpeechRecognizerManager
 import timber.log.Timber
 
@@ -109,7 +110,7 @@ fun BottomMessageBar2(
     var recognizedText by remember { mutableStateOf("") }
     var rmsValue by remember { mutableStateOf(0f) }
     var voiceText by remember { mutableStateOf("") }     // speech result
-
+    var isMessageEmpty = remember {  state.message.isBlank() && recognizedText.isBlank() }
 
     val speechRecognizer = remember {
         SpeechRecognizer.createSpeechRecognizer(context)
@@ -140,14 +141,12 @@ fun BottomMessageBar2(
             }
 
             override fun onResults(results: Bundle?) {
-                val voiceResult =
-                    results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                        ?.firstOrNull() ?: ""
+                val voiceResult = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull() ?: ""
 
                 viewModel.onMessageChange(
                     viewModel.uiState.value.message + " " + voiceResult
                 )
-                // ✅ STOP RECORDING HERE
+
                 isRecording = false
                 rmsValue = 0f
                 showText = false
@@ -231,7 +230,6 @@ fun BottomMessageBar2(
                     Surface(
                         modifier = Modifier
                             .wrapContentWidth()
-
                             .align(Alignment.CenterHorizontally)
                             .padding(horizontal = 18.dp),
                         shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp),
@@ -375,7 +373,8 @@ fun BottomMessageBar2(
                             .clickable(interactionSource = remember { MutableInteractionSource() },
                                 indication = null
                             ) {
-                                // imageLauncher.launch("image/*")
+
+
                                 fileLauncher.launch(
                                     arrayOf(
                                         "image/*",
@@ -389,6 +388,7 @@ fun BottomMessageBar2(
 
                     Column {
                         if (state.images.isNotEmpty() || state.pdfs.isNotEmpty()) {
+                            isMessageEmpty = false
                             Spacer(modifier = Modifier.height(10.dp))
                             InlineAttachmentPreview(
                                 images = state.images,
@@ -507,8 +507,7 @@ fun BottomMessageBar2(
 
                 Spacer(modifier = Modifier.width(6.dp))
 
-                val isMessageEmpty =
-                    state.message.isBlank() && recognizedText.isBlank()
+
 
 
                 if (isMessageEmpty) {
@@ -557,3 +556,4 @@ fun BottomMessageBar2(
     }
 
 }
+
