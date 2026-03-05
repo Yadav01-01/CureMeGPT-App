@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.implementation
+import java.util.Properties // 1. Top par import zaroori hai
+import java.io.FileInputStream
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,7 +8,11 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.kapt)
+    id("com.google.firebase.crashlytics")
+    id("com.google.gms.google-services")
 }
+
+
 
 android {
     namespace = "com.bussiness.curemegptapp"
@@ -21,15 +28,41 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) {
+            load(FileInputStream(file))
+        }
+    }
+
+    // String value ko quotes mein wrap karna zaroori hai
+    val baseUrl = localProperties.getProperty("baseUrl") ?: "\"https://curemegpt.tgastaging.com/api/\""
+
     buildTypes {
-        release {
+        // Release Build Type
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // BASE_URL yahan add karein
+            buildConfigField("String", "BASE_URL", baseUrl)
+        }
+
+        // Debug Build Type (Testing ke liye)
+        getByName("debug") {
+            buildConfigField("String", "BASE_URL", baseUrl)
         }
     }
+
+    // 2. BuildConfig generate karne ke liye ye enable karein
+    buildFeatures {
+        buildConfig = true
+    }
+
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -83,19 +116,38 @@ dependencies {
     // Hilt for Jetpack Compose
     implementation (libs.androidx.hilt.navigation.compose)
 
-    implementation ("com.google.android.material:material:1.9.0")
+    implementation (libs.material)
 
     // speech
     implementation (libs.accompanist.permissions.v0360)
 
-   // implementation ("com.github.skydoves:orchestra-colorpicker:1.2.7")
-    implementation("com.airbnb.android:lottie-compose:6.0.0")
+    implementation(libs.lottie.compose)
 
     // OR latest version
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.1.0")
     implementation ("com.jakewharton.timber:timber:5.0.1")
 
- //   implementation("com.github.canopas:composable-cropper:0.4.0")
-   // implementation("com.github.CanHub:Android-Image-Cropper:4.0.0")
     implementation("com.vanniktech:android-image-cropper:4.5.0")
+
+    //Retrofit for api
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
+    //google Firebase
+    implementation("com.google.android.libraries.places:places:3.2.0")
+    implementation("com.google.firebase:firebase-messaging:23.2.1")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
+
+    // firebase crashlytics
+    implementation("com.google.firebase:firebase-crashlytics:18.2.9")
+    implementation("com.google.firebase:firebase-analytics:20.1.2")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-messaging")
+
 }

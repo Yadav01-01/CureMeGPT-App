@@ -70,10 +70,25 @@ fun AppNavGraph(navController: NavHostController,modifier : Modifier = Modifier)
             }
 
 
-            composable<AppDestination.NewPassword> { NewPasswordScreen(navController,"auth") }
+//            composable<AppDestination.NewPassword> { NewPasswordScreen(navController,"auth","") }
+            composable(route = "${AppDestination.NewPassword}?from={from}&email={email}",
+                arguments = listOf(
+                    navArgument("from") { defaultValue = "" },
+                    navArgument("email") { defaultValue = "" }
+                )) {
+                    backStackEntry ->
+                val from = backStackEntry.arguments?.getString("from") ?: ""
+                val email = backStackEntry.arguments?.getString("email") ?: ""
+                NewPasswordScreen(navController,from,email)
+            }
+
+
+
             composable<AppDestination.CreateAccount> { CreateAccountScreen(navController) }
             composable<AppDestination.PrivacyConsent> { PrivacyConsentScreen(navController) }
+
             composable<AppDestination.ProfileCompletion> { ProfileCompletionScreen(navController) }
+
            composable<AppDestination.MainScreen> { MainScreen(navController) }
 
 

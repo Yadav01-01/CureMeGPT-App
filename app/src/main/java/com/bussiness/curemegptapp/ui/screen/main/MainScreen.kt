@@ -91,10 +91,10 @@ fun MainScreen(authNavController: NavHostController,) {
 //                    }
                     navController.navigate(item.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true       // 👈 state save
+                            saveState = true
                         }
                         launchSingleTop = true
-                        restoreState = true       // 👈 state restore
+                        restoreState = true
                     }
 
                 },

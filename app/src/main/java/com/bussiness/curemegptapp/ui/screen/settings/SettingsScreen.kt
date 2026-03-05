@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -49,10 +50,13 @@ import com.bussiness.curemegptapp.ui.component.TopBarHeader2
 import com.bussiness.curemegptapp.R
 import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.dialog.LogOutDialog
+import com.bussiness.curemegptapp.util.SessionManager
 
 @Composable
 fun SettingsScreen(navController: NavHostController,authNavController : NavController) {
     var showDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val sessionManager = SessionManager.getInstance(context)
 
     Column(
         modifier = Modifier
@@ -143,7 +147,7 @@ fun SettingsScreen(navController: NavHostController,authNavController : NavContr
                 Surface(
                     shape = RoundedCornerShape(105.dp),
                     color = Color.Unspecified,
-                    shadowElevation = 8.dp        // ⭐ Shadow yahi se milega
+                    shadowElevation = 8.dp
                 ) {
                     // Hexagon background effect
                     Image(
@@ -210,6 +214,7 @@ fun SettingsScreen(navController: NavHostController,authNavController : NavContr
             },
             onConfirm = {
                 showDialog = false
+                sessionManager.clearSession()
                 authNavController.navigate(AppDestination.Login) {
                     popUpTo(AppDestination.MainScreen) { inclusive = true }
                 }

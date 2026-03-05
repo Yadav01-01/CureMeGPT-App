@@ -1,6 +1,8 @@
 package com.bussiness.curemegptapp.ui.screen.auth
 
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
@@ -39,52 +44,54 @@ import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
 import com.bussiness.curemegptapp.util.ValidationUtils
+import com.bussiness.curemegptapp.viewmodel.loginviewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController,viewModel: LoginViewModel = hiltViewModel()) {
+
     val context = LocalContext.current
-    Column(
-        modifier = Modifier
+    val state by viewModel.uiState.collectAsState()
+
+    BackHandler() {
+        (context as Activity).moveTaskToBack(true)
+    }
+
+    Column(modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-    ) {
+            .background(Color.White)) {
+
         // Top Gradient Header
         GradientHeader(heading = stringResource(R.string.welcome_back_title),
             description = stringResource(R.string.welcome_back_description))
 
         Spacer(modifier = Modifier.height(55.dp))
 
-        // FORM
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var emailOrPhoneError by remember { mutableStateOf("") }
-        var passwordError by remember { mutableStateOf("") }
-
         // Email Field
         GradientIconInputField(icon = R.drawable.mail_ic,
-            placeholder = stringResource(R.string.email_phone_placeholder),//"Email / Phone Number",
-            value = email,
-            onValueChange = { email = it
-                emailOrPhoneError = ""   },
+            placeholder = stringResource(R.string.email_phone_placeholder),
+            value = state.emailOrPhone,
+            onValueChange = { viewModel.onEmailPhoneChange(it) },
             keyboardType = KeyboardType.Text,)
 
         Spacer(Modifier.height(20.dp))
 
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = stringResource(R.string.password_placeholder),//"Password",
-            value = password, onValueChange = { password = it }, isPassword = true)
+        GradientIconInputField(icon = R.drawable.pass_ic,
+            placeholder = stringResource(R.string.password_placeholder),
+            value = state.password,
+            onValueChange = { viewModel.onPasswordChange(it) },
+            isPassword = true)
 
         Spacer(Modifier.height(20.dp))
 
         // Forgot Password
         Text(
-            text = stringResource(R.string.forgot_password),//"Forgot Password?",
+            text = stringResource(R.string.forgot_password),
             modifier = Modifier
                 .padding(horizontal = 18.dp)
                 .align(Alignment.End)
                 .clickable( interactionSource = remember { MutableInteractionSource() },
                     indication = null){
-                    navController.navigate("reset?from=auth")
-                                      },
+                    navController.navigate("reset?from=auth") },
             fontSize = 17.sp,
             fontFamily = FontFamily(Font(R.font.urbanist_medium)),
             color = Color.Black,
@@ -94,48 +101,28 @@ fun LoginScreen(navController: NavHostController) {
         Spacer(Modifier.height(20.dp))
 
         // Gradient Login Button
-     //   GradientButton(text = "Login", onClick = { navController.navigate(AppDestination.MainScreen) })
+        val loginSuccessful = stringResource(R.string.login_success)
 
-        // Gradient Login Button
-        var loginSuccessful = stringResource(R.string.login_success)
         GradientButton(
-            text = stringResource(R.string.login_button), //"Login",
+            text = stringResource(R.string.login_button),
             onClick = {
-                // Validate inputs
-                val emailOrPhoneValidation = ValidationUtils.validateEmailOrPhone(email)
-                val passwordValidation = ValidationUtils.validatePassword(password)
-
-                if (!emailOrPhoneValidation.isValid) {
-                    Toast.makeText(context, emailOrPhoneValidation.errorMessage, Toast.LENGTH_LONG).show()
-                    return@GradientButton
-                }
-
-                if (!passwordValidation.isValid) {
-                    Toast.makeText(context, passwordValidation.errorMessage, Toast.LENGTH_LONG).show()
-                    return@GradientButton
-                }
-
-                // Combined validation for login
-                val loginValidation = ValidationUtils.validateLoginCredentials(email, password)
-                if (loginValidation.isValid) {
-                    // TODO: Call login API here
-                    Toast.makeText(context, loginSuccessful, Toast.LENGTH_SHORT).show()
-                    navController.navigate(AppDestination.MainScreen)
-                } else {
-                    Toast.makeText(context, loginValidation.errorMessage, Toast.LENGTH_LONG).show()
-                }
+                viewModel.loginRequest(
+                    onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() },
+                    onSuccess = {
+                        Toast.makeText(context, loginSuccessful, Toast.LENGTH_SHORT).show()
+                        navController.navigate(AppDestination.MainScreen)
+                    }
+                )
             }
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         // Bottom Signup
-        Row(
-            modifier = Modifier
+        Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 42.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
+            horizontalArrangement = Arrangement.Center) {
             Text(
                 text = stringResource(R.string.new_here),//"New here?" ,
                 color = Color.Black,
@@ -154,6 +141,7 @@ fun LoginScreen(navController: NavHostController) {
                     indication = null) { navController.navigate(AppDestination.CreateAccount) }
             )
         }
+
     }
 }
 

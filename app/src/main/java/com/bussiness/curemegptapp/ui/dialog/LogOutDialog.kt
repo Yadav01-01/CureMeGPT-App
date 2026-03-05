@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bussiness.curemegptapp.R
@@ -42,9 +43,11 @@ import com.bussiness.curemegptapp.ui.component.GradientButton2
 
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.ui.component.GradientButton1
 import com.bussiness.curemegptapp.ui.component.GradientRedButton
 import com.bussiness.curemegptapp.ui.component.GradientRedButton1
+import com.bussiness.curemegptapp.ui.screen.auth.LoginScreen
 
 @Composable
 fun LogOutDialog(
@@ -152,4 +155,16 @@ fun LogOutDialog(
             }
         }
     }
+}
+
+// ✅ Preview with dummy callbacks
+@Preview(showBackground = true)
+@Composable
+fun LogOutDialogPreview() {
+    LogOutDialog(
+        title = "Logout",
+        message = "Are you sure you want to logout?",
+        onDismiss = {},
+        onConfirm = {}
+    )
 }

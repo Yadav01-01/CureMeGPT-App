@@ -108,14 +108,11 @@ object ValidationUtils {
         val errorMessage: String
     )
 
-
-    // ValidationUtils.kt में नई methods जोड़ें
     fun validateDateOfBirth(dob: String): ValidationResult {
         return when {
             dob.isBlank() -> ValidationResult(false, "Date of birth is required")
             else -> {
                 try {
-                    // आप अपने date format के according validation कर सकते हैं
                     ValidationResult(true, "")
                 } catch (e: Exception) {
                     ValidationResult(false, "Enter a valid date")

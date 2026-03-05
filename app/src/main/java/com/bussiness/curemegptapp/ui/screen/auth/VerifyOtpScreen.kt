@@ -25,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
@@ -54,19 +56,21 @@ import com.bussiness.curemegptapp.navigation.AppDestination
 import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.dialog.AccountCreatedDialog
+import com.bussiness.curemegptapp.viewmodel.otpverifyviewmodel.OtpVerifyViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 fun VerifyOtpScreen(
     navController: NavHostController,
     fromScreen: String? = "",
-    email: String? = ""
+    email: String? = "",
+    viewModel: OtpVerifyViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    var otp by remember { mutableStateOf("") }
+    val state by viewModel.uiState.collectAsState()
     var timeLeft by remember { mutableStateOf(30) }
-    var errorMessage by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
+
 
     if (showDialog) {
         AccountCreatedDialog(
@@ -79,7 +83,6 @@ fun VerifyOtpScreen(
             },
             onGoToAskAI = {
                 showDialog = false
-                //   navController.navigate(AppDestination.OpenChatScreen)
                 navController.navigate("openChat?from=auth")
             }
         )
@@ -93,71 +96,54 @@ fun VerifyOtpScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
+    Column(modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-    ) {
-
+            .background(Color.White)) {
         GradientHeader(
-            heading = stringResource(R.string.verify_your_account),//"Verify Your Account",
+            heading = stringResource(R.string.verify_your_account),
             description = stringResource(
                 R.string.otp_sent_description,
-               /* email ?: ""*/"email/Phone number."
-            )//"We’ve sent a 5-digit code to your $email."
+             "email/Phone number."
+            )
         )
 
         Spacer(Modifier.height(55.dp))
 
         // OTP INPUT
         OtpInputField(
-            otp = otp,
+            otp = state.otp,
             onOtpChange = { entered ->
-                if (entered.length <= 5 && entered.all { it.isDigit() }) {
-                    otp = entered
-                }
-                if (otp.length == 5) {
-                    errorMessage = ""
-                }
+                viewModel.onOtpChange(entered)
             }
         )
 
-
-
         Spacer(Modifier.height(20.dp))
-        var pleaseEnterOtp = stringResource(R.string.please_enter_otp)
-        var enterCompleteOtp = stringResource(R.string.enter_complete_otp)
+
         GradientButton(
-            text = stringResource(R.string.verify_and_continue),//"Verify & Continue",
+            text = stringResource(R.string.verify_and_continue),
             onClick = {
-                when {
-                    otp.isEmpty() -> {
-                        Toast.makeText(context, pleaseEnterOtp, Toast.LENGTH_SHORT).show()
-                    }
-
-                    otp.length < 5 -> {
-                        Toast.makeText(context, enterCompleteOtp, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-
-                    otp != "12345" -> {
-                        Toast.makeText(context, "Invalid OTP", Toast.LENGTH_SHORT).show()
-                    }
-
-                    else -> {
+                viewModel.forgotOtpRequest(
+                    email=email.toString(),
+                    fromScreen=fromScreen.toString(),
+                    onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() },
+                    onSuccess = {
                         if (fromScreen == "create") {
                             showDialog = true
-                        } else {
-//                            navController.navigate(AppDestination.NewPassword)
-                            navController.navigate(AppDestination.NewPassword) {
+                        }else{
+                            val route = "${AppDestination.NewPassword}?from=${fromScreen}&email=${email}"
+                            navController.navigate(route) {
                                 popUpTo("verifyOtp?from={from}&email={email}") {
                                     inclusive = true
                                 }
                             }
+                           /* navController.navigate(AppDestination.NewPassword) {
+                                popUpTo("verifyOtp?from={from}&email={email}") {
+                                    inclusive = true
+                                }
+                            }*/
                         }
-
                     }
-                }
+                )
             },
             modifier = Modifier.height(54.dp)
         )
@@ -166,27 +152,23 @@ fun VerifyOtpScreen(
         Spacer(Modifier.height(21.dp))
 
         // RESEND TEXT
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Text(
-                text = stringResource(R.string.didnt_receive_code),//"Didn’t receive code? ",
+                text = stringResource(R.string.didnt_receive_code),
                 color = Color.Black,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = FontFamily(Font(R.font.urbanist_medium))
             )
-
             if (timeLeft > 0) {
                 Text(
-                    text = stringResource(R.string.resend_otp_in),//"Resend OTP in ",
+                    text = stringResource(R.string.resend_otp_in),
                     color = Color.Black,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = FontFamily(Font(R.font.urbanist_medium))
                 )
-
+                Spacer(Modifier.width(5.dp))
                 Text(
                     text = "${timeLeft}s",
                     color = Color(0xFF1E3A8A),
@@ -196,7 +178,7 @@ fun VerifyOtpScreen(
                 )
             } else {
                 Text(
-                    text = stringResource(R.string.resend_now),//"Resend Now",
+                    text = stringResource(R.string.resend_now),
                     color = Color(0xFF4338CA),
                     fontSize = 15.sp,
                     fontFamily = FontFamily(Font(R.font.urbanist_bold)),
@@ -204,7 +186,15 @@ fun VerifyOtpScreen(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
                     ) {
-                        timeLeft = 30
+                        viewModel.sendOtpRequest(
+                            email=email.toString(),
+                            onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() },
+                            onSuccess = { data->
+                                Toast.makeText(context,"Otp :- "+data.otp, Toast.LENGTH_SHORT).show()
+                                timeLeft = 30
+                            }
+                        )
+
                     }
                 )
             }
@@ -213,13 +203,10 @@ fun VerifyOtpScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         // BOTTOM: BACK TO LOGIN
-        if (fromScreen == "create") {
-            Row(
-                modifier = Modifier
+        if (fromScreen.equals("create",true)) {
+            Row(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 42.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
+                    .padding(bottom = 42.dp), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = stringResource(R.string.back),//"Back",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -231,16 +218,11 @@ fun VerifyOtpScreen(
                         navController.navigate(AppDestination.CreateAccount)
                     }
                 )
-
             }
-        } else if(fromScreen == "reset")
-        {
-            Row(
-                modifier = Modifier
+        } else if(fromScreen.equals("reset",true)) {
+            Row(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 42.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
+                    .padding(bottom = 42.dp), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = stringResource(R.string.back_to_text),//"Back to",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -263,12 +245,9 @@ fun VerifyOtpScreen(
                 )
             }
         }else {
-            Row(
-                modifier = Modifier
+            Row(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 42.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
+                    .padding(bottom = 42.dp), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = stringResource(R.string.back),//"Back",
                     fontFamily = FontFamily(Font(R.font.urbanist_medium)),
@@ -280,7 +259,6 @@ fun VerifyOtpScreen(
                         navController.navigateUp()
                     }
                 )
-
             }
         }
 
@@ -360,7 +338,6 @@ fun OtpInputField(
             }
         }
     }
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }

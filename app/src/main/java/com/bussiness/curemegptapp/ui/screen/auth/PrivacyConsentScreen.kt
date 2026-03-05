@@ -1,6 +1,8 @@
 package com.bussiness.curemegptapp.ui.screen.auth
 
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -67,40 +69,35 @@ fun PrivacyConsentScreen(navController: NavHostController) {
     var showError by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    Column(
-        modifier = Modifier
+
+
+    BackHandler() {
+        (context as Activity).moveTaskToBack(true)
+    }
+
+    Column(modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .verticalScroll(rememberScrollState())
-    ) {
+            .verticalScroll(rememberScrollState())) {
+
         // Top Gradient Header
         GradientHeader(
             heading = stringResource(R.string.privacy_consent_title),
-            description = stringResource(R.string.privacy_consent_description)
-//            heading = "Privacy & Consent",
-//            description = "Please review and agree to continue"
-        )
+            description = stringResource(R.string.privacy_consent_description))
 
         Spacer(modifier = Modifier.height(26.dp))
 
         // Important Disclaimers Section
-        Column(
-            modifier = Modifier
+        Column(modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-        ) {
+                .padding(horizontal = 24.dp)) {
             // Important Disclaimers Header with Icon
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_warning), // You'll need a warning icon
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 16.dp)) {
+                Image(
+                        painter = painterResource(id = R.drawable.ic_warning),
                         contentDescription = "Warning",
                         modifier = Modifier.size(42.dp)
                     )
-
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = stringResource(R.string.important_disclaimers_title),
@@ -110,93 +107,76 @@ fun PrivacyConsentScreen(navController: NavHostController) {
                     color = Color.Black
                 )
             }
-
             // Medical Disclaimer Box
             DisclaimerBox(
-                title = stringResource(R.string.medical_disclaimer_title),//"Medical Disclaimer",
-                description = stringResource(R.string.medical_disclaimer_description),//"This app provides AI-powered health insights for informational purposes only. It is not a substitute for professional medical advice, diagnosis, or treatment.",
+                title = stringResource(R.string.medical_disclaimer_title),
+                description = stringResource(R.string.medical_disclaimer_description),
                 titleColor = Color(0xFF4338CA),
                 backColor = Color(0x084338CA)
             )
-
             Spacer(modifier = Modifier.height(16.dp))
-
             // Data Privacy Box
             DisclaimerBox(
-                title = stringResource(R.string.data_privacy_title),//"Data Privacy",
-                description = stringResource(R.string.data_privacy_description),//"Your health data is encrypted and stored securely. We comply with HIPAA and other privacy regulations.",
-                titleColor = Color(0xFFDC2626),
+                title = stringResource(R.string.data_privacy_title),
+                description = stringResource(R.string.data_privacy_description),
                 backColor = Color(0x08F31D1D)
             )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-
-
-        Column(
-            modifier = Modifier
+        Column(modifier = Modifier
                 .fillMaxWidth().padding(22.dp)
                 .border(width = 1.dp, color = Color(0xFF697383),
-                    shape = RoundedCornerShape(30.dp))
-
-        ) {
-            Column(
-                modifier = Modifier
+                    shape = RoundedCornerShape(30.dp))) {
+            Column(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 26.dp).padding(start = 20.dp, end = 15.dp)
-            ) {
+                    .padding(vertical = 26.dp).padding(start = 20.dp, end = 15.dp)) {
                 ConsentCheckbox(
                     checked = checkbox1,
                     onCheckedChange = { checkbox1 = it },
                     text = buildAnnotatedString {
-                        append(stringResource(R.string.consent_checkbox_1_part1)/*"I Have Read And Agree To The "*/)
+                        append(stringResource(R.string.consent_checkbox_1_part1))
                         withStyle(
                             style = SpanStyle(
                                 color = Color(0xFF4338CA),
                                 fontWeight = FontWeight.Normal
                             )
                         ) {
-                            append(stringResource(R.string.privacy_policy_link)/*"Privacy Policy"*/)
+                            append(stringResource(R.string.privacy_policy_link))
                         }
                     }
                 )
-
                 Spacer(modifier = Modifier.height(12.dp))
-
                 ConsentCheckbox(
                     checked = checkbox2,
                     onCheckedChange = { checkbox2 = it },
                     text = buildAnnotatedString {
-                        append(stringResource(R.string.consent_checkbox_2_part1)/*"I Agree To The "*/)
+                        append(stringResource(R.string.consent_checkbox_2_part1))
                         withStyle(
                             style = SpanStyle(
                                 color = Color(0xFF4338CA),
                                 fontWeight = FontWeight.Normal
                             )
                         ) {
-                            append(stringResource(R.string.terms_of_service_link)/*"Terms Of Service"*/)
+                            append(stringResource(R.string.terms_of_service_link))
                         }
                     }
                 )
-
                 Spacer(modifier = Modifier.height(12.dp))
-
                 ConsentCheckbox(
                     checked = checkbox3,
                     onCheckedChange = { checkbox3 = it },
                     text = buildAnnotatedString {
-                        append(stringResource(R.string.consent_checkbox_3)/*"I Understand This App Does Not Replace Professional Medical Advice"*/)
+                        append(stringResource(R.string.consent_checkbox_3))
                     }
                 )
-
                 Spacer(modifier = Modifier.height(12.dp))
-
                 ConsentCheckbox(
                     checked = checkbox4,
                     onCheckedChange = { checkbox4 = it },
                     text = buildAnnotatedString {
-                        append(stringResource(R.string.consent_checkbox_4)/*"I Consent to the processing of my health data for AI analysis"*/)
+                        append(stringResource(R.string.consent_checkbox_4))
                     }
                 )
             }
@@ -205,20 +185,19 @@ fun PrivacyConsentScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         // I Agree - Continue Button
-        var allterm = stringResource(R.string.accept_all_terms_error)
+        val allTerm = stringResource(R.string.accept_all_terms_error)
         GradientButton(
-            text =  stringResource(R.string.i_agree_continue_button)/*"I Agree - Continue"*/,
+            text =  stringResource(R.string.i_agree_continue_button),
             onClick = {   if (allChecked) {
                 navController.navigate(AppDestination.ProfileCompletion)
             } else {
                 Toast.makeText(
                     context,
-                    allterm/*"Please accept all terms to continue"*/,
+                    allTerm,
                     Toast.LENGTH_SHORT
                 ).show()
             } }
         )
-
 
         // Exit Instead
         Row(
@@ -228,16 +207,14 @@ fun PrivacyConsentScreen(navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-
             Image(
-                painter = painterResource(id = R.drawable.ic_lock_encripted_icon), // You'll need a warning icon
+                painter = painterResource(id = R.drawable.ic_lock_encripted_icon),
                 contentDescription = "Encripted",
                 modifier = Modifier.size(20.dp)
             )
-
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                text = stringResource(R.string.encrypted_text)/*"Encrypted"*/,
+                text = stringResource(R.string.encrypted_text),
                 fontFamily = FontFamily(Font(R.font.urbanist_medium)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,

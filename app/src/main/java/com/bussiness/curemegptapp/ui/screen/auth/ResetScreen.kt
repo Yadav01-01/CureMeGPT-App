@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
@@ -41,38 +43,14 @@ import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
 import com.bussiness.curemegptapp.util.ValidationUtils
+import com.bussiness.curemegptapp.viewmodel.forgotviewmodel.ForgotPasswordViewModel
+import com.bussiness.curemegptapp.viewmodel.signupviewmodel.SignUpViewModel
 
 @Composable
-fun ResetScreen(navController: NavHostController, fromScreen: String? = "") {
-
-    // FORM
-    var email by remember { mutableStateOf("") }
-    var validationError by remember { mutableStateOf("") }
-    var showErrorToast by remember { mutableStateOf(false) }
+fun ResetScreen(navController: NavHostController, fromScreen: String? = "",viewModel: ForgotPasswordViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
-
-    // Validation logic
-    fun validateInput(): Boolean {
-        val validationResult = ValidationUtils.validateEmailOrPhone(email)
-        if (!validationResult.isValid) {
-            validationError = validationResult.errorMessage
-            return false
-        }
-        return true
-    }
-
-    // Show Toast when validation error occurs
-    LaunchedEffect(showErrorToast) {
-        if (showErrorToast) {
-            Toast.makeText(
-                context,
-                validationError,
-                Toast.LENGTH_LONG
-            ).show()
-            showErrorToast = false
-        }
-    }
+    val state by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -80,101 +58,43 @@ fun ResetScreen(navController: NavHostController, fromScreen: String? = "") {
             .background(Color.White)
     ) {
         // Top Gradient Header
-        GradientHeader( heading = stringResource(R.string.reset_password_title),
-            description = stringResource(R.string.reset_password_description)
-            //heading = "Reset Your Password",
-          //  description = "Enter your registered email or phone number to reset your password."
-        )
+        GradientHeader( heading = stringResource(R.string.reset_password_title), description = stringResource(R.string.reset_password_description))
 
         Spacer(modifier = Modifier.height(55.dp))
 
         // Email Field
         GradientIconInputField(icon = R.drawable.mail_ic,
-            placeholder = stringResource(R.string.email_phone_placeholder),//"Email / Phone Number",
-            value = email, onValueChange = {
-                email = it
-                validationError = ""},
+            placeholder = stringResource(R.string.email_phone_placeholder),
+            value = state.emailOrPhone,
+            onValueChange = { viewModel.onEmailPhoneChange(it)
+                            },
             keyboardType = KeyboardType.Email)
 
         Spacer(Modifier.height(20.dp))
 
-        // Gradient Login Button
-     /*   GradientButton(text = stringResource(R.string.send_code_button)*//*"Send Code"*//*,
-            onClick = {
-                if (fromScreen == "auth") {
-                    navController.navigate("verifyOtp?from=reset&email=$email")
-                }else {
-                    navController.navigate("verifyOtp?from=reset&email=$email") {
-                        popUpTo("reset?from={from}") {
-                            inclusive = true
-                        }
-                    }
-                }
-        },modifier = Modifier.height(54.dp).padding(horizontal = 7.dp))*/
-
         GradientButton(
             text = stringResource(R.string.send_code_button),
             onClick = {
-                if (validateInput()) {
-                    // Show success toast
-                    Toast.makeText(
-                        context,
-                        "Reset code sent to $email",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    // Navigate to OTP screen after validation
-                    val route = if (fromScreen == "auth") {
-                        "verifyOtp?from=reset&email=$email"
-                    } else {
-                        "verifyOtp?from=reset1&email=$email"
-                    }
-
-                    navController.navigate(route) {
-                        if (fromScreen != "auth") {
-                            popUpTo("reset?from={from}") {
-                                inclusive = true
+                viewModel.forgotOtpRequest(
+                    onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() },
+                    onSuccess = { data->
+                        Toast.makeText(context,"Otp :- "+data.otp, Toast.LENGTH_SHORT).show()
+                        val route = if (fromScreen == "auth") { "verifyOtp?from=reset&email=${state.emailOrPhone}" } else { "verifyOtp?from=reset1&email=${state.emailOrPhone}" }
+                        navController.navigate(route) {
+                            if (fromScreen != "auth") {
+                                popUpTo("reset?from={from}") {
+                                    inclusive = true
+                                }
                             }
                         }
                     }
-                } else {
-                    // Show error toast
-                    showErrorToast = true
-                }
+                )
             },
             modifier = Modifier.height(54.dp).padding(horizontal = 7.dp)
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Bottom Signup
-        /*
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 42.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = stringResource(R.string.back_to_text)/*"Back to" */,
-                color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium,
-                fontSize = 17.sp
-            )
-            Spacer(Modifier.width(4.dp))
-            Text(
-                text = stringResource(R.string.login_link)/*" Login"*/,
-                color = Color(0xFF4338CA),
-                fontFamily = FontFamily(Font(R.font.urbanist_medium)),
-                fontWeight = FontWeight.Medium,
-                fontSize = 17.sp,
-                modifier = Modifier.clickable(  interactionSource = remember { MutableInteractionSource() },
-                    indication = null){ navController.navigate(AppDestination.Login)}
-            )
-        }
-
-         */
         // BOTTOM: BACK TO LOGIN
         if (fromScreen == "main") {
             Row(

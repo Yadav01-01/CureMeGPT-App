@@ -25,6 +25,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bussiness.curemegptapp.R
@@ -49,16 +51,14 @@ import com.bussiness.curemegptapp.ui.component.GradientButton
 import com.bussiness.curemegptapp.ui.component.GradientHeader
 import com.bussiness.curemegptapp.ui.component.GradientIconInputField
 import com.bussiness.curemegptapp.util.ValidationUtils
+import com.bussiness.curemegptapp.viewmodel.loginviewmodel.LoginViewModel
+import com.bussiness.curemegptapp.viewmodel.signupviewmodel.SignUpViewModel
 
 @Composable
-fun CreateAccountScreen(navController: NavHostController) {
+fun CreateAccountScreen(navController: NavHostController,viewModel: SignUpViewModel = hiltViewModel()) {
     val context = LocalContext.current
-    // FORM
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var accountCreatedSuccessfully = stringResource(R.string.account_created_success)
+    val state by viewModel.uiState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize().imePadding()
@@ -67,69 +67,42 @@ fun CreateAccountScreen(navController: NavHostController) {
 
         GradientHeader( heading = stringResource(R.string.create_account_title),
             description = stringResource(R.string.create_account_description))
-
         Spacer(modifier = Modifier.height(55.dp))
-
-        GradientIconInputField(icon = R.drawable.profile_ic, placeholder = stringResource(R.string.full_name_placeholder), value = name, onValueChange = { name = it })
-
+        GradientIconInputField(icon = R.drawable.profile_ic,
+            placeholder = stringResource(R.string.full_name_placeholder),
+            value = state.name,
+            onValueChange = {viewModel.onNameChange(it)})
         Spacer(Modifier.height(20.dp))
-        // Email Field
-        GradientIconInputField(icon = R.drawable.mail_ic,placeholder = stringResource(R.string.email_phone_placeholder), value = email, onValueChange = { email = it },keyboardType = KeyboardType.Email)
-
+        GradientIconInputField(icon = R.drawable.mail_ic,
+            placeholder = stringResource(R.string.email_phone_placeholder),
+            value = state.emailOrPhone,
+            onValueChange = {viewModel.onEmailPhoneChange(it)},
+            keyboardType = KeyboardType.Email)
         Spacer(Modifier.height(20.dp))
-
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = stringResource(R.string.password_placeholder),/*"Password",*/ value = password, onValueChange = { password = it }, isPassword = true)
-
+        GradientIconInputField(icon = R.drawable.pass_ic,
+            placeholder = stringResource(R.string.password_placeholder),
+            value = state.password,
+            onValueChange = {viewModel.onPasswordChange(it)},
+            isPassword = true)
         Spacer(Modifier.height(20.dp))
-
-        GradientIconInputField(icon = R.drawable.pass_ic,placeholder = stringResource(R.string.confirm_password_placeholder), /*"Confirm Password",*/ value = confirmPassword, onValueChange = { confirmPassword = it }, isPassword = true)
-
+        GradientIconInputField(icon = R.drawable.pass_ic,
+            placeholder = stringResource(R.string.confirm_password_placeholder),
+            value = state.cnfPassword,
+            onValueChange = {viewModel.onCnfPasswordChange(it)},
+            isPassword = true)
         Spacer(Modifier.height(20.dp))
-
-        // Gradient Login Button
-     //   GradientButton(text = "Sign Up", onClick = { navController.navigate("verifyOtp?from=create&email=$email") })
-
-// Gradient Sign Up Button
         GradientButton( text = stringResource(R.string.sign_up_button),
-           // text = "Sign Up",
             onClick = {
-                // Validate all inputs in sequence
-                val nameValidation = ValidationUtils.validateName(name)
-                if (!nameValidation.isValid) {
-                    Toast.makeText(context, nameValidation.errorMessage, Toast.LENGTH_LONG).show()
-                    return@GradientButton
-                }
-
-                val emailOrPhoneValidation = ValidationUtils.validateEmailOrPhone(email)
-                if (!emailOrPhoneValidation.isValid) {
-                    Toast.makeText(context, emailOrPhoneValidation.errorMessage, Toast.LENGTH_LONG).show()
-                    return@GradientButton
-                }
-
-                val passwordValidation = ValidationUtils.validatePassword(password)
-                if (!passwordValidation.isValid) {
-                    Toast.makeText(context, passwordValidation.errorMessage, Toast.LENGTH_LONG).show()
-                    return@GradientButton
-                }
-
-                val confirmPasswordValidation = ValidationUtils.validateConfirmPassword(password, confirmPassword)
-                if (!confirmPasswordValidation.isValid) {
-                    Toast.makeText(context, confirmPasswordValidation.errorMessage, Toast.LENGTH_LONG).show()
-                    return@GradientButton
-                }
-
-                // All validations passed
-                // TODO: Call sign up API here
-
-                Toast.makeText(context,accountCreatedSuccessfully, /*"Account created successfully!",*/ Toast.LENGTH_SHORT).show()
-                navController.navigate("verifyOtp?from=create&email=$email")
+                viewModel.registerRequest(
+                    onError = { msg -> Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() },
+                    onSuccess = { data->
+                        Toast.makeText(context,"Otp :- "+data.user?.otp, Toast.LENGTH_SHORT).show()
+                        navController.navigate("verifyOtp?from=create&email=${state.emailOrPhone}")
+                    }
+                )
             }
         )
-
-
         Spacer(modifier = Modifier.weight(1f))
-
-        // Bottom Signup
         Row(
             modifier = Modifier
                 .fillMaxWidth()

@@ -22,12 +22,14 @@ import javax.inject.Inject
  */
 class SessionManager @Inject constructor(@ApplicationContext context: Context) {
 
+
     private val preferences: SharedPreferences =
         context.applicationContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
     companion object {
         private const val PREF_NAME = "app_preferences"
         private const val KEY_USER_ID = "key_user_id"
+        private const val KEY_USER_NAME = "key_user_name"
         private const val KEY_TOKEN = "key_token"
         private const val KEY_SIGNUP_FLOW = "signup_flow"
 
@@ -57,9 +59,19 @@ class SessionManager @Inject constructor(@ApplicationContext context: Context) {
         preferences.edit { putString(KEY_USER_ID, userId) }
     }
 
+    /** Save user NAME */
+    fun setUserName(userId: String) {
+        preferences.edit { putString(KEY_USER_NAME, userId) }
+    }
+
     /** Get user ID safely */
     fun getUserId(): String {
         return preferences.getString(KEY_USER_ID, "") ?: ""
+    }
+
+    /** Get user NAME safely */
+    fun getUserName(): String {
+        return preferences.getString(KEY_USER_NAME, "") ?: ""
     }
 
     /** Save auth token */

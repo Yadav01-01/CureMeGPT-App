@@ -146,7 +146,7 @@ fun MainNavGraph(
             val email = backStackEntry.arguments?.getString("email") ?: ""
             VerifyOtpScreen(navController, from, email)
         }
-        composable<AppDestination.NewPassword> { NewPasswordScreen(navController, "main") }
+        composable<AppDestination.NewPassword> { NewPasswordScreen(navController, "main","") }
 
         composable<AppDestination.DeleteAccountScreen> { DeleteAccountScreen(navController,authNavController) }
 
